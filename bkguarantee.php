@@ -27,9 +27,6 @@ class BkGuarantee extends Module
 {
     /** Controlador de la pantalla de configuración, y nombre de su pestaña en el back office */
     const TAB_CLASS = 'AdminBkGuaranteeConfig';
-    /** Pestaña padre: la pantalla vive bajo Configurar, junto al resto de ajustes de la tienda */
-    const TAB_PARENT = 'AdminParentPreferences';
-
     /**
      * displayProductAdditionalInfo cae bajo el bloque de compra, que es donde la oferta queda a
      * la vista; displayCheckoutSubtotalDetails repite el aviso en el resumen del pedido, el
@@ -75,7 +72,7 @@ class BkGuarantee extends Module
 
         BkGuaranteeConfig::installDefaults();
 
-        if (!$this->installTab()) {
+        if (!BkGuaranteeTabsInstaller::install($this->name)) {
             BkGuaranteeLogger::error('No se pudo crear la pestaña ' . self::TAB_CLASS);
         }
 
@@ -96,51 +93,11 @@ class BkGuarantee extends Module
     {
         \BkModules\Registry\V1\InstallReporter::report($this->name, $this->version, 'uninstall');
 
-        $this->uninstallTab();
+        BkGuaranteeTabsInstaller::uninstall();
         BkGuaranteeConfig::uninstallKeys();
         BkGuaranteeLogger::confirmation('Módulo desinstalado');
 
         return parent::uninstall();
-    }
-
-    /**
-     * La pestaña se monta a mano y con nombre por idioma: `Tab::$name` es multiidioma, así que
-     * sin rellenar todos los idiomas activos la entrada del menú sale vacía para el empleado que
-     * trabaje en cualquiera de los otros.
-     *
-     * @return bool
-     */
-    private function installTab()
-    {
-        if (Tab::getIdFromClassName(self::TAB_CLASS)) {
-            return true;
-        }
-
-        $tab = new Tab();
-        $tab->class_name = self::TAB_CLASS;
-        $tab->module = $this->name;
-        $tab->id_parent = (int) Tab::getIdFromClassName(self::TAB_PARENT);
-        $tab->active = 1;
-        $tab->icon = 'verified_user';
-
-        foreach (Language::getLanguages(false) as $lang) {
-            $tab->name[(int) $lang['id_lang']] = 'BK EU Guarantee';
-        }
-
-        return (bool) $tab->add();
-    }
-
-    private function uninstallTab()
-    {
-        $id = (int) Tab::getIdFromClassName(self::TAB_CLASS);
-        if (!$id) {
-            return;
-        }
-
-        $tab = new Tab($id);
-        if (Validate::isLoadedObject($tab)) {
-            $tab->delete();
-        }
     }
 
     /**
