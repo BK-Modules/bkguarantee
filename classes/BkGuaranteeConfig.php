@@ -22,7 +22,7 @@ class BkGuaranteeConfig
     const HIDE_FOR_B2B = 'BK_GUAR_HIDE_B2B';
     /** Grupos considerados B2B, separados por comas */
     const B2B_GROUPS = 'BK_GUAR_B2B_GROUPS';
-    /** Presentación: card | framed | plain */
+    /** Presentación: card | framed | plain | band */
     const STYLE = 'BK_GUAR_STYLE';
     /** Alineación dentro de su columna: left | center */
     const ALIGN = 'BK_GUAR_ALIGN';
@@ -32,7 +32,7 @@ class BkGuaranteeConfig
     const DEBUG = 'BK_GUAR_DEBUG';
 
     /** Presentaciones admitidas */
-    const STYLES = ['card', 'framed', 'plain'];
+    const STYLES = ['card', 'framed', 'plain', 'band'];
     /** Alineaciones admitidas */
     const ALIGNS = ['left', 'center'];
     /** Puntos de la ficha admitidos, con el hook que los sirve */

@@ -221,6 +221,12 @@ class BkGuarantee extends Module
             ),
             'bkguar_full' => $this->trans('View full size', [], 'Modules.Bkguarantee.Shop'),
             'bkguar_title' => $this->trans('EU legal guarantee', [], 'Modules.Bkguarantee.Shop'),
+            'bkguar_band_title' => $this->trans('Your rights on this purchase', [], 'Modules.Bkguarantee.Shop'),
+            'bkguar_band_text' => $this->trans(
+                'This is the official European Union notice on the legal guarantee of conformity, reproduced exactly as the Commission publishes it.',
+                [],
+                'Modules.Bkguarantee.Shop'
+            ),
         ]);
 
         return $this->fetch('module:bkguarantee/views/templates/hook/notice.tpl');

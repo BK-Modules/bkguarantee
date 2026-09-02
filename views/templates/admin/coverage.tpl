@@ -56,6 +56,7 @@
         </p>
         <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start">
           {foreach from=$bkguar_styles item=style}
+            {if $style !== 'band'}
             <div style="flex:0 0 190px;max-width:190px">
               <div style="font-size:12px;font-weight:600;margin-bottom:6px;
                           color:{if $style === $bkguar_style}#00723d{else}#6c868e{/if}">
@@ -83,7 +84,27 @@
                 <span class="bkguar__full">{l s='View full size' d='Modules.Bkguarantee.Shop'}</span>
               </section>
             </div>
+            {/if}
           {/foreach}
+        </div>
+
+        <div style="margin-top:18px">
+          <div style="font-size:12px;font-weight:600;margin-bottom:6px;
+                      color:{if $bkguar_style === 'band'}#00723d{else}#6c868e{/if}">
+            {l s='Wide band with a heading beside it' d='Modules.Bkguarantee.Admin'}
+            {if $bkguar_style === 'band'} &middot; {l s='in use' d='Modules.Bkguarantee.Admin'}{/if}
+          </div>
+          <section class="bkguar bkguar--band bkguar--align-left" style="--bkguar-w:170px;margin:0">
+            <div class="bkguar__figure">
+              <img class="bkguar__notice" src="{$bkguar_preview|escape:'htmlall':'UTF-8'}"
+                   alt="{l s='EU harmonised notice on the legal guarantee of conformity' d='Modules.Bkguarantee.Admin'}">
+            </div>
+            <div class="bkguar__aside">
+              <h3 class="bkguar__band-title">{l s='Your rights on this purchase' d='Modules.Bkguarantee.Shop'}</h3>
+              <p class="bkguar__band-text">{l s='This is the official European Union notice on the legal guarantee of conformity, reproduced exactly as the Commission publishes it.' d='Modules.Bkguarantee.Shop'}</p>
+              <span class="bkguar__full">{l s='View full size' d='Modules.Bkguarantee.Shop'}</span>
+            </div>
+          </section>
         </div>
         <p class="help-block" style="margin-top:14px">
           {l s='In the shop the notice is shown at' d='Modules.Bkguarantee.Admin'}

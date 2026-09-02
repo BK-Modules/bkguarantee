@@ -151,12 +151,13 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
                         'type' => 'select',
                         'label' => $this->trans('Presentation', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::STYLE,
-                        'desc' => $this->trans('The frame around the notice. The notice itself never changes.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->trans('The frame around the notice. The notice itself never changes. The wide band is meant for the bottom of the product page, where it has room.', [], 'Modules.Bkguarantee.Admin'),
                         'options' => [
                             'query' => [
                                 ['id' => 'card', 'name' => $this->trans('Card with blue header', [], 'Modules.Bkguarantee.Admin')],
                                 ['id' => 'framed', 'name' => $this->trans('Thin frame only', [], 'Modules.Bkguarantee.Admin')],
                                 ['id' => 'plain', 'name' => $this->trans('No frame', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'band', 'name' => $this->trans('Wide band with a heading beside it', [], 'Modules.Bkguarantee.Admin')],
                             ],
                             'id' => 'id',
                             'name' => 'name',

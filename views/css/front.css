@@ -8,6 +8,7 @@
  *   .bkguar--framed  solo un marco fino. Para temas que ya tienen mucha caja.
  *   .bkguar--plain   el aviso a secas. Para temas minimalistas o de fondo oscuro,
  *                    donde cualquier caja desentona.
+ *   .bkguar--band    seccion a lo ancho con titular al lado. Para el pie de la ficha.
  *
  * El ancho lo manda --bkguar-w y es un máximo: por debajo de él la imagen ocupa todo el espacio
  * disponible, que es lo que la mantiene legible en móvil.
@@ -109,4 +110,63 @@
 .bkguar--checkout {
     margin-left: auto;
     margin-right: auto;
+}
+
+/* ---- band: sección a lo ancho, para el pie de la ficha ----
+ *
+ * Es la presentación que mejor resuelve el problema de fondo: un cartel A4 metido junto al precio
+ * queda huérfano, y aquí pasa a ser una sección con su titular y su columna de texto. El aviso
+ * sigue completo y a la vista; lo que se añade al lado es contenido propio de la tienda.
+ */
+.bkguar--band {
+    max-width: none;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    align-items: center;
+    padding: 1.5rem;
+    border: 1px solid rgba(0, 51, 153, .14);
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(0, 51, 153, .04), rgba(0, 51, 153, .015));
+}
+
+@media (min-width: 700px) {
+    .bkguar--band {
+        grid-template-columns: minmax(0, var(--bkguar-w, 380px)) minmax(0, 1fr);
+        gap: 2rem;
+        padding: 1.75rem 2rem;
+    }
+}
+
+.bkguar--band .bkguar__figure {
+    max-width: var(--bkguar-w, 380px);
+    width: 100%;
+}
+
+.bkguar--band .bkguar__notice {
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 14px 30px -22px rgba(0, 51, 153, .5);
+}
+
+.bkguar--band .bkguar__aside {
+    min-width: 0;
+}
+
+.bkguar__band-title {
+    margin: 0 0 .5rem;
+    font-size: 1.125rem;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.bkguar__band-text {
+    margin: 0 0 .75rem;
+    font-size: .9375rem;
+    line-height: 1.55;
+    opacity: .85;
+    max-width: 46ch;
+}
+
+.bkguar--band .bkguar__full {
+    padding: 0;
 }

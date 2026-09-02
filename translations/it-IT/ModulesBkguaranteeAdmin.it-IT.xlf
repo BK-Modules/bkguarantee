@@ -194,6 +194,22 @@
         <source>in use</source>
         <target>in uso</target>
       </trans-unit>
+      <trans-unit id="120f32f7d892411d037fd2f3be94bca9">
+        <source>The frame around the notice. The notice itself never changes. The wide band is meant for the bottom of the product page, where it has room.</source>
+        <target>La cornice attorno all’avviso. L’avviso in sé non cambia mai. La fascia larga è pensata per il fondo della scheda prodotto, dove ha spazio.</target>
+      </trans-unit>
+      <trans-unit id="0581775827049a71481f264bee631f05">
+        <source>Wide band with a heading beside it</source>
+        <target>Fascia larga con titolo accanto</target>
+      </trans-unit>
+      <trans-unit id="0118572b0c611d2befab429b2ecf496a">
+        <source>This is the official European Union notice on the legal guarantee of conformity, reproduced exactly as the Commission publishes it.</source>
+        <target>Questo è l’avviso ufficiale dell’Unione europea sulla garanzia legale di conformità, riprodotto esattamente come lo pubblica la Commissione.</target>
+      </trans-unit>
+      <trans-unit id="4dc8bdb70a383d9be59bc44a80dfc0fa">
+        <source>Your rights on this purchase</source>
+        <target>I tuoi diritti su questo acquisto</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

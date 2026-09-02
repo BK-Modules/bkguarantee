@@ -194,6 +194,22 @@
         <source>in use</source>
         <target>in use</target>
       </trans-unit>
+      <trans-unit id="120f32f7d892411d037fd2f3be94bca9">
+        <source>The frame around the notice. The notice itself never changes. The wide band is meant for the bottom of the product page, where it has room.</source>
+        <target>The frame around the notice. The notice itself never changes. The wide band is meant for the bottom of the product page, where it has room.</target>
+      </trans-unit>
+      <trans-unit id="0581775827049a71481f264bee631f05">
+        <source>Wide band with a heading beside it</source>
+        <target>Wide band with a heading beside it</target>
+      </trans-unit>
+      <trans-unit id="0118572b0c611d2befab429b2ecf496a">
+        <source>This is the official European Union notice on the legal guarantee of conformity, reproduced exactly as the Commission publishes it.</source>
+        <target>This is the official European Union notice on the legal guarantee of conformity, reproduced exactly as the Commission publishes it.</target>
+      </trans-unit>
+      <trans-unit id="4dc8bdb70a383d9be59bc44a80dfc0fa">
+        <source>Your rights on this purchase</source>
+        <target>Your rights on this purchase</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
