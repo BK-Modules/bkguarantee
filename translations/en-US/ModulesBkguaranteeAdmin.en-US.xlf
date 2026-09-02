@@ -126,6 +126,74 @@
         <source>Yes</source>
         <target>Yes</target>
       </trans-unit>
+      <trans-unit id="a63706eecfa33f67b315f978392ad7ae">
+        <source>Alignment</source>
+        <target>Alignment</target>
+      </trans-unit>
+      <trans-unit id="d9536a3eba01855c1696b9b721dad651">
+        <source>At the bottom of the product page</source>
+        <target>At the bottom of the product page</target>
+      </trans-unit>
+      <trans-unit id="eee5d7045eae71f5365028d8213fa543">
+        <source>Below the add-to-cart block</source>
+        <target>Below the add-to-cart block</target>
+      </trans-unit>
+      <trans-unit id="a3ec55f09be07222f7ff78d28af3b5ca">
+        <source>Card with blue header</source>
+        <target>Card with blue header</target>
+      </trans-unit>
+      <trans-unit id="398124682999fe955755feb5cfccf031">
+        <source>Centred</source>
+        <target>Centred</target>
+      </trans-unit>
+      <trans-unit id="b6457930d8126990acda27dc76824970">
+        <source>In the shop the notice is shown at</source>
+        <target>In the shop the notice is shown at</target>
+      </trans-unit>
+      <trans-unit id="487d40af5d53713c405cb3d152381013">
+        <source>Judge legibility at that width, not at full size.</source>
+        <target>Judge legibility at that width, not at full size.</target>
+      </trans-unit>
+      <trans-unit id="945d5e233cf7d6240f6b783b36a374ff">
+        <source>Left</source>
+        <target>Left</target>
+      </trans-unit>
+      <trans-unit id="3a7417e5c79054abfe968529a32d481d">
+        <source>No frame</source>
+        <target>No frame</target>
+      </trans-unit>
+      <trans-unit id="9ff24e871426f7f7d4c33acb82e3c067">
+        <source>Not every theme renders every position. If one of them shows nothing, try another or move the module from Design &gt; Positions.</source>
+        <target>Not every theme renders every position. If one of them shows nothing, try another or move the module from Design &gt; Positions.</target>
+      </trans-unit>
+      <trans-unit id="960560bf7db7819cf09ca46704385b56">
+        <source>Position on the product page</source>
+        <target>Position on the product page</target>
+      </trans-unit>
+      <trans-unit id="c7bc3fddddb62d5b656adc30cea77a55">
+        <source>Presentation</source>
+        <target>Presentation</target>
+      </trans-unit>
+      <trans-unit id="9f46e77ff9e16f0bd620cb72cbad03c3">
+        <source>The frame around the notice. The notice itself never changes.</source>
+        <target>The frame around the notice. The notice itself never changes.</target>
+      </trans-unit>
+      <trans-unit id="4564b7308b0dcc56b3da82743b8ae2c8">
+        <source>The three presentations side by side, with the CSS of the shop. The one in use is marked; the notice inside is identical in all three.</source>
+        <target>The three presentations side by side, with the CSS of the shop. The one in use is marked; the notice inside is identical in all three.</target>
+      </trans-unit>
+      <trans-unit id="df6aa8fbf81d2d20657cc75b5f0e69d0">
+        <source>Thin frame only</source>
+        <target>Thin frame only</target>
+      </trans-unit>
+      <trans-unit id="f569043421b809e0448507e7d0a4e0b9">
+        <source>Under the product gallery</source>
+        <target>Under the product gallery</target>
+      </trans-unit>
+      <trans-unit id="ba11b8feb4e43d227dcabe6565836d24">
+        <source>in use</source>
+        <target>in use</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

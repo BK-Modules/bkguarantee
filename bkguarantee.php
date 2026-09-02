@@ -36,6 +36,8 @@ class BkGuarantee extends Module
      */
     private $hooks = [
         'displayProductAdditionalInfo',
+        'displayAfterProductThumbs',
+        'displayFooterProduct',
         'displayCheckoutSubtotalDetails',
         'actionFrontControllerSetMedia',
     ];
@@ -124,9 +126,38 @@ class BkGuarantee extends Module
         );
     }
 
+    /**
+     * Los tres puntos de la ficha se registran siempre y solo pinta el elegido: así cambiar de
+     * sitio es un desplegable y no una reinstalación, y el comerciante puede además moverlo desde
+     * Posiciones sin que el módulo se entere.
+     */
     public function hookDisplayProductAdditionalInfo(array $params)
     {
+        return $this->renderProduct('info');
+    }
+
+    public function hookDisplayAfterProductThumbs(array $params)
+    {
+        return $this->renderProduct('thumbs');
+    }
+
+    public function hookDisplayFooterProduct(array $params)
+    {
+        return $this->renderProduct('footer');
+    }
+
+    /**
+     * @param string $placement info|thumbs|footer
+     *
+     * @return string
+     */
+    private function renderProduct($placement)
+    {
         if (!BkGuaranteeConfig::isOn(BkGuaranteeConfig::ON_PRODUCT)) {
+            return '';
+        }
+
+        if (BkGuaranteeConfig::getPlacement() !== $placement) {
             return '';
         }
 
@@ -181,6 +212,8 @@ class BkGuarantee extends Module
             'bkguar_url' => $url,
             'bkguar_width' => BkGuaranteeConfig::getWidth(),
             'bkguar_place' => $place,
+            'bkguar_style' => BkGuaranteeConfig::getStyle(),
+            'bkguar_align' => BkGuaranteeConfig::getAlign(),
             'bkguar_alt' => $this->trans(
                 'EU harmonised notice on the legal guarantee of conformity',
                 [],

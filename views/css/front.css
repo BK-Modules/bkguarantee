@@ -1,12 +1,16 @@
 /**
  * Aviso armonizado en el front.
  *
- * La tarjeta presenta el aviso; nunca lo recorta, lo tapa ni le superpone nada. El ancho lo manda
- * la variable --bkguar-w que escribe la plantilla, y es un máximo: por debajo de él la imagen
- * ocupa todo el espacio disponible, que es lo que la mantiene legible en móvil.
+ * Tres presentaciones para que el aviso encaje en cualquier tema; ninguna lo recorta, lo tapa ni
+ * le superpone nada, porque el anexo I no lo permite:
  *
- * Los colores son los de referencia del propio aviso (azul Reflex #003399), así que la tarjeta
- * pertenece visualmente a la pieza que enmarca y no al tema de turno.
+ *   .bkguar--card    tarjeta con cabecera azul. Destaca en temas con mucho blanco.
+ *   .bkguar--framed  solo un marco fino. Para temas que ya tienen mucha caja.
+ *   .bkguar--plain   el aviso a secas. Para temas minimalistas o de fondo oscuro,
+ *                    donde cualquier caja desentona.
+ *
+ * El ancho lo manda --bkguar-w y es un máximo: por debajo de él la imagen ocupa todo el espacio
+ * disponible, que es lo que la mantiene legible en móvil.
  */
 .bkguar {
     --bkguar-blue: #003399;
@@ -14,10 +18,39 @@
     max-width: var(--bkguar-w, 380px);
     margin: 1.5rem 0;
     padding: 0;
-    border: 1px solid rgba(0, 51, 153, .18);
-    border-radius: 10px;
     background: #fff;
     overflow: hidden;
+}
+
+.bkguar--align-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bkguar__notice {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 0;
+}
+
+.bkguar__full {
+    display: block;
+    font-size: .75rem;
+    line-height: 1.3;
+    color: var(--bkguar-blue);
+    text-decoration: none;
+}
+
+.bkguar__full:hover,
+.bkguar__full:focus {
+    text-decoration: underline;
+}
+
+/* ---- card: cabecera azul, borde y sombra ---- */
+.bkguar--card {
+    border: 1px solid rgba(0, 51, 153, .18);
+    border-radius: 10px;
     box-shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 12px 28px -20px rgba(0, 51, 153, .45);
 }
 
@@ -42,29 +75,37 @@
     line-height: 1.2;
 }
 
-.bkguar__notice {
-    display: block;
-    width: 100%;
-    height: auto;
-    border: 0;
-}
-
-.bkguar__full {
-    display: block;
+.bkguar--card .bkguar__full {
     padding: .5rem .85rem .6rem;
-    font-size: .75rem;
-    line-height: 1.3;
-    color: var(--bkguar-blue);
-    text-decoration: none;
     border-top: 1px solid rgba(0, 51, 153, .12);
 }
 
-.bkguar__full:hover,
-.bkguar__full:focus {
-    text-decoration: underline;
+/* ---- framed: solo el marco ---- */
+.bkguar--framed {
+    border: 1px solid rgba(0, 0, 0, .14);
+    border-radius: 6px;
 }
 
-/* En el resumen del pedido la columna es estrecha y va centrada */
+.bkguar--framed .bkguar__full {
+    padding: .45rem .7rem .55rem;
+    border-top: 1px solid rgba(0, 0, 0, .09);
+}
+
+/* ---- plain: el aviso y nada más ---- */
+.bkguar--plain {
+    background: transparent;
+}
+
+.bkguar--plain .bkguar__notice {
+    border-radius: 4px;
+}
+
+.bkguar--plain .bkguar__full {
+    padding: .4rem 0 0;
+    opacity: .8;
+}
+
+/* ---- el resumen del pedido siempre va centrado, sea cual sea la alineación de la ficha ---- */
 .bkguar--checkout {
     margin-left: auto;
     margin-right: auto;

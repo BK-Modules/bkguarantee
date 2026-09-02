@@ -22,8 +22,25 @@ class BkGuaranteeConfig
     const HIDE_FOR_B2B = 'BK_GUAR_HIDE_B2B';
     /** Grupos considerados B2B, separados por comas */
     const B2B_GROUPS = 'BK_GUAR_B2B_GROUPS';
+    /** Presentación: card | framed | plain */
+    const STYLE = 'BK_GUAR_STYLE';
+    /** Alineación dentro de su columna: left | center */
+    const ALIGN = 'BK_GUAR_ALIGN';
+    /** Punto de la ficha donde se pinta: info | thumbs | footer */
+    const PLACEMENT = 'BK_GUAR_PLACEMENT';
     /** Traza de depuración */
     const DEBUG = 'BK_GUAR_DEBUG';
+
+    /** Presentaciones admitidas */
+    const STYLES = ['card', 'framed', 'plain'];
+    /** Alineaciones admitidas */
+    const ALIGNS = ['left', 'center'];
+    /** Puntos de la ficha admitidos, con el hook que los sirve */
+    const PLACEMENTS = [
+        'info' => 'displayProductAdditionalInfo',
+        'thumbs' => 'displayAfterProductThumbs',
+        'footer' => 'displayFooterProduct',
+    ];
 
     /** Ancho por debajo del cual el aviso deja de leerse */
     const WIDTH_MIN = 240;
@@ -42,6 +59,9 @@ class BkGuaranteeConfig
             self::WIDTH => '380',
             self::HIDE_FOR_B2B => '0',
             self::B2B_GROUPS => '',
+            self::STYLE => 'card',
+            self::ALIGN => 'left',
+            self::PLACEMENT => 'info',
             self::DEBUG => '0',
         ];
     }
@@ -83,6 +103,40 @@ class BkGuaranteeConfig
         $width = (int) Configuration::get(self::WIDTH);
 
         return max(self::WIDTH_MIN, min(self::WIDTH_MAX, $width ?: 380));
+    }
+
+    /**
+     * Los tres ajustes de presentación se validan al leerlos contra su lista blanca: un valor
+     * heredado de otra instalación o escrito a mano en la base de datos no puede dejar la tarjeta
+     * con una clase que el CSS no conoce.
+     *
+     * @return string
+     */
+    public static function getStyle()
+    {
+        $value = (string) Configuration::get(self::STYLE);
+
+        return in_array($value, self::STYLES, true) ? $value : 'card';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getAlign()
+    {
+        $value = (string) Configuration::get(self::ALIGN);
+
+        return in_array($value, self::ALIGNS, true) ? $value : 'left';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getPlacement()
+    {
+        $value = (string) Configuration::get(self::PLACEMENT);
+
+        return isset(self::PLACEMENTS[$value]) ? $value : 'info';
     }
 
     /**

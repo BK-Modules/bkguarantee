@@ -24,6 +24,9 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
     {
         parent::setMedia($isNewTheme);
         $this->addCSS($this->module->assetUrl('views/css/admin.css'), 'all', null, false);
+        // El CSS del front se carga también aquí para que la comparativa de presentaciones se vea
+        // exactamente como se verá en la tienda. Todo cuelga de .bkguar, así que no toca el BO.
+        $this->addCSS($this->module->assetUrl('views/css/front.css'), 'all', null, false);
     }
 
     public function initContent()
@@ -53,6 +56,22 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         Configuration::updateValue(BkGuaranteeConfig::WIDTH, $width);
         Configuration::updateValue(BkGuaranteeConfig::HIDE_FOR_B2B, (int) Tools::getValue(BkGuaranteeConfig::HIDE_FOR_B2B));
         Configuration::updateValue(BkGuaranteeConfig::B2B_GROUPS, $groups);
+
+        $style = Tools::getValue(BkGuaranteeConfig::STYLE);
+        $align = Tools::getValue(BkGuaranteeConfig::ALIGN);
+        $placement = Tools::getValue(BkGuaranteeConfig::PLACEMENT);
+        Configuration::updateValue(
+            BkGuaranteeConfig::STYLE,
+            in_array($style, BkGuaranteeConfig::STYLES, true) ? $style : 'card'
+        );
+        Configuration::updateValue(
+            BkGuaranteeConfig::ALIGN,
+            in_array($align, BkGuaranteeConfig::ALIGNS, true) ? $align : 'left'
+        );
+        Configuration::updateValue(
+            BkGuaranteeConfig::PLACEMENT,
+            isset(BkGuaranteeConfig::PLACEMENTS[$placement]) ? $placement : 'info'
+        );
         Configuration::updateValue(BkGuaranteeConfig::DEBUG, (int) Tools::getValue(BkGuaranteeConfig::DEBUG));
 
         BkGuaranteeLogger::confirmation('Configuración guardada');
@@ -90,6 +109,8 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             'bkguar_preview' => $preview,
             'bkguar_width' => BkGuaranteeConfig::getWidth(),
             'bkguar_dir' => 'modules/bkguarantee/' . BkGuaranteeNotice::DIR,
+            'bkguar_styles' => BkGuaranteeConfig::STYLES,
+            'bkguar_style' => BkGuaranteeConfig::getStyle(),
         ]);
 
         return $this->context->smarty->fetch(
@@ -126,6 +147,49 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
                         $this->trans('On the order summary', [], 'Modules.Bkguarantee.Admin'),
                         $this->trans('The last screen before the contract is concluded.', [], 'Modules.Bkguarantee.Admin')
                     ),
+                    [
+                        'type' => 'select',
+                        'label' => $this->trans('Presentation', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => BkGuaranteeConfig::STYLE,
+                        'desc' => $this->trans('The frame around the notice. The notice itself never changes.', [], 'Modules.Bkguarantee.Admin'),
+                        'options' => [
+                            'query' => [
+                                ['id' => 'card', 'name' => $this->trans('Card with blue header', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'framed', 'name' => $this->trans('Thin frame only', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'plain', 'name' => $this->trans('No frame', [], 'Modules.Bkguarantee.Admin')],
+                            ],
+                            'id' => 'id',
+                            'name' => 'name',
+                        ],
+                    ],
+                    [
+                        'type' => 'select',
+                        'label' => $this->trans('Position on the product page', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => BkGuaranteeConfig::PLACEMENT,
+                        'desc' => $this->trans('Not every theme renders every position. If one of them shows nothing, try another or move the module from Design > Positions.', [], 'Modules.Bkguarantee.Admin'),
+                        'options' => [
+                            'query' => [
+                                ['id' => 'info', 'name' => $this->trans('Below the add-to-cart block', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'thumbs', 'name' => $this->trans('Under the product gallery', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'footer', 'name' => $this->trans('At the bottom of the product page', [], 'Modules.Bkguarantee.Admin')],
+                            ],
+                            'id' => 'id',
+                            'name' => 'name',
+                        ],
+                    ],
+                    [
+                        'type' => 'select',
+                        'label' => $this->trans('Alignment', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => BkGuaranteeConfig::ALIGN,
+                        'options' => [
+                            'query' => [
+                                ['id' => 'left', 'name' => $this->trans('Left', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'center', 'name' => $this->trans('Centred', [], 'Modules.Bkguarantee.Admin')],
+                            ],
+                            'id' => 'id',
+                            'name' => 'name',
+                        ],
+                    ],
                     [
                         'type' => 'text',
                         'label' => $this->trans('Width in pixels', [], 'Modules.Bkguarantee.Admin'),
@@ -200,6 +264,9 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             BkGuaranteeConfig::ON_PRODUCT => (int) Configuration::get(BkGuaranteeConfig::ON_PRODUCT),
             BkGuaranteeConfig::ON_CHECKOUT => (int) Configuration::get(BkGuaranteeConfig::ON_CHECKOUT),
             BkGuaranteeConfig::WIDTH => BkGuaranteeConfig::getWidth(),
+            BkGuaranteeConfig::STYLE => BkGuaranteeConfig::getStyle(),
+            BkGuaranteeConfig::ALIGN => BkGuaranteeConfig::getAlign(),
+            BkGuaranteeConfig::PLACEMENT => BkGuaranteeConfig::getPlacement(),
             BkGuaranteeConfig::HIDE_FOR_B2B => (int) Configuration::get(BkGuaranteeConfig::HIDE_FOR_B2B),
             BkGuaranteeConfig::DEBUG => (int) Configuration::get(BkGuaranteeConfig::DEBUG),
         ];
