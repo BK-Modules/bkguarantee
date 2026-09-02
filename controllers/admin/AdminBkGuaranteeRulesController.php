@@ -276,6 +276,13 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
         $this->fields_value['bkguar_manufacturers[]'] = $type === BkGuaranteeRule::FILTER_MANUFACTURER ? $values : [];
         $this->fields_value['bkguar_products'] = $type === BkGuaranteeRule::FILTER_PRODUCTS ? implode(', ', $values) : '';
 
+        // Una regla recién creada nace activa: nadie da de alta una regla para dejarla apagada, y
+        // el interruptor por defecto en 'No' hacía que la primera se guardara sin efecto.
+        if (!($rule instanceof BkGuaranteeRule) || !$rule->id) {
+            $this->fields_value['active'] = 1;
+            $this->fields_value['priority'] = 0;
+        }
+
         return parent::renderForm();
     }
 
