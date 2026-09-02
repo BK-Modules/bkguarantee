@@ -258,6 +258,122 @@
         <source>Wins over anything else: a product in one of these never shows the notice.</source>
         <target>Prevale su tutto il resto: un prodotto di una di queste non mostra mai l’avviso.</target>
       </trans-unit>
+      <trans-unit id="cf64937c7a882ce072e72cc1cdde4238">
+        <source>A durability guarantee earns a label only above two years.</source>
+        <target>Una garanzia di durabilità dà diritto all’etichetta solo oltre i due anni.</target>
+      </trans-unit>
+      <trans-unit id="dd593f8a542ab628cbba98c709255e60">
+        <source>Add a rule</source>
+        <target>Aggiungi una regola</target>
+      </trans-unit>
+      <trans-unit id="1d9432b1d2f4a541154b18c2e72f39ef">
+        <source>Applies by</source>
+        <target>Si applica per</target>
+      </trans-unit>
+      <trans-unit id="1be6f9eb563f3bf85c78b4219bf09de9">
+        <source>Brand</source>
+        <target>Marca</target>
+      </trans-unit>
+      <trans-unit id="84be54bb4bd1b755a27d86388700d097">
+        <source>Brands</source>
+        <target>Marche</target>
+      </trans-unit>
+      <trans-unit id="af1b98adf7f686b84cd0b443e022b7a0">
+        <source>Categories</source>
+        <target>Categorie</target>
+      </trans-unit>
+      <trans-unit id="3adbdb3ac060038aa0e6e6c138ef9873">
+        <source>Category</source>
+        <target>Categoria</target>
+      </trans-unit>
+      <trans-unit id="84c1c5c723aa1d1ed70c7e3eda5d72ac">
+        <source>Choose at least one target for the rule.</source>
+        <target>Scegli almeno un destinatario per la regola.</target>
+      </trans-unit>
+      <trans-unit id="d3b206d196cd6be3a2764c1fb90b200f">
+        <source>Delete selected</source>
+        <target>Elimina la selezione</target>
+      </trans-unit>
+      <trans-unit id="171322029b260f77c88c0743cff4731c">
+        <source>Delete the selected rules?</source>
+        <target>Eliminare le regole selezionate?</target>
+      </trans-unit>
+      <trans-unit id="9974fe105de2e9c20d1b3f378c8d2db9">
+        <source>Durability guarantee rule</source>
+        <target>Regola di garanzia di durabilità</target>
+      </trans-unit>
+      <trans-unit id="25ccc7e578cd92490f01324f31f7c196">
+        <source>Durability guarantees</source>
+        <target>Garanzie di durabilità</target>
+      </trans-unit>
+      <trans-unit id="ce2c8aed9c2fa0cfbed56cbda4d8bf07">
+        <source>Empty</source>
+        <target>Vuoto</target>
+      </trans-unit>
+      <trans-unit id="00d23a76e43b46dae9ec7aa9dcbebb32">
+        <source>Enabled</source>
+        <target>Attiva</target>
+      </trans-unit>
+      <trans-unit id="3ba9e2524c3673ca9b3a3a2a16ccc808">
+        <source>From the product</source>
+        <target>Dal prodotto</target>
+      </trans-unit>
+      <trans-unit id="b718adec73e04ce3ec720dd11a06a308">
+        <source>ID</source>
+        <target>ID</target>
+      </trans-unit>
+      <trans-unit id="cdd46e2b61671f996b088f7a3c714ad9">
+        <source>Leave it empty to use the MPN of each product. A rule covering several models needs it empty, or they would all claim the same one.</source>
+        <target>Lascialo vuoto per usare l’MPN di ogni prodotto. Una regola che copre più modelli lo richiede vuoto, altrimenti dichiarerebbero tutti lo stesso.</target>
+      </trans-unit>
+      <trans-unit id="f51b44eafff2b8f798c9d95c5662ebfa">
+        <source>Leave it empty to use the brand of each product.</source>
+        <target>Lascialo vuoto per usare la marca di ogni prodotto.</target>
+      </trans-unit>
+      <trans-unit id="73cff11c9de2bd25aa9f07b6f7129ed2">
+        <source>Model identifier</source>
+        <target>Identificativo del modello</target>
+      </trans-unit>
+      <trans-unit id="047f7a25f368a24593ab71d09bc0ca26">
+        <source>Only a name for you, so you can find it in the list.</source>
+        <target>Solo un nome per te, per ritrovarla nell’elenco.</target>
+      </trans-unit>
+      <trans-unit id="502996d9790340c5fd7b86a5b93b1c9f">
+        <source>Priority</source>
+        <target>Priorità</target>
+      </trans-unit>
+      <trans-unit id="a6ad87aadc206f6491720e309821904a">
+        <source>Producer</source>
+        <target>Produttore</target>
+      </trans-unit>
+      <trans-unit id="068f80c7519d0528fb08e82137a72131">
+        <source>Products</source>
+        <target>Prodotti</target>
+      </trans-unit>
+      <trans-unit id="ab7a485ebe75b6dd7243ad719f23c7de">
+        <source>Rule</source>
+        <target>Regola</target>
+      </trans-unit>
+      <trans-unit id="0134930cd8de5ba2ea50e5a843bea37d">
+        <source>Specific products</source>
+        <target>Prodotti specifici</target>
+      </trans-unit>
+      <trans-unit id="91fadc5613280f76b916f1fd236e43e9">
+        <source>Targets</source>
+        <target>Destinatari</target>
+      </trans-unit>
+      <trans-unit id="08c830d475295b77fbf0bbb2da7b6b72">
+        <source>The producer guarantee only earns a label above two years, because two is what the legal guarantee already covers.</source>
+        <target>La garanzia del produttore dà diritto all’etichetta solo oltre i due anni, perché due è ciò che la garanzia legale già copre.</target>
+      </trans-unit>
+      <trans-unit id="c5241f6d217cb7c2931620a592ba509f">
+        <source>When two rules match the same product, the higher priority wins.</source>
+        <target>Quando due regole corrispondono allo stesso prodotto, vince quella con priorità più alta.</target>
+      </trans-unit>
+      <trans-unit id="e4a00407f4e14849a66f076123f38494">
+        <source>Years</source>
+        <target>Anni</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

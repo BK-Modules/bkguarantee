@@ -26,7 +26,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 class BkGuarantee extends Module
 {
     /** Controlador de la pantalla de configuración, y nombre de su pestaña en el back office */
-    const TAB_CLASS = 'AdminBkGuaranteeConfig';
+    const TAB_CLASS = 'AdminBkGuaranteeTab';
     /**
      * displayProductAdditionalInfo cae bajo el bloque de compra, que es donde la oferta queda a
      * la vista; displayCheckoutSubtotalDetails repite el aviso en el resumen del pedido, el
@@ -72,6 +72,10 @@ class BkGuarantee extends Module
             $this->registerHook($hook);
         }
 
+        if (!BkGuaranteeRule::installTable()) {
+            return false;
+        }
+
         BkGuaranteeConfig::installDefaults();
 
         if (!BkGuaranteeTabsInstaller::install($this->name)) {
@@ -96,6 +100,7 @@ class BkGuarantee extends Module
         \BkModules\Registry\V1\InstallReporter::report($this->name, $this->version, 'uninstall');
 
         BkGuaranteeTabsInstaller::uninstall();
+        BkGuaranteeRule::uninstallTable();
         BkGuaranteeConfig::uninstallKeys();
         BkGuaranteeLogger::confirmation('Módulo desinstalado');
 
