@@ -153,6 +153,14 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             'bkguar_preview' => $preview,
             'bkguar_width' => BkGuaranteeConfig::getWidth(),
             'bkguar_dir' => 'modules/bkguarantee/' . BkGuaranteeNotice::DIR,
+            'bkguar_qr' => BkGuaranteeNotice::qrCheck(BkGuaranteeConfig::getWidth()),
+            'bkguar_qr_garan' => BkGuaranteeNotice::qrCheck(
+                BkGuaranteeConfig::getGaranWidth(),
+                BkGuaranteeNotice::QR_RATIO_LABEL
+            ),
+            'bkguar_qr_ideal' => BkGuaranteeNotice::widthForComfortableQr(),
+            'bkguar_qr_ideal_garan' => BkGuaranteeNotice::widthForComfortableQr(BkGuaranteeNotice::QR_RATIO_LABEL),
+            'bkguar_garan_width' => BkGuaranteeConfig::getGaranWidth(),
             'bkguar_styles' => BkGuaranteeConfig::STYLES,
             'bkguar_style' => BkGuaranteeConfig::getStyle(),
         ]);

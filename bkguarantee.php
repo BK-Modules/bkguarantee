@@ -143,7 +143,10 @@ class BkGuarantee extends Module
         );
 
         if (isset($params['template_html'])) {
-            $params['template_html'] .= BkGuaranteeEmail::htmlBlock($idLang, $title, $alt);
+            $params['template_html'] = BkGuaranteeEmail::insertIntoBody(
+                $params['template_html'],
+                BkGuaranteeEmail::htmlBlock($idLang, $title, $alt)
+            );
         }
         if (isset($params['template_txt'])) {
             $params['template_txt'] .= BkGuaranteeEmail::textBlock($idLang, $title);

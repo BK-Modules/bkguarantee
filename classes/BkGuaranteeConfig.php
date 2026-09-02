@@ -79,7 +79,11 @@ class BkGuaranteeConfig
         'footer' => 'displayFooterProduct',
     ];
 
-    /** Ancho por debajo del cual el aviso deja de leerse */
+    /**
+     * Ancho por debajo del cual el aviso deja de leerse. El mínimo se queda bajo a propósito —hay
+     * temas con columnas estrechas—, pero la pantalla de configuración avisa de que a esos anchos
+     * el código QR ya no se escanea, que es lo que el anexo I sí exige.
+     */
     const WIDTH_MIN = 240;
     /** Ancho por encima del cual el aviso desborda la columna de cualquier tema */
     const WIDTH_MAX = 720;
@@ -93,16 +97,16 @@ class BkGuaranteeConfig
             self::ENABLED => '1',
             self::ON_PRODUCT => '1',
             self::ON_CHECKOUT => '1',
-            self::WIDTH => '380',
+            self::WIDTH => '620',
             self::HIDE_FOR_B2B => '0',
             self::B2B_GROUPS => '',
-            self::STYLE => 'card',
+            self::STYLE => 'band',
             self::ALIGN => 'left',
-            self::PLACEMENT => 'info',
+            self::PLACEMENT => 'footer',
             self::CHECKOUT_PLACEMENT => 'summary',
             self::GARAN_ON => '1',
             self::GARAN_PLACEMENT => 'thumbs',
-            self::GARAN_WIDTH => '300',
+            self::GARAN_WIDTH => '420',
             self::GARAN_NESTED => '0',
             self::ON_EMAIL => '1',
             self::EMAIL_ATTACH => '1',
@@ -151,7 +155,7 @@ class BkGuaranteeConfig
     {
         $width = (int) Configuration::get(self::WIDTH);
 
-        return max(self::WIDTH_MIN, min(self::WIDTH_MAX, $width ?: 380));
+        return max(self::WIDTH_MIN, min(self::WIDTH_MAX, $width ?: 620));
     }
 
     /**
@@ -205,7 +209,7 @@ class BkGuaranteeConfig
     {
         $width = (int) Configuration::get(self::GARAN_WIDTH);
 
-        return max(180, min(520, $width ?: 300));
+        return max(180, min(520, $width ?: 420));
     }
 
     /**

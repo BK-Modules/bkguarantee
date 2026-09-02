@@ -446,6 +446,46 @@
         <source>Top of the order summary</source>
         <target>Top of the order summary</target>
       </trans-unit>
+      <trans-unit id="c921f6f07b73fdb47059a76935f04c7f">
+        <source>It scans comfortably from</source>
+        <target>It scans comfortably from</target>
+      </trans-unit>
+      <trans-unit id="9c12f952ca3695bb3043ddcc0ceaaf80">
+        <source>QR code</source>
+        <target>QR code</target>
+      </trans-unit>
+      <trans-unit id="692a10031943c7f8c354df527cd487b0">
+        <source>The regulation requires the QR to be scannable with a standard phone in normal light, and that depends on the width you choose here, not on the artwork.</source>
+        <target>The regulation requires the QR to be scannable with a standard phone in normal light, and that depends on the width you choose here, not on the artwork.</target>
+      </trans-unit>
+      <trans-unit id="2342ffc35c91c94fe0adac32ff28c304">
+        <source>fine.</source>
+        <target>fine.</target>
+      </trans-unit>
+      <trans-unit id="2df7061a4899962434fd5bb14d4bcbd3">
+        <source>scans comfortably.</source>
+        <target>scans comfortably.</target>
+      </trans-unit>
+      <trans-unit id="513117b408b6056079d26db9c38c6e01">
+        <source>the notice</source>
+        <target>the notice</target>
+      </trans-unit>
+      <trans-unit id="5d3111ccfa36a024cbf24b0b303b3e5d">
+        <source>tight.</source>
+        <target>tight.</target>
+      </trans-unit>
+      <trans-unit id="95fe74e6eb2393e88eab06846a6a1500">
+        <source>tight: it scans on a good camera and fails on a mediocre one.</source>
+        <target>tight: it scans on a good camera and fails on a mediocre one.</target>
+      </trans-unit>
+      <trans-unit id="705b3b2b39b482727e66e23b225e44f5">
+        <source>too small, no phone will read it.</source>
+        <target>too small, no phone will read it.</target>
+      </trans-unit>
+      <trans-unit id="c024fb30de2d46675faa9cd23353acf9">
+        <source>too small.</source>
+        <target>too small.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

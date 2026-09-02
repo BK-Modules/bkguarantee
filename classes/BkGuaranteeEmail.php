@@ -52,12 +52,42 @@ class BkGuaranteeEmail
         // tiendas instaladas en la raíz, donde __PS_BASE_URI__ es una sola barra.
         $absolute = Tools::getShopDomainSsl(true) . $url;
 
-        return '<table style="width:100%;border-collapse:collapse;margin:24px 0 0">'
-            . '<tr><td style="padding:0 0 8px;font-family:Arial,sans-serif;font-size:13px;color:#333">'
-            . '<strong>' . Tools::htmlentitiesUTF8($title) . '</strong></td></tr>'
-            . '<tr><td><img src="' . Tools::htmlentitiesUTF8($absolute) . '" alt="'
-            . Tools::htmlentitiesUTF8($alt) . '" width="420" style="display:block;max-width:100%;height:auto;border:0"></td></tr>'
-            . '</table>';
+        // Todo el estilo va en línea y el bloque se acota a su propio ancho: la plantilla del
+        // comerciante puede ser cualquier cosa, así que este bloque no hereda nada de ella ni le
+        // impone ancho —un table al 100 % deforma un diseño estrecho—.
+        return '<div style="margin:24px auto 0;max-width:420px;text-align:left">'
+            . '<p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:13px;'
+            . 'line-height:1.4;color:#333"><strong>' . Tools::htmlentitiesUTF8($title) . '</strong></p>'
+            . '<img src="' . Tools::htmlentitiesUTF8($absolute) . '" alt="'
+            . Tools::htmlentitiesUTF8($alt) . '" width="420" style="display:block;width:100%;'
+            . 'max-width:420px;height:auto;border:0;outline:none;text-decoration:none">'
+            . '</div>';
+    }
+
+    /**
+     * Inserta el bloque dentro del cuerpo, antes de </body>, en vez de pegarlo detrás del cierre:
+     * la plantilla del comerciante es un documento completo y lo que va después de </html> queda
+     * fuera del documento, con clientes de correo que lo esconden o lo pintan donde les parece.
+     *
+     * @param string $html
+     * @param string $block
+     *
+     * @return string
+     */
+    public static function insertIntoBody($html, $block)
+    {
+        if ($block === '' || trim((string) $html) === '') {
+            return $html;
+        }
+
+        foreach (['</body>', '</BODY>'] as $needle) {
+            $at = strripos($html, $needle);
+            if ($at !== false) {
+                return substr($html, 0, $at) . $block . substr($html, $at);
+            }
+        }
+
+        return $html . $block;
     }
 
     /**
@@ -69,11 +99,15 @@ class BkGuaranteeEmail
     public static function textBlock($idLang, $title)
     {
         $iso = self::isoFor($idLang);
-        if (BkGuaranteeNotice::pathFor($iso) === null) {
+        $url = BkGuaranteeNotice::urlFor($iso);
+        if ($url === null) {
             return '';
         }
 
-        return PHP_EOL . PHP_EOL . $title . PHP_EOL;
+        // En la versión de texto no hay imagen que valga: va el enlace, que es lo único que le
+        // sirve a quien recibe el correo en texto plano.
+        return PHP_EOL . PHP_EOL . $title . PHP_EOL
+            . Tools::getShopDomainSsl(true) . $url . PHP_EOL;
     }
 
     /**

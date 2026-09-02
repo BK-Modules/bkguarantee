@@ -111,6 +111,24 @@
           <strong>{$bkguar_width|intval}&nbsp;px</strong>.
           {l s='Judge legibility at that width, not at full size.' d='Modules.Bkguarantee.Admin'}
         </p>
+
+        {* El anexo I exige que el QR se pueda escanear, y eso lo decide el ancho de la tienda *}
+        <div class="alert {if $bkguar_qr.level === 'ok'}alert-success{elseif $bkguar_qr.level === 'tight'}alert-warning{else}alert-danger{/if}" style="margin-top:6px">
+          <strong>{l s='QR code' d='Modules.Bkguarantee.Admin'}</strong> &mdash;
+          {l s='the notice' d='Modules.Bkguarantee.Admin'}: {$bkguar_qr.side|intval}&nbsp;px,
+          {if $bkguar_qr.level === 'ok'}{l s='scans comfortably.' d='Modules.Bkguarantee.Admin'}
+          {elseif $bkguar_qr.level === 'tight'}{l s='tight: it scans on a good camera and fails on a mediocre one.' d='Modules.Bkguarantee.Admin'}
+          {else}{l s='too small, no phone will read it.' d='Modules.Bkguarantee.Admin'}{/if}
+          {if $bkguar_qr.level !== 'ok'}
+            {l s='It scans comfortably from' d='Modules.Bkguarantee.Admin'} <strong>{$bkguar_qr_ideal|intval}&nbsp;px</strong>.
+          {/if}
+          &nbsp;·&nbsp; GARAN ({$bkguar_garan_width|intval}&nbsp;px): {$bkguar_qr_garan.side|intval}&nbsp;px,
+          {if $bkguar_qr_garan.level === 'ok'}{l s='fine.' d='Modules.Bkguarantee.Admin'}
+          {elseif $bkguar_qr_garan.level === 'tight'}{l s='tight.' d='Modules.Bkguarantee.Admin'}
+          {else}{l s='too small.' d='Modules.Bkguarantee.Admin'}{/if}
+          <br>
+          <small>{l s='The regulation requires the QR to be scannable with a standard phone in normal light, and that depends on the width you choose here, not on the artwork.' d='Modules.Bkguarantee.Admin'}</small>
+        </div>
       {else}
         <div class="alert alert-danger" style="margin:0">
           {l s='No official notice is installed yet, so nothing is being shown anywhere in the shop.' d='Modules.Bkguarantee.Admin'}

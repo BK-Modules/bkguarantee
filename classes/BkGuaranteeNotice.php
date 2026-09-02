@@ -24,6 +24,52 @@ class BkGuaranteeNotice
     const EXT = '.jpg';
 
     /**
+     * Fracción del ancho que ocupa el código QR en cada arte, medida sobre los ficheros oficiales:
+     * el del aviso es proporcionalmente más pequeño que el de la etiqueta.
+     */
+    const QR_RATIO_NOTICE = 0.18;
+    const QR_RATIO_LABEL = 0.263;
+    /** Lado del QR en píxeles a partir del cual se escanea con comodidad desde una pantalla */
+    const QR_COMFORTABLE = 110;
+    /** Lado por debajo del cual no hay nada que hacer */
+    const QR_MINIMUM = 80;
+
+    /**
+     * El anexo I exige que el QR sea escaneable con un móvil normal y con luz normal, y eso no
+     * depende del arte sino del ancho al que lo pinte la tienda: a 240 px el código baja de 45 px
+     * de lado y no hay teléfono que lo lea.
+     *
+     * @param int   $width Ancho al que se pinta la pieza
+     * @param float $ratio Proporción del QR dentro de la pieza
+     *
+     * @return array side, level (ok|tight|bad)
+     */
+    public static function qrCheck($width, $ratio = self::QR_RATIO_NOTICE)
+    {
+        $side = (int) round((int) $width * $ratio);
+
+        if ($side >= self::QR_COMFORTABLE) {
+            $level = 'ok';
+        } elseif ($side >= self::QR_MINIMUM) {
+            $level = 'tight';
+        } else {
+            $level = 'bad';
+        }
+
+        return ['side' => $side, 'level' => $level];
+    }
+
+    /**
+     * @param float $ratio
+     *
+     * @return int Ancho mínimo al que el QR se escanea con comodidad
+     */
+    public static function widthForComfortableQr($ratio = self::QR_RATIO_NOTICE)
+    {
+        return (int) ceil(self::QR_COMFORTABLE / $ratio);
+    }
+
+    /**
      * @param string $isoCode Código ISO del idioma (es, en, fr…)
      *
      * @return string|null Ruta absoluta en disco, o null si ese idioma no tiene arte instalado
