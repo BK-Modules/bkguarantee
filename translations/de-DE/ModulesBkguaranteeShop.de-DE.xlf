@@ -22,6 +22,14 @@
         <source>Your rights on this purchase</source>
         <target>Ihre Rechte bei diesem Kauf</target>
       </trans-unit>
+      <trans-unit id="e80a3632cfb8578cd49629ecf0266be8">
+        <source>GARAN label: producer durability guarantee in years</source>
+        <target>GARAN-Label: Haltbarkeitsgarantie des Herstellers in Jahren</target>
+      </trans-unit>
+      <trans-unit id="3c5e3918666f7f53c99192a089690d5d">
+        <source>Producer guarantee in years</source>
+        <target>Herstellergarantie in Jahren</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

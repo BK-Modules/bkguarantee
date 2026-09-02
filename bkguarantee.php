@@ -185,6 +185,14 @@ class BkGuarantee extends Module
             'modules/' . $this->name . '/views/css/front.css',
             ['media' => 'all', 'priority' => 150]
         );
+
+        if (BkGuaranteeConfig::isOn(BkGuaranteeConfig::GARAN_NESTED)) {
+            $this->context->controller->registerJavascript(
+                'bkguarantee-garan',
+                'modules/' . $this->name . '/views/js/garan.js',
+                ['position' => 'bottom', 'priority' => 150]
+            );
+        }
     }
 
     /**
@@ -194,17 +202,17 @@ class BkGuarantee extends Module
      */
     public function hookDisplayProductAdditionalInfo(array $params)
     {
-        return $this->renderProduct('info', $params);
+        return $this->renderProduct('info', $params) . $this->renderGaran('info', $params);
     }
 
     public function hookDisplayAfterProductThumbs(array $params)
     {
-        return $this->renderProduct('thumbs', $params);
+        return $this->renderProduct('thumbs', $params) . $this->renderGaran('thumbs', $params);
     }
 
     public function hookDisplayFooterProduct(array $params)
     {
-        return $this->renderProduct('footer', $params);
+        return $this->renderProduct('footer', $params) . $this->renderGaran('footer', $params);
     }
 
     /**
@@ -228,6 +236,48 @@ class BkGuarantee extends Module
         }
 
         return $this->renderNotice('product');
+    }
+
+    /**
+     * La etiqueta GARAN tiene su propia posición: el aviso acompaña a la oferta y la etiqueta va
+     * junto a la imagen del producto, que es donde la sitúa el reglamento.
+     *
+     * @param string $placement
+     * @param array  $params
+     *
+     * @return string
+     */
+    private function renderGaran($placement, array $params)
+    {
+        if (!BkGuaranteeConfig::isOn(BkGuaranteeConfig::GARAN_ON)
+            || !BkGuaranteeConfig::isOn(BkGuaranteeConfig::ENABLED)
+            || BkGuaranteeConfig::getGaranPlacement() !== $placement
+        ) {
+            return '';
+        }
+
+        $idProduct = $this->productIdFrom($params);
+        $label = BkGuaranteeRule::labelFor($idProduct);
+        if ($label === null) {
+            return '';
+        }
+
+        $this->smarty->assign([
+            'bkgaran_art' => $this->assetUrl('views/img/garan-blank.png'),
+            'bkgaran_width' => BkGuaranteeConfig::getGaranWidth(),
+            'bkgaran_nested' => BkGuaranteeConfig::isOn(BkGuaranteeConfig::GARAN_NESTED),
+            'bkgaran_years' => (int) $label['years'],
+            'bkgaran_brand' => $label['brand'],
+            'bkgaran_model' => $label['model'],
+            'bkgaran_alt' => $this->trans(
+                'GARAN label: producer durability guarantee in years',
+                [],
+                'Modules.Bkguarantee.Shop'
+            ),
+            'bkgaran_toggle' => $this->trans('Producer guarantee in years', [], 'Modules.Bkguarantee.Shop'),
+        ]);
+
+        return $this->fetch('module:bkguarantee/views/templates/hook/garan.tpl');
     }
 
     /**

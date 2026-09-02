@@ -374,6 +374,78 @@
         <source>Years</source>
         <target>Années</target>
       </trans-unit>
+      <trans-unit id="8054c05eb89bb31453b5a0d763a96a75">
+        <source>A compact badge that opens the full label on the first click, hover or touch. The regulation allows this for the label only, never for the notice.</source>
+        <target>Un badge compact qui ouvre le label complet au premier clic, survol ou toucher. Le règlement l’autorise pour le label seulement, jamais pour l’avis.</target>
+      </trans-unit>
+      <trans-unit id="2d81edfc914330957a41226ab832c473">
+        <source>Above the payment methods</source>
+        <target>Au-dessus des moyens de paiement</target>
+      </trans-unit>
+      <trans-unit id="ffa5ab3a1e9acd5d9e842357fe3048b2">
+        <source>Attach it to the email as well</source>
+        <target>Le joindre aussi à l’e-mail</target>
+      </trans-unit>
+      <trans-unit id="fd0216da0744a3c5504f7b871334b76d">
+        <source>Between 180 and 520.</source>
+        <target>Entre 180 et 520.</target>
+      </trans-unit>
+      <trans-unit id="e80a3632cfb8578cd49629ecf0266be8">
+        <source>GARAN label: producer durability guarantee in years</source>
+        <target>Label GARAN : garantie de durabilité du producteur en années</target>
+      </trans-unit>
+      <trans-unit id="4436550732ba91aeef1f0a09a1191b6d">
+        <source>GARAN width in pixels</source>
+        <target>Largeur de GARAN en pixels</target>
+      </trans-unit>
+      <trans-unit id="974ab6d5835cb5e996b71941bc0da69b">
+        <source>Half the inboxes block remote images. The attachment is what guarantees the notice actually arrives.</source>
+        <target>La moitié des boîtes de réception bloquent les images distantes. La pièce jointe est ce qui garantit que l’avis arrive vraiment.</target>
+      </trans-unit>
+      <trans-unit id="ea571a8fd88daaff7f97e105fdd58667">
+        <source>In the order confirmation email</source>
+        <target>Dans l’e-mail de confirmation de commande</target>
+      </trans-unit>
+      <trans-unit id="47e56e82574ec215cea329dfda43ccae">
+        <source>Nested display for GARAN</source>
+        <target>Affichage imbriqué pour GARAN</target>
+      </trans-unit>
+      <trans-unit id="aebe0f3c53a0559fd8aa1482c23ebbcd">
+        <source>Only appears on products covered by a durability guarantee rule with all three fields resolved.</source>
+        <target>N’apparaît que sur les produits couverts par une règle de garantie de durabilité dont les trois champs sont résolus.</target>
+      </trans-unit>
+      <trans-unit id="7401f196cb31060c9a813e9f429a77fe">
+        <source>Position in the checkout</source>
+        <target>Position dans le tunnel de commande</target>
+      </trans-unit>
+      <trans-unit id="e9850863e280484afa31d17f9caf5f7e">
+        <source>Position of the GARAN label</source>
+        <target>Position du label GARAN</target>
+      </trans-unit>
+      <trans-unit id="3c5e3918666f7f53c99192a089690d5d">
+        <source>Producer guarantee in years</source>
+        <target>Garantie du producteur en années</target>
+      </trans-unit>
+      <trans-unit id="9483bb036143a3f0fa94b283daad11f7">
+        <source>Show the GARAN label</source>
+        <target>Afficher le label GARAN</target>
+      </trans-unit>
+      <trans-unit id="f430366701dccfb835d8d4bf93ec4759">
+        <source>The notice has to stay available to the customer after the purchase, and the confirmation email is the durable medium that already reaches everyone.</source>
+        <target>L’avis doit rester à disposition du client après l’achat, et l’e-mail de confirmation est le support durable qui parvient déjà à tout le monde.</target>
+      </trans-unit>
+      <trans-unit id="034499699d7472b703d441e41b29dc65">
+        <source>The order summary is visible from the first step. Above the payment methods the notice only appears once the customer has finished the address and shipping steps.</source>
+        <target>Le récapitulatif est visible dès la première étape. Au-dessus des moyens de paiement, l’avis n’apparaît qu’une fois l’adresse et la livraison validées.</target>
+      </trans-unit>
+      <trans-unit id="8c737371420d2f23acc894544ff36a2d">
+        <source>The regulation places it next to the image of the goods.</source>
+        <target>Le règlement la place à côté de l’image du bien.</target>
+      </trans-unit>
+      <trans-unit id="88406801b21499a49d4d2dd1125bbeb9">
+        <source>Top of the order summary</source>
+        <target>En haut du récapitulatif</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

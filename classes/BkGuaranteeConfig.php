@@ -28,6 +28,14 @@ class BkGuaranteeConfig
     const ALIGN = 'BK_GUAR_ALIGN';
     /** Punto de la ficha donde se pinta: info | thumbs | footer */
     const PLACEMENT = 'BK_GUAR_PLACEMENT';
+    /** Etiqueta GARAN en la ficha de producto */
+    const GARAN_ON = 'BK_GUAR_GARAN';
+    /** Punto de la ficha donde va la etiqueta: info | thumbs | footer */
+    const GARAN_PLACEMENT = 'BK_GUAR_GARAN_PLACE';
+    /** Ancho máximo de la etiqueta en píxeles */
+    const GARAN_WIDTH = 'BK_GUAR_GARAN_W';
+    /** Visualización anidada de la etiqueta: se abre entera al primer clic */
+    const GARAN_NESTED = 'BK_GUAR_GARAN_NEST';
     /** Aviso en el correo de confirmación de pedido */
     const ON_EMAIL = 'BK_GUAR_EMAIL';
     /** Adjunta además el aviso al correo, para que llegue aunque el cliente bloquee imágenes */
@@ -92,6 +100,10 @@ class BkGuaranteeConfig
             self::ALIGN => 'left',
             self::PLACEMENT => 'info',
             self::CHECKOUT_PLACEMENT => 'summary',
+            self::GARAN_ON => '1',
+            self::GARAN_PLACEMENT => 'thumbs',
+            self::GARAN_WIDTH => '300',
+            self::GARAN_NESTED => '0',
             self::ON_EMAIL => '1',
             self::EMAIL_ATTACH => '1',
             self::SCOPE_MODE => 'all',
@@ -174,6 +186,26 @@ class BkGuaranteeConfig
         $value = (string) Configuration::get(self::PLACEMENT);
 
         return isset(self::PLACEMENTS[$value]) ? $value : 'info';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getGaranPlacement()
+    {
+        $value = (string) Configuration::get(self::GARAN_PLACEMENT);
+
+        return isset(self::PLACEMENTS[$value]) ? $value : 'thumbs';
+    }
+
+    /**
+     * @return int
+     */
+    public static function getGaranWidth()
+    {
+        $width = (int) Configuration::get(self::GARAN_WIDTH);
+
+        return max(180, min(520, $width ?: 300));
     }
 
     /**

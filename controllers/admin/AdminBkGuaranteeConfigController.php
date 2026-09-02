@@ -54,6 +54,15 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         Configuration::updateValue(BkGuaranteeConfig::ON_PRODUCT, (int) Tools::getValue(BkGuaranteeConfig::ON_PRODUCT));
         Configuration::updateValue(BkGuaranteeConfig::ON_CHECKOUT, (int) Tools::getValue(BkGuaranteeConfig::ON_CHECKOUT));
         Configuration::updateValue(BkGuaranteeConfig::ON_EMAIL, (int) Tools::getValue(BkGuaranteeConfig::ON_EMAIL));
+        Configuration::updateValue(BkGuaranteeConfig::GARAN_ON, (int) Tools::getValue(BkGuaranteeConfig::GARAN_ON));
+        Configuration::updateValue(BkGuaranteeConfig::GARAN_NESTED, (int) Tools::getValue(BkGuaranteeConfig::GARAN_NESTED));
+        $garanPlace = Tools::getValue(BkGuaranteeConfig::GARAN_PLACEMENT);
+        Configuration::updateValue(
+            BkGuaranteeConfig::GARAN_PLACEMENT,
+            isset(BkGuaranteeConfig::PLACEMENTS[$garanPlace]) ? $garanPlace : 'thumbs'
+        );
+        $garanWidth = (int) Tools::getValue(BkGuaranteeConfig::GARAN_WIDTH);
+        Configuration::updateValue(BkGuaranteeConfig::GARAN_WIDTH, max(180, min(520, $garanWidth ?: 300)));
         Configuration::updateValue(BkGuaranteeConfig::EMAIL_ATTACH, (int) Tools::getValue(BkGuaranteeConfig::EMAIL_ATTACH));
         Configuration::updateValue(BkGuaranteeConfig::WIDTH, $width);
         Configuration::updateValue(BkGuaranteeConfig::HIDE_FOR_B2B, (int) Tools::getValue(BkGuaranteeConfig::HIDE_FOR_B2B));
@@ -239,6 +248,38 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
                         'desc' => $this->trans('Between 240 and 720. On phones the notice always uses the full width available.', [], 'Modules.Bkguarantee.Admin'),
                     ],
                     $this->buildSwitch(
+                        BkGuaranteeConfig::GARAN_ON,
+                        $this->trans('Show the GARAN label', [], 'Modules.Bkguarantee.Admin'),
+                        $this->trans('Only appears on products covered by a durability guarantee rule with all three fields resolved.', [], 'Modules.Bkguarantee.Admin')
+                    ),
+                    [
+                        'type' => 'select',
+                        'label' => $this->trans('Position of the GARAN label', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => BkGuaranteeConfig::GARAN_PLACEMENT,
+                        'desc' => $this->trans('The regulation places it next to the image of the goods.', [], 'Modules.Bkguarantee.Admin'),
+                        'options' => [
+                            'query' => [
+                                ['id' => 'thumbs', 'name' => $this->trans('Under the product gallery', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'info', 'name' => $this->trans('Below the add-to-cart block', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'footer', 'name' => $this->trans('At the bottom of the product page', [], 'Modules.Bkguarantee.Admin')],
+                            ],
+                            'id' => 'id',
+                            'name' => 'name',
+                        ],
+                    ],
+                    [
+                        'type' => 'text',
+                        'label' => $this->trans('GARAN width in pixels', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => BkGuaranteeConfig::GARAN_WIDTH,
+                        'class' => 'fixed-width-sm',
+                        'desc' => $this->trans('Between 180 and 520.', [], 'Modules.Bkguarantee.Admin'),
+                    ],
+                    $this->buildSwitch(
+                        BkGuaranteeConfig::GARAN_NESTED,
+                        $this->trans('Nested display for GARAN', [], 'Modules.Bkguarantee.Admin'),
+                        $this->trans('A compact badge that opens the full label on the first click, hover or touch. The regulation allows this for the label only, never for the notice.', [], 'Modules.Bkguarantee.Admin')
+                    ),
+                    $this->buildSwitch(
                         BkGuaranteeConfig::ON_EMAIL,
                         $this->trans('In the order confirmation email', [], 'Modules.Bkguarantee.Admin'),
                         $this->trans('The notice has to stay available to the customer after the purchase, and the confirmation email is the durable medium that already reaches everyone.', [], 'Modules.Bkguarantee.Admin')
@@ -372,6 +413,10 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             BkGuaranteeConfig::ON_PRODUCT => (int) Configuration::get(BkGuaranteeConfig::ON_PRODUCT),
             BkGuaranteeConfig::ON_CHECKOUT => (int) Configuration::get(BkGuaranteeConfig::ON_CHECKOUT),
             BkGuaranteeConfig::ON_EMAIL => (int) Configuration::get(BkGuaranteeConfig::ON_EMAIL),
+            BkGuaranteeConfig::GARAN_ON => (int) Configuration::get(BkGuaranteeConfig::GARAN_ON),
+            BkGuaranteeConfig::GARAN_PLACEMENT => BkGuaranteeConfig::getGaranPlacement(),
+            BkGuaranteeConfig::GARAN_WIDTH => BkGuaranteeConfig::getGaranWidth(),
+            BkGuaranteeConfig::GARAN_NESTED => (int) Configuration::get(BkGuaranteeConfig::GARAN_NESTED),
             BkGuaranteeConfig::EMAIL_ATTACH => (int) Configuration::get(BkGuaranteeConfig::EMAIL_ATTACH),
             BkGuaranteeConfig::WIDTH => BkGuaranteeConfig::getWidth(),
             BkGuaranteeConfig::STYLE => BkGuaranteeConfig::getStyle(),
