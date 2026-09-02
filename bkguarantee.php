@@ -29,8 +29,8 @@ class BkGuarantee extends Module
     const TAB_CLASS = 'AdminBkGuaranteeTab';
     /**
      * displayProductAdditionalInfo cae bajo el bloque de compra, que es donde la oferta queda a
-     * la vista; displayCheckoutSubtotalDetails repite el aviso en el resumen del pedido, el
-     * último punto antes de que el contrato se cierre.
+     * la vista; displayPaymentTop repite el aviso justo encima de las formas de pago, que es la
+     * última pantalla antes de que el contrato se cierre.
      *
      * @var array
      */
@@ -38,7 +38,8 @@ class BkGuarantee extends Module
         'displayProductAdditionalInfo',
         'displayAfterProductThumbs',
         'displayFooterProduct',
-        'displayCheckoutSubtotalDetails',
+        'displayPaymentTop',
+        'displayCheckoutSummaryTop',
         'actionFrontControllerSetMedia',
     ];
 
@@ -201,9 +202,28 @@ class BkGuarantee extends Module
         return (int) Tools::getValue('id_product');
     }
 
-    public function hookDisplayCheckoutSubtotalDetails(array $params)
+    public function hookDisplayPaymentTop(array $params)
+    {
+        return $this->renderCheckout('payment');
+    }
+
+    public function hookDisplayCheckoutSummaryTop(array $params)
+    {
+        return $this->renderCheckout('summary');
+    }
+
+    /**
+     * @param string $placement payment|summary
+     *
+     * @return string
+     */
+    private function renderCheckout($placement)
     {
         if (!BkGuaranteeConfig::isOn(BkGuaranteeConfig::ON_CHECKOUT)) {
+            return '';
+        }
+
+        if (BkGuaranteeConfig::getCheckoutPlacement() !== $placement) {
             return '';
         }
 

@@ -28,6 +28,8 @@ class BkGuaranteeConfig
     const ALIGN = 'BK_GUAR_ALIGN';
     /** Punto de la ficha donde se pinta: info | thumbs | footer */
     const PLACEMENT = 'BK_GUAR_PLACEMENT';
+    /** Punto del checkout donde se pinta: payment | summary */
+    const CHECKOUT_PLACEMENT = 'BK_GUAR_CO_PLACE';
     /** Alcance del catálogo: all | categories */
     const SCOPE_MODE = 'BK_GUAR_SCOPE';
     /** Categorías en las que se muestra cuando el alcance es 'categories' */
@@ -48,6 +50,16 @@ class BkGuaranteeConfig
     const STYLES = ['card', 'framed', 'plain', 'band'];
     /** Alineaciones admitidas */
     const ALIGNS = ['left', 'center'];
+    /**
+     * Puntos del checkout admitidos, con el hook que los sirve.
+     *
+     * displayCheckoutSubtotalDetails NO sirve: el tema solo lo dispara en la línea de gastos de
+     * envío y dentro de un <small>, así que en un carrito sin transporte no llega a ejecutarse.
+     */
+    const CHECKOUT_PLACEMENTS = [
+        'summary' => 'displayCheckoutSummaryTop',
+        'payment' => 'displayPaymentTop',
+    ];
     /** Puntos de la ficha admitidos, con el hook que los sirve */
     const PLACEMENTS = [
         'info' => 'displayProductAdditionalInfo',
@@ -75,6 +87,7 @@ class BkGuaranteeConfig
             self::STYLE => 'card',
             self::ALIGN => 'left',
             self::PLACEMENT => 'info',
+            self::CHECKOUT_PLACEMENT => 'summary',
             self::SCOPE_MODE => 'all',
             self::INCLUDED_CATEGORIES => '',
             self::EXCLUDED_CATEGORIES => '',
@@ -155,6 +168,16 @@ class BkGuaranteeConfig
         $value = (string) Configuration::get(self::PLACEMENT);
 
         return isset(self::PLACEMENTS[$value]) ? $value : 'info';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCheckoutPlacement()
+    {
+        $value = (string) Configuration::get(self::CHECKOUT_PLACEMENT);
+
+        return isset(self::CHECKOUT_PLACEMENTS[$value]) ? $value : 'summary';
     }
 
     /**

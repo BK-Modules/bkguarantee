@@ -73,6 +73,12 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             isset(BkGuaranteeConfig::PLACEMENTS[$placement]) ? $placement : 'info'
         );
 
+        $coPlacement = Tools::getValue(BkGuaranteeConfig::CHECKOUT_PLACEMENT);
+        Configuration::updateValue(
+            BkGuaranteeConfig::CHECKOUT_PLACEMENT,
+            isset(BkGuaranteeConfig::CHECKOUT_PLACEMENTS[$coPlacement]) ? $coPlacement : 'payment'
+        );
+
         $mode = Tools::getValue(BkGuaranteeConfig::SCOPE_MODE);
         Configuration::updateValue(
             BkGuaranteeConfig::SCOPE_MODE,
@@ -232,6 +238,20 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
                     ],
                     [
                         'type' => 'select',
+                        'label' => $this->trans('Position in the checkout', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => BkGuaranteeConfig::CHECKOUT_PLACEMENT,
+                        'desc' => $this->trans('The order summary is visible from the first step. Above the payment methods the notice only appears once the customer has finished the address and shipping steps.', [], 'Modules.Bkguarantee.Admin'),
+                        'options' => [
+                            'query' => [
+                                ['id' => 'summary', 'name' => $this->trans('Top of the order summary', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'payment', 'name' => $this->trans('Above the payment methods', [], 'Modules.Bkguarantee.Admin')],
+                            ],
+                            'id' => 'id',
+                            'name' => 'name',
+                        ],
+                    ],
+                    [
+                        'type' => 'select',
                         'label' => $this->trans('Catalogue covered', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::SCOPE_MODE,
                         'desc' => $this->trans('The notice is mandatory on the sale of goods. Services and pure digital content are not goods, and that is the reason to leave part of the catalogue out.', [], 'Modules.Bkguarantee.Admin'),
@@ -343,6 +363,7 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             BkGuaranteeConfig::STYLE => BkGuaranteeConfig::getStyle(),
             BkGuaranteeConfig::ALIGN => BkGuaranteeConfig::getAlign(),
             BkGuaranteeConfig::PLACEMENT => BkGuaranteeConfig::getPlacement(),
+            BkGuaranteeConfig::CHECKOUT_PLACEMENT => BkGuaranteeConfig::getCheckoutPlacement(),
             BkGuaranteeConfig::SCOPE_MODE => BkGuaranteeConfig::getScopeMode(),
             BkGuaranteeConfig::INCLUDED_CATEGORIES . '[]' => BkGuaranteeConfig::getIncludedCategories(),
             BkGuaranteeConfig::EXCLUDED_CATEGORIES . '[]' => BkGuaranteeConfig::getExcludedCategories(),
