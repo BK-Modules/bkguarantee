@@ -210,6 +210,54 @@
         <source>Your rights on this purchase</source>
         <target>Vos droits sur cet achat</target>
       </trans-unit>
+      <trans-unit id="d1b05e782be0b37dedd92cd687d9317e">
+        <source>Catalogue covered</source>
+        <target>Catalogue couvert</target>
+      </trans-unit>
+      <trans-unit id="02244ff888721e074621769d5232a0af">
+        <source>Categories covered</source>
+        <target>Catégories couvertes</target>
+      </trans-unit>
+      <trans-unit id="eb4eadf49e86517e562d8c451559472f">
+        <source>Categories left out</source>
+        <target>Catégories exclues</target>
+      </trans-unit>
+      <trans-unit id="ef57b0faa1f7b81ff77f510e340971ac">
+        <source>Downloads and services are not goods under the sale of goods directive. Check your own catalogue before turning this on: a physical product flagged as virtual would lose the notice too.</source>
+        <target>Les téléchargements et les services ne sont pas des biens au sens de la directive sur la vente de biens. Vérifiez votre catalogue avant d’activer : un produit physique marqué comme virtuel perdrait lui aussi l’avis.</target>
+      </trans-unit>
+      <trans-unit id="829fd3e0b70a894cf237f65a342c9f8b">
+        <source>Every product</source>
+        <target>Tous les produits</target>
+      </trans-unit>
+      <trans-unit id="851ae55cc628b30b64247371766fc2ab">
+        <source>Leave virtual products out</source>
+        <target>Exclure les produits virtuels</target>
+      </trans-unit>
+      <trans-unit id="c43561c39c4e2f7f6bf0d8400c240707">
+        <source>Only the categories I choose</source>
+        <target>Uniquement les catégories choisies</target>
+      </trans-unit>
+      <trans-unit id="5ba56ad80aed01788b440d54ef7a78f1">
+        <source>Only used when the catalogue is limited to chosen categories.</source>
+        <target>Utilisé uniquement lorsque le catalogue est limité aux catégories choisies.</target>
+      </trans-unit>
+      <trans-unit id="d3bc3c743a1176bd7906e7fba24072b3">
+        <source>Product IDs separated by commas.</source>
+        <target>Identifiants produit séparés par des virgules.</target>
+      </trans-unit>
+      <trans-unit id="8328332af67bc239c11bb7d25b0f3c9f">
+        <source>Products left out</source>
+        <target>Produits exclus</target>
+      </trans-unit>
+      <trans-unit id="aec123d548a8a83c005cfab794df2180">
+        <source>The notice is mandatory on the sale of goods. Services and pure digital content are not goods, and that is the reason to leave part of the catalogue out.</source>
+        <target>L’avis est obligatoire pour la vente de biens. Les services et le contenu numérique pur ne sont pas des biens : c’est la raison de laisser une partie du catalogue de côté.</target>
+      </trans-unit>
+      <trans-unit id="deeea13d202c9c7066c548e6287b633c">
+        <source>Wins over anything else: a product in one of these never shows the notice.</source>
+        <target>Prime sur tout le reste : un produit de l’une d’elles n’affiche jamais l’avis.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

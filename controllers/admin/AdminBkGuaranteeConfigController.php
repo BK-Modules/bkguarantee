@@ -72,10 +72,37 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             BkGuaranteeConfig::PLACEMENT,
             isset(BkGuaranteeConfig::PLACEMENTS[$placement]) ? $placement : 'info'
         );
+
+        $mode = Tools::getValue(BkGuaranteeConfig::SCOPE_MODE);
+        Configuration::updateValue(
+            BkGuaranteeConfig::SCOPE_MODE,
+            in_array($mode, BkGuaranteeConfig::SCOPE_MODES, true) ? $mode : 'all'
+        );
+        Configuration::updateValue(BkGuaranteeConfig::INCLUDED_CATEGORIES, $this->idListFrom(BkGuaranteeConfig::INCLUDED_CATEGORIES));
+        Configuration::updateValue(BkGuaranteeConfig::EXCLUDED_CATEGORIES, $this->idListFrom(BkGuaranteeConfig::EXCLUDED_CATEGORIES));
+        Configuration::updateValue(BkGuaranteeConfig::EXCLUDED_PRODUCTS, $this->idListFrom(BkGuaranteeConfig::EXCLUDED_PRODUCTS));
+        Configuration::updateValue(BkGuaranteeConfig::SKIP_VIRTUAL, (int) Tools::getValue(BkGuaranteeConfig::SKIP_VIRTUAL));
         Configuration::updateValue(BkGuaranteeConfig::DEBUG, (int) Tools::getValue(BkGuaranteeConfig::DEBUG));
 
         BkGuaranteeLogger::confirmation('Configuración guardada');
         $this->confirmations[] = $this->trans('Settings updated.', [], 'Modules.Bkguarantee.Admin');
+    }
+
+    /**
+     * Normaliza a lista de enteros separados por comas, venga de un multiselect o de un campo de
+     * texto donde el comerciante haya pegado los identificadores como le haya parecido.
+     *
+     * @param string $field
+     *
+     * @return string
+     */
+    private function idListFrom($field)
+    {
+        $raw = Tools::getValue($field);
+        $ids = is_array($raw) ? $raw : preg_split('/[^0-9]+/', (string) $raw);
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids))));
+
+        return implode(',', $ids);
     }
 
     /**
@@ -120,6 +147,11 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
 
     private function renderConfigForm()
     {
+        $categories = [];
+        foreach (Category::getSimpleCategories((int) $this->context->language->id) as $category) {
+            $categories[] = ['id' => (int) $category['id_category'], 'name' => $category['name']];
+        }
+
         $groups = [];
         foreach (Group::getGroups($this->context->language->id) as $group) {
             $groups[] = ['id' => (int) $group['id_group'], 'name' => $group['name']];
@@ -198,6 +230,49 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
                         'class' => 'fixed-width-sm',
                         'desc' => $this->trans('Between 240 and 720. On phones the notice always uses the full width available.', [], 'Modules.Bkguarantee.Admin'),
                     ],
+                    [
+                        'type' => 'select',
+                        'label' => $this->trans('Catalogue covered', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => BkGuaranteeConfig::SCOPE_MODE,
+                        'desc' => $this->trans('The notice is mandatory on the sale of goods. Services and pure digital content are not goods, and that is the reason to leave part of the catalogue out.', [], 'Modules.Bkguarantee.Admin'),
+                        'options' => [
+                            'query' => [
+                                ['id' => 'all', 'name' => $this->trans('Every product', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'categories', 'name' => $this->trans('Only the categories I choose', [], 'Modules.Bkguarantee.Admin')],
+                            ],
+                            'id' => 'id',
+                            'name' => 'name',
+                        ],
+                    ],
+                    [
+                        'type' => 'select',
+                        'multiple' => true,
+                        'class' => 'chosen',
+                        'label' => $this->trans('Categories covered', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => BkGuaranteeConfig::INCLUDED_CATEGORIES . '[]',
+                        'desc' => $this->trans('Only used when the catalogue is limited to chosen categories.', [], 'Modules.Bkguarantee.Admin'),
+                        'options' => ['query' => $categories, 'id' => 'id', 'name' => 'name'],
+                    ],
+                    [
+                        'type' => 'select',
+                        'multiple' => true,
+                        'class' => 'chosen',
+                        'label' => $this->trans('Categories left out', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => BkGuaranteeConfig::EXCLUDED_CATEGORIES . '[]',
+                        'desc' => $this->trans('Wins over anything else: a product in one of these never shows the notice.', [], 'Modules.Bkguarantee.Admin'),
+                        'options' => ['query' => $categories, 'id' => 'id', 'name' => 'name'],
+                    ],
+                    [
+                        'type' => 'text',
+                        'label' => $this->trans('Products left out', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => BkGuaranteeConfig::EXCLUDED_PRODUCTS,
+                        'desc' => $this->trans('Product IDs separated by commas.', [], 'Modules.Bkguarantee.Admin'),
+                    ],
+                    $this->buildSwitch(
+                        BkGuaranteeConfig::SKIP_VIRTUAL,
+                        $this->trans('Leave virtual products out', [], 'Modules.Bkguarantee.Admin'),
+                        $this->trans('Downloads and services are not goods under the sale of goods directive. Check your own catalogue before turning this on: a physical product flagged as virtual would lose the notice too.', [], 'Modules.Bkguarantee.Admin')
+                    ),
                     $this->buildSwitch(
                         BkGuaranteeConfig::HIDE_FOR_B2B,
                         $this->trans('Hide it from business customers', [], 'Modules.Bkguarantee.Admin'),
@@ -268,6 +343,11 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             BkGuaranteeConfig::STYLE => BkGuaranteeConfig::getStyle(),
             BkGuaranteeConfig::ALIGN => BkGuaranteeConfig::getAlign(),
             BkGuaranteeConfig::PLACEMENT => BkGuaranteeConfig::getPlacement(),
+            BkGuaranteeConfig::SCOPE_MODE => BkGuaranteeConfig::getScopeMode(),
+            BkGuaranteeConfig::INCLUDED_CATEGORIES . '[]' => BkGuaranteeConfig::getIncludedCategories(),
+            BkGuaranteeConfig::EXCLUDED_CATEGORIES . '[]' => BkGuaranteeConfig::getExcludedCategories(),
+            BkGuaranteeConfig::EXCLUDED_PRODUCTS => implode(', ', BkGuaranteeConfig::getExcludedProducts()),
+            BkGuaranteeConfig::SKIP_VIRTUAL => (int) Configuration::get(BkGuaranteeConfig::SKIP_VIRTUAL),
             BkGuaranteeConfig::HIDE_FOR_B2B => (int) Configuration::get(BkGuaranteeConfig::HIDE_FOR_B2B),
             BkGuaranteeConfig::DEBUG => (int) Configuration::get(BkGuaranteeConfig::DEBUG),
         ];

@@ -133,25 +133,26 @@ class BkGuarantee extends Module
      */
     public function hookDisplayProductAdditionalInfo(array $params)
     {
-        return $this->renderProduct('info');
+        return $this->renderProduct('info', $params);
     }
 
     public function hookDisplayAfterProductThumbs(array $params)
     {
-        return $this->renderProduct('thumbs');
+        return $this->renderProduct('thumbs', $params);
     }
 
     public function hookDisplayFooterProduct(array $params)
     {
-        return $this->renderProduct('footer');
+        return $this->renderProduct('footer', $params);
     }
 
     /**
      * @param string $placement info|thumbs|footer
+     * @param array  $params
      *
      * @return string
      */
-    private function renderProduct($placement)
+    private function renderProduct($placement, array $params)
     {
         if (!BkGuaranteeConfig::isOn(BkGuaranteeConfig::ON_PRODUCT)) {
             return '';
@@ -161,7 +162,38 @@ class BkGuarantee extends Module
             return '';
         }
 
+        if (!BkGuaranteeScope::appliesTo($this->productIdFrom($params))) {
+            return '';
+        }
+
         return $this->renderNotice('product');
+    }
+
+    /**
+     * El identificador llega de forma distinta según el hook y la versión: como array presentado,
+     * como ObjectModel o como nada. Se leen las tres y, si no hay ninguna, se cae a la petición.
+     *
+     * @param array $params
+     *
+     * @return int
+     */
+    private function productIdFrom(array $params)
+    {
+        if (isset($params['product'])) {
+            $product = $params['product'];
+            if (is_array($product) && isset($product['id_product'])) {
+                return (int) $product['id_product'];
+            }
+            if (is_object($product) && isset($product->id)) {
+                return (int) $product->id;
+            }
+        }
+
+        if (isset($params['id_product'])) {
+            return (int) $params['id_product'];
+        }
+
+        return (int) Tools::getValue('id_product');
     }
 
     public function hookDisplayCheckoutSubtotalDetails(array $params)

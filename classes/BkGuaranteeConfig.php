@@ -28,8 +28,21 @@ class BkGuaranteeConfig
     const ALIGN = 'BK_GUAR_ALIGN';
     /** Punto de la ficha donde se pinta: info | thumbs | footer */
     const PLACEMENT = 'BK_GUAR_PLACEMENT';
+    /** Alcance del catálogo: all | categories */
+    const SCOPE_MODE = 'BK_GUAR_SCOPE';
+    /** Categorías en las que se muestra cuando el alcance es 'categories' */
+    const INCLUDED_CATEGORIES = 'BK_GUAR_CAT_IN';
+    /** Categorías que nunca llevan aviso */
+    const EXCLUDED_CATEGORIES = 'BK_GUAR_CAT_OUT';
+    /** Productos que nunca llevan aviso */
+    const EXCLUDED_PRODUCTS = 'BK_GUAR_PROD_OUT';
+    /** Deja fuera los productos virtuales: servicios y contenido digital no son bienes */
+    const SKIP_VIRTUAL = 'BK_GUAR_SKIP_VIRTUAL';
     /** Traza de depuración */
     const DEBUG = 'BK_GUAR_DEBUG';
+
+    /** Alcances admitidos */
+    const SCOPE_MODES = ['all', 'categories'];
 
     /** Presentaciones admitidas */
     const STYLES = ['card', 'framed', 'plain', 'band'];
@@ -62,6 +75,11 @@ class BkGuaranteeConfig
             self::STYLE => 'card',
             self::ALIGN => 'left',
             self::PLACEMENT => 'info',
+            self::SCOPE_MODE => 'all',
+            self::INCLUDED_CATEGORIES => '',
+            self::EXCLUDED_CATEGORIES => '',
+            self::EXCLUDED_PRODUCTS => '',
+            self::SKIP_VIRTUAL => '0',
             self::DEBUG => '0',
         ];
     }
@@ -140,12 +158,59 @@ class BkGuaranteeConfig
     }
 
     /**
+     * @return string
+     */
+    public static function getScopeMode()
+    {
+        $value = (string) Configuration::get(self::SCOPE_MODE);
+
+        return in_array($value, self::SCOPE_MODES, true) ? $value : 'all';
+    }
+
+    /**
      * @return array Identificadores de grupo considerados B2B
      */
     public static function getB2bGroups()
     {
-        $raw = (string) Configuration::get(self::B2B_GROUPS);
-        $ids = array_filter(array_map('intval', explode(',', $raw)));
+        return self::idList(self::B2B_GROUPS);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getIncludedCategories()
+    {
+        return self::idList(self::INCLUDED_CATEGORIES);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getExcludedCategories()
+    {
+        return self::idList(self::EXCLUDED_CATEGORIES);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getExcludedProducts()
+    {
+        return self::idList(self::EXCLUDED_PRODUCTS);
+    }
+
+    /**
+     * Las listas se guardan como texto separado por comas y se limpian al leerlas: así una lista
+     * escrita a mano o traída de otra instalación no puede colar nada que no sea un identificador.
+     *
+     * @param string $key
+     *
+     * @return array
+     */
+    private static function idList($key)
+    {
+        $raw = (string) Configuration::get($key);
+        $ids = array_filter(array_map('intval', preg_split('/[^0-9]+/', $raw)));
 
         return array_values(array_unique($ids));
     }
