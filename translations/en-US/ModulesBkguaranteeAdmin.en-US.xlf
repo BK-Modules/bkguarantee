@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="ModulesBkguaranteeAdmin" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="2fbca1eddd563e2808690d45525d3018">
+        <source>BK EU Guarantee</source>
+        <target>BK EU Guarantee</target>
+      </trans-unit>
+      <trans-unit id="1f07afd3bc8c1e38425daf4959fffdf1">
+        <source>Behaviour</source>
+        <target>Behaviour</target>
+      </trans-unit>
+      <trans-unit id="cc1e000ce5882d67f09a18d7d0f186f8">
+        <source>Below the add-to-cart block, where the offer is presented.</source>
+        <target>Below the add-to-cart block, where the offer is presented.</target>
+      </trans-unit>
+      <trans-unit id="8785c72e6a271233060a7ee3aa385952">
+        <source>Between 240 and 720. On phones the notice always uses the full width available.</source>
+        <target>Between 240 and 720. On phones the notice always uses the full width available.</target>
+      </trans-unit>
+      <trans-unit id="a7f4944ffd18f8ee92c585fb1632c6ff">
+        <source>Business customer groups</source>
+        <target>Business customer groups</target>
+      </trans-unit>
+      <trans-unit id="cd92e21218612817d52a8d71c32faf38">
+        <source>Debug log</source>
+        <target>Debug log</target>
+      </trans-unit>
+      <trans-unit id="36a39f9d964f9048c963cbab8168dd31">
+        <source>EU harmonised notice on the legal guarantee of conformity</source>
+        <target>EU harmonised notice on the legal guarantee of conformity</target>
+      </trans-unit>
+      <trans-unit id="211fb58ac1cfab8c3055dd595b03bc35">
+        <source>Hide it from business customers</source>
+        <target>Hide it from business customers</target>
+      </trans-unit>
+      <trans-unit id="5b512ee8a59deb284ad0a6a035ba10b1">
+        <source>ISO</source>
+        <target>ISO</target>
+      </trans-unit>
+      <trans-unit id="98dd43dfae05b11befe1f140e0ec787a">
+        <source>Installed</source>
+        <target>Installed</target>
+      </trans-unit>
+      <trans-unit id="4994a8ffeba4ac3140beb89e8d41f174">
+        <source>Language</source>
+        <target>Language</target>
+      </trans-unit>
+      <trans-unit id="a63234bb8b7db1f6dfb90d8868982450">
+        <source>Master switch. Turn it off only if this shop sells exclusively to businesses.</source>
+        <target>Master switch. Turn it off only if this shop sells exclusively to businesses.</target>
+      </trans-unit>
+      <trans-unit id="2aee0be2678ee90fd327cc186826438e">
+        <source>Missing</source>
+        <target>Missing</target>
+      </trans-unit>
+      <trans-unit id="bafd7322c6e97d25b6299b5d6fe8920b">
+        <source>No</source>
+        <target>No</target>
+      </trans-unit>
+      <trans-unit id="195153d2c30ada6cbc72df266fd7d3a5">
+        <source>No official notice is installed yet, so nothing is being shown anywhere in the shop.</source>
+        <target>No official notice is installed yet, so nothing is being shown anywhere in the shop.</target>
+      </trans-unit>
+      <trans-unit id="24efa7ee4511563b16144f39706d594f">
+        <source>Notice</source>
+        <target>Notice</target>
+      </trans-unit>
+      <trans-unit id="527ab1ba3c6248dbb782b158f15a92b6">
+        <source>Official notice per language</source>
+        <target>Official notice per language</target>
+      </trans-unit>
+      <trans-unit id="5a470c7998ebb93d9da5c3673b1939c3">
+        <source>On the order summary</source>
+        <target>On the order summary</target>
+      </trans-unit>
+      <trans-unit id="832716f8b7047d7de4f6c4f4735a704d">
+        <source>On the product page</source>
+        <target>On the product page</target>
+      </trans-unit>
+      <trans-unit id="048c53ec2205fa83ba1165a02ef03993">
+        <source>Only a shop selling exclusively to businesses falls outside the obligation. In a mixed shop this is your call, not a recommendation.</source>
+        <target>Only a shop selling exclusively to businesses falls outside the obligation. In a mixed shop this is your call, not a recommendation.</target>
+      </trans-unit>
+      <trans-unit id="314864fd7110c5cdc2a6b1a07d343c9e">
+        <source>Preview at the configured width. This is the size the customer sees, so judge it here and not at full size.</source>
+        <target>Preview at the configured width. This is the size the customer sees, so judge it here and not at full size.</target>
+      </trans-unit>
+      <trans-unit id="c9cc8cce247e49bae79f15173ce97354">
+        <source>Save</source>
+        <target>Save</target>
+      </trans-unit>
+      <trans-unit id="f38f5974cdc23279ffe6d203641a8bdf">
+        <source>Settings updated.</source>
+        <target>Settings updated.</target>
+      </trans-unit>
+      <trans-unit id="9a3ce7a18bc725bdf367eeeadb7aac9b">
+        <source>Show the notice</source>
+        <target>Show the notice</target>
+      </trans-unit>
+      <trans-unit id="77ae7d2905d85f36235faf738b8d82a9">
+        <source>Shows the EU harmonised notice on the legal guarantee of conformity on your product pages and order summary.</source>
+        <target>Shows the EU harmonised notice on the legal guarantee of conformity on your product pages and order summary.</target>
+      </trans-unit>
+      <trans-unit id="7c6c9c87955f72474a9bd5be6c2c21a5">
+        <source>The last screen before the contract is concluded.</source>
+        <target>The last screen before the contract is concluded.</target>
+      </trans-unit>
+      <trans-unit id="a8dea70bfcffcc387c9442005ec7672f">
+        <source>The notice may not be edited or translated by hand, so the module never falls back to another language: showing a Spanish notice to a French customer would look compliant without being compliant. Drop the official file published in the Official Journal for that language into</source>
+        <target>The notice may not be edited or translated by hand, so the module never falls back to another language: showing a Spanish notice to a French customer would look compliant without being compliant. Drop the official file published in the Official Journal for that language into</target>
+      </trans-unit>
+      <trans-unit id="734a611467a55138fdc199834b4a3c99">
+        <source>These languages show no notice at all:</source>
+        <target>These languages show no notice at all:</target>
+      </trans-unit>
+      <trans-unit id="b13d42622d01993ebf555ea220674f72">
+        <source>Width in pixels</source>
+        <target>Width in pixels</target>
+      </trans-unit>
+      <trans-unit id="628436b1cf0616c60998e15b4be0eac5">
+        <source>Writes to log/bkguarantee.log inside the module.</source>
+        <target>Writes to log/bkguarantee.log inside the module.</target>
+      </trans-unit>
+      <trans-unit id="93cba07454f06a4a960172bbd6e2a435">
+        <source>Yes</source>
+        <target>Yes</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

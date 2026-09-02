@@ -187,6 +187,7 @@ class BkGuarantee extends Module
                 'Modules.Bkguarantee.Shop'
             ),
             'bkguar_full' => $this->trans('View full size', [], 'Modules.Bkguarantee.Shop'),
+            'bkguar_title' => $this->trans('EU legal guarantee', [], 'Modules.Bkguarantee.Shop'),
         ]);
 
         return $this->fetch('module:bkguarantee/views/templates/hook/notice.tpl');

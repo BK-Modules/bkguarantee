@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="ModulesBkguaranteeShop" source-language="en-US" target-language="it-IT" datatype="plaintext">
+    <body>
+      <trans-unit id="36a39f9d964f9048c963cbab8168dd31">
+        <source>EU harmonised notice on the legal guarantee of conformity</source>
+        <target>Avviso armonizzato dell’UE sulla garanzia legale di conformità</target>
+      </trans-unit>
+      <trans-unit id="00c5948f905128f9ad9676c9bd1a96b1">
+        <source>EU legal guarantee</source>
+        <target>Garanzia legale UE</target>
+      </trans-unit>
+      <trans-unit id="c6beb9157a0e29e604ad5ec484488608">
+        <source>View full size</source>
+        <target>Vedi a dimensione intera</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
