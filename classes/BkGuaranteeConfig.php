@@ -28,6 +28,10 @@ class BkGuaranteeConfig
     const ALIGN = 'BK_GUAR_ALIGN';
     /** Punto de la ficha donde se pinta: info | thumbs | footer */
     const PLACEMENT = 'BK_GUAR_PLACEMENT';
+    /** Aviso en el correo de confirmación de pedido */
+    const ON_EMAIL = 'BK_GUAR_EMAIL';
+    /** Adjunta además el aviso al correo, para que llegue aunque el cliente bloquee imágenes */
+    const EMAIL_ATTACH = 'BK_GUAR_EMAIL_ATT';
     /** Punto del checkout donde se pinta: payment | summary */
     const CHECKOUT_PLACEMENT = 'BK_GUAR_CO_PLACE';
     /** Alcance del catálogo: all | categories */
@@ -88,6 +92,8 @@ class BkGuaranteeConfig
             self::ALIGN => 'left',
             self::PLACEMENT => 'info',
             self::CHECKOUT_PLACEMENT => 'summary',
+            self::ON_EMAIL => '1',
+            self::EMAIL_ATTACH => '1',
             self::SCOPE_MODE => 'all',
             self::INCLUDED_CATEGORIES => '',
             self::EXCLUDED_CATEGORIES => '',

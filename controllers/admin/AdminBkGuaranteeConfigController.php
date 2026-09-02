@@ -53,6 +53,8 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         Configuration::updateValue(BkGuaranteeConfig::ENABLED, (int) Tools::getValue(BkGuaranteeConfig::ENABLED));
         Configuration::updateValue(BkGuaranteeConfig::ON_PRODUCT, (int) Tools::getValue(BkGuaranteeConfig::ON_PRODUCT));
         Configuration::updateValue(BkGuaranteeConfig::ON_CHECKOUT, (int) Tools::getValue(BkGuaranteeConfig::ON_CHECKOUT));
+        Configuration::updateValue(BkGuaranteeConfig::ON_EMAIL, (int) Tools::getValue(BkGuaranteeConfig::ON_EMAIL));
+        Configuration::updateValue(BkGuaranteeConfig::EMAIL_ATTACH, (int) Tools::getValue(BkGuaranteeConfig::EMAIL_ATTACH));
         Configuration::updateValue(BkGuaranteeConfig::WIDTH, $width);
         Configuration::updateValue(BkGuaranteeConfig::HIDE_FOR_B2B, (int) Tools::getValue(BkGuaranteeConfig::HIDE_FOR_B2B));
         Configuration::updateValue(BkGuaranteeConfig::B2B_GROUPS, $groups);
@@ -236,6 +238,16 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
                         'class' => 'fixed-width-sm',
                         'desc' => $this->trans('Between 240 and 720. On phones the notice always uses the full width available.', [], 'Modules.Bkguarantee.Admin'),
                     ],
+                    $this->buildSwitch(
+                        BkGuaranteeConfig::ON_EMAIL,
+                        $this->trans('In the order confirmation email', [], 'Modules.Bkguarantee.Admin'),
+                        $this->trans('The notice has to stay available to the customer after the purchase, and the confirmation email is the durable medium that already reaches everyone.', [], 'Modules.Bkguarantee.Admin')
+                    ),
+                    $this->buildSwitch(
+                        BkGuaranteeConfig::EMAIL_ATTACH,
+                        $this->trans('Attach it to the email as well', [], 'Modules.Bkguarantee.Admin'),
+                        $this->trans('Half the inboxes block remote images. The attachment is what guarantees the notice actually arrives.', [], 'Modules.Bkguarantee.Admin')
+                    ),
                     [
                         'type' => 'select',
                         'label' => $this->trans('Position in the checkout', [], 'Modules.Bkguarantee.Admin'),
@@ -359,6 +371,8 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             BkGuaranteeConfig::ENABLED => (int) Configuration::get(BkGuaranteeConfig::ENABLED),
             BkGuaranteeConfig::ON_PRODUCT => (int) Configuration::get(BkGuaranteeConfig::ON_PRODUCT),
             BkGuaranteeConfig::ON_CHECKOUT => (int) Configuration::get(BkGuaranteeConfig::ON_CHECKOUT),
+            BkGuaranteeConfig::ON_EMAIL => (int) Configuration::get(BkGuaranteeConfig::ON_EMAIL),
+            BkGuaranteeConfig::EMAIL_ATTACH => (int) Configuration::get(BkGuaranteeConfig::EMAIL_ATTACH),
             BkGuaranteeConfig::WIDTH => BkGuaranteeConfig::getWidth(),
             BkGuaranteeConfig::STYLE => BkGuaranteeConfig::getStyle(),
             BkGuaranteeConfig::ALIGN => BkGuaranteeConfig::getAlign(),

@@ -40,6 +40,8 @@ class BkGuarantee extends Module
         'displayFooterProduct',
         'displayPaymentTop',
         'displayCheckoutSummaryTop',
+        'actionEmailAddAfterContent',
+        'actionEmailSendBefore',
         'actionFrontControllerSetMedia',
     ];
 
@@ -117,6 +119,59 @@ class BkGuarantee extends Module
         Tools::redirectAdmin(
             $this->context->link->getAdminLink('AdminBkGuaranteeConfig')
         );
+    }
+
+    /**
+     * Los dos hooks del correo reciben sus parámetros por referencia, así que se declaran por
+     * referencia también aquí: escribir sobre $params es lo que modifica el correo de verdad.
+     */
+    public function hookActionEmailAddAfterContent(&$params)
+    {
+        if (!BkGuaranteeConfig::isOn(BkGuaranteeConfig::ON_EMAIL)
+            || !BkGuaranteeConfig::isOn(BkGuaranteeConfig::ENABLED)
+            || !BkGuaranteeEmail::isOrderConfirmation(isset($params['template']) ? $params['template'] : '')
+        ) {
+            return;
+        }
+
+        $idLang = isset($params['id_lang']) ? (int) $params['id_lang'] : (int) $this->context->language->id;
+        $title = $this->trans('Your rights on this purchase', [], 'Modules.Bkguarantee.Shop');
+        $alt = $this->trans(
+            'EU harmonised notice on the legal guarantee of conformity',
+            [],
+            'Modules.Bkguarantee.Shop'
+        );
+
+        if (isset($params['template_html'])) {
+            $params['template_html'] .= BkGuaranteeEmail::htmlBlock($idLang, $title, $alt);
+        }
+        if (isset($params['template_txt'])) {
+            $params['template_txt'] .= BkGuaranteeEmail::textBlock($idLang, $title);
+        }
+    }
+
+    public function hookActionEmailSendBefore(&$params)
+    {
+        if (!BkGuaranteeConfig::isOn(BkGuaranteeConfig::EMAIL_ATTACH)
+            || !BkGuaranteeConfig::isOn(BkGuaranteeConfig::ON_EMAIL)
+            || !BkGuaranteeConfig::isOn(BkGuaranteeConfig::ENABLED)
+            || !BkGuaranteeEmail::isOrderConfirmation(isset($params['template']) ? $params['template'] : '')
+        ) {
+            return true;
+        }
+
+        $idLang = isset($params['idLang']) ? (int) $params['idLang'] : (int) $this->context->language->id;
+        $attachment = BkGuaranteeEmail::attachment($idLang);
+        if ($attachment === null) {
+            return true;
+        }
+
+        $params['fileAttachment'] = BkGuaranteeEmail::mergeAttachment(
+            isset($params['fileAttachment']) ? $params['fileAttachment'] : null,
+            $attachment
+        );
+
+        return true;
     }
 
     public function hookActionFrontControllerSetMedia()
