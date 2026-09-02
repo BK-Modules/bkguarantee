@@ -1,0 +1,38 @@
+/**
+ * Aviso armonizado en el front.
+ *
+ * El aviso llega como imagen cerrada, así que el CSS solo la coloca: no la recorta, no la tapa
+ * ni le pone nada encima. En móvil ocupa el ancho disponible, que es lo que la mantiene legible.
+ */
+.bkguar {
+    margin: 1.25rem 0;
+}
+
+.bkguar__notice {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-radius: 3px;
+    background: #fff;
+}
+
+.bkguar__full {
+    display: inline-block;
+    margin-top: .4rem;
+    font-size: .8125rem;
+    opacity: .75;
+}
+
+.bkguar__full:hover,
+.bkguar__full:focus {
+    opacity: 1;
+}
+
+/* En el resumen del pedido la columna es estrecha: el aviso se centra en vez de pegarse al borde */
+.bkguar--checkout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}

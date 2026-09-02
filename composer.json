@@ -1,0 +1,43 @@
+{
+    "name": "bkmodules/bkguarantee",
+    "description": "BK EU Guarantee — aviso armonizado sobre la garantía legal de conformidad",
+    "type": "prestashop-module",
+    "keywords": ["prestashop", "guarantee", "warranty", "eu", "compliance", "garan"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "BK Modules",
+            "email": "dev@bkmodules.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "autoload": {
+        "classmap": [
+            "classes/"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "classmap-authoritative": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "extra": {
+        "prestashop": {
+            "name": "bkguarantee",
+            "version": "1.0.0",
+            "displayName": "BK EU Guarantee",
+            "description": "Aviso armonizado sobre la garantía legal de conformidad",
+            "tab": "front_office_features",
+            "bootstrap": true,
+            "compatibility": {
+                "min": "1.7.6.0",
+                "max": "9.99.99"
+            }
+        }
+    }
+}
