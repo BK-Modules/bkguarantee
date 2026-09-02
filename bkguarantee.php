@@ -174,6 +174,15 @@ class BkGuarantee extends Module
             $attachment
         );
 
+        // Las etiquetas GARAN de los productos del pedido viajan también: en el correo no hay
+        // navegador que monte el SVG, así que se componen con GD sobre el mismo arte oficial.
+        if (BkGuaranteeConfig::isOn(BkGuaranteeConfig::GARAN_ON)) {
+            $garan = BkGuaranteeEmail::garanAttachments(
+                isset($params['templateVars']) && is_array($params['templateVars']) ? $params['templateVars'] : []
+            );
+            $params['fileAttachment'] = BkGuaranteeEmail::mergeAttachments($params['fileAttachment'], $garan);
+        }
+
         return true;
     }
 

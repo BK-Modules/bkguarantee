@@ -140,6 +140,37 @@ class BkGuaranteeEmail
     }
 
     /**
+     * Etiquetas GARAN de un pedido, ya compuestas como PNG y listas para adjuntar.
+     *
+     * @param array $templateVars Variables de la plantilla del correo
+     *
+     * @return array Adjuntos en el formato de Mail::Send
+     */
+    public static function garanAttachments(array $templateVars)
+    {
+        $idOrder = isset($templateVars['{id_order}']) ? (int) $templateVars['{id_order}'] : 0;
+        if ($idOrder <= 0) {
+            return [];
+        }
+
+        $out = [];
+        foreach (BkGuaranteeLabelImage::forOrder($idOrder) as $label) {
+            $png = BkGuaranteeLabelImage::render($label);
+            if ($png === null) {
+                continue;
+            }
+
+            $out[] = [
+                'content' => $png,
+                'name' => 'garan-' . Tools::str2url($label['model']) . '.jpg',
+                'mime' => 'image/jpeg',
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
      * Mail::Send acepta un adjunto suelto o una lista: se normaliza a lista antes de añadir el
      * nuestro, para no pisar el que traiga otro módulo —una factura, por ejemplo—.
      *
@@ -150,17 +181,28 @@ class BkGuaranteeEmail
      */
     public static function mergeAttachment($existing, array $ours)
     {
+        return self::mergeAttachments($existing, [$ours]);
+    }
+
+    /**
+     * @param mixed $existing
+     * @param array $ours Lista de adjuntos
+     *
+     * @return mixed
+     */
+    public static function mergeAttachments($existing, array $ours)
+    {
+        if (empty($ours)) {
+            return $existing;
+        }
+
         if (empty($existing)) {
-            return [$ours];
+            return $ours;
         }
 
-        if (isset($existing['content'])) {
-            return [$existing, $ours];
-        }
+        $list = isset($existing['content']) ? [$existing] : $existing;
 
-        $existing[] = $ours;
-
-        return $existing;
+        return array_merge($list, $ours);
     }
 
     /**

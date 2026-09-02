@@ -486,6 +486,18 @@
         <source>too small.</source>
         <target>demasiado pequeño.</target>
       </trans-unit>
+      <trans-unit id="672c988ec9b599f4a7ed962e47b02ada">
+        <source>A rule for one shop wins over an equivalent rule for all of them.</source>
+        <target>Una regla de una tienda gana sobre una regla equivalente para todas.</target>
+      </trans-unit>
+      <trans-unit id="804ccd6219996d12eda865d1c0707423">
+        <source>All shops</source>
+        <target>Todas las tiendas</target>
+      </trans-unit>
+      <trans-unit id="9f82518d468b9fee614fcc92f76bb163">
+        <source>Shop</source>
+        <target>Tienda</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

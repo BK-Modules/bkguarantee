@@ -61,6 +61,12 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
                 'title' => $this->trans('Model identifier', [], 'Modules.Bkguarantee.Admin'),
                 'callback' => 'renderInherited',
             ],
+            'id_shop' => [
+                'title' => $this->trans('Shop', [], 'Modules.Bkguarantee.Admin'),
+                'callback' => 'renderShop',
+                'search' => false,
+                'orderby' => true,
+            ],
             'priority' => [
                 'title' => $this->trans('Priority', [], 'Modules.Bkguarantee.Admin'),
                 'align' => 'center',
@@ -162,8 +168,29 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
         return $value;
     }
 
+    /**
+     * @param int $value
+     *
+     * @return string
+     */
+    public function renderShop($value)
+    {
+        if (!(int) $value) {
+            return '<span class="text-muted"><em>' . $this->trans('All shops', [], 'Modules.Bkguarantee.Admin') . '</em></span>';
+        }
+
+        $shop = new Shop((int) $value);
+
+        return Validate::isLoadedObject($shop) ? $shop->name : (int) $value;
+    }
+
     public function renderForm()
     {
+        $shops = [['id' => 0, 'name' => $this->trans('All shops', [], 'Modules.Bkguarantee.Admin')]];
+        foreach (Shop::getShops(false) as $shop) {
+            $shops[] = ['id' => (int) $shop['id_shop'], 'name' => $shop['name']];
+        }
+
         $categories = [];
         foreach (Category::getSimpleCategories((int) $this->context->language->id) as $category) {
             $categories[] = ['id' => (int) $category['id_category'], 'name' => $category['name']];
@@ -248,6 +275,13 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
                     'desc' => $this->trans('Leave it empty to use the MPN of each product. A rule covering several models needs it empty, or they would all claim the same one.', [], 'Modules.Bkguarantee.Admin'),
                 ],
                 [
+                    'type' => 'select',
+                    'label' => $this->trans('Shop', [], 'Modules.Bkguarantee.Admin'),
+                    'name' => 'id_shop',
+                    'desc' => $this->trans('A rule for one shop wins over an equivalent rule for all of them.', [], 'Modules.Bkguarantee.Admin'),
+                    'options' => ['query' => $shops, 'id' => 'id', 'name' => 'name'],
+                ],
+                [
                     'type' => 'text',
                     'label' => $this->trans('Priority', [], 'Modules.Bkguarantee.Admin'),
                     'name' => 'priority',
@@ -281,6 +315,7 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
         if (!($rule instanceof BkGuaranteeRule) || !$rule->id) {
             $this->fields_value['active'] = 1;
             $this->fields_value['priority'] = 0;
+            $this->fields_value['id_shop'] = Shop::isFeatureActive() ? (int) $this->context->shop->id : 0;
         }
 
         return parent::renderForm();

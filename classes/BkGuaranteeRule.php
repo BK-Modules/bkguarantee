@@ -40,6 +40,8 @@ class BkGuaranteeRule extends ObjectModel
     public $model;
     /** @var int A mayor prioridad, antes se evalúa */
     public $priority;
+    /** @var int Tienda a la que se aplica; 0 = todas */
+    public $id_shop;
     /** @var bool */
     public $active;
     /** @var string */
@@ -57,6 +59,7 @@ class BkGuaranteeRule extends ObjectModel
             'years' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedInt', 'required' => true],
             'brand' => ['type' => self::TYPE_STRING, 'validate' => 'isGenericName', 'size' => 128],
             'model' => ['type' => self::TYPE_STRING, 'validate' => 'isGenericName', 'size' => 128],
+            'id_shop' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedInt'],
             'priority' => ['type' => self::TYPE_INT, 'validate' => 'isInt'],
             'active' => ['type' => self::TYPE_BOOL, 'validate' => 'isBool'],
             'date_add' => ['type' => self::TYPE_DATE, 'validate' => 'isDate'],
@@ -102,9 +105,13 @@ class BkGuaranteeRule extends ObjectModel
             return null;
         }
 
+        // Una regla con id_shop 0 vale para todas las tiendas; con una tienda concreta, solo para
+        // esa. En multitienda dos marcas distintas necesitan reglas distintas y no compartirlas.
+        $idShop = (int) Context::getContext()->shop->id;
         $rows = Db::getInstance()->executeS(
             'SELECT * FROM `' . _DB_PREFIX_ . 'bk_guarantee_rule`
-             WHERE `active` = 1 ORDER BY `priority` DESC, `id_guarantee_rule` ASC'
+             WHERE `active` = 1 AND `id_shop` IN (0, ' . $idShop . ')
+             ORDER BY `id_shop` DESC, `priority` DESC, `id_guarantee_rule` ASC'
         );
         if (empty($rows)) {
             return null;
@@ -225,12 +232,13 @@ class BkGuaranteeRule extends ObjectModel
                 `years` int(10) unsigned NOT NULL DEFAULT 0,
                 `brand` varchar(128) DEFAULT NULL,
                 `model` varchar(128) DEFAULT NULL,
+                `id_shop` int(10) unsigned NOT NULL DEFAULT 0,
                 `priority` int(11) NOT NULL DEFAULT 0,
                 `active` tinyint(1) unsigned NOT NULL DEFAULT 1,
                 `date_add` datetime DEFAULT NULL,
                 `date_upd` datetime DEFAULT NULL,
                 PRIMARY KEY (`id_guarantee_rule`),
-                KEY `active_priority` (`active`, `priority`)
+                KEY `active_priority` (`active`, `id_shop`, `priority`)
             ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8mb4;'
         );
     }
