@@ -308,8 +308,44 @@
     text-underline-offset: 2px;
 }
 
+/* Desplegada, la etiqueta flota sobre la página: abrirla al pasar el ratón no puede empujar la
+   ficha hacia abajo, o lo que el cliente estaba mirando se le mueve de sitio.
+
+   Va en `fixed` y la coloca el JS: las columnas de los temas recortan lo que se sale (overflow),
+   y una capa absoluta dentro de la columna se vería cortada. */
+.bkgaran--nested {
+    position: relative;
+}
+
 .bkgaran--nested .bkgaran__full {
-    margin-top: .75rem;
+    position: fixed;
+    z-index: 1000;
+    width: min(var(--bkgaran-w, 420px), calc(100vw - 32px));
+    max-width: none;
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, .14);
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .16);
+}
+
+/* Puente invisible sobre el hueco: al bajar del botón a la etiqueta el ratón no llega a salirse. */
+.bkgaran--nested .bkgaran__full::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 10px;
+}
+
+.bkgaran--nested .bkgaran__full.is-above::before {
+    top: auto;
+    bottom: -10px;
+}
+
+.bkgaran__full[hidden] {
+    display: none !important;
 }
 
 /* En pantallas estrechas la insignia manda y el texto se retira: la figura no se comprime. */
