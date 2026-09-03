@@ -498,6 +498,158 @@
         <source>Shop</source>
         <target>Shop</target>
       </trans-unit>
+      <trans-unit id="9ff0c55a3be1bde86007ea783fe10e30">
+        <source>Choose a CSV file to import.</source>
+        <target>Choose a CSV file to import.</target>
+      </trans-unit>
+      <trans-unit id="2f577cb84af79d69a15bf3c518cee480">
+        <source>The file could not be stored for review.</source>
+        <target>The file could not be stored for review.</target>
+      </trans-unit>
+      <trans-unit id="cadf15b7c4580b8a069ec0d9f8649d8d">
+        <source>The file has no rows.</source>
+        <target>The file has no rows.</target>
+      </trans-unit>
+      <trans-unit id="dc34fec11da686609329d93f0df5cea8">
+        <source>The file to import is no longer available. Upload it again.</source>
+        <target>The file to import is no longer available. Upload it again.</target>
+      </trans-unit>
+      <trans-unit id="14a25a47b074b9f986276b40f3d6e8de">
+        <source>Import finished: %1$d rules created, %2$d updated, %3$d skipped.</source>
+        <target>Import finished: %1$d rules created, %2$d updated, %3$d skipped.</target>
+      </trans-unit>
+      <trans-unit id="3629d01920a945712d30867ceba48ef3">
+        <source>Export to CSV</source>
+        <target>Export to CSV</target>
+      </trans-unit>
+      <trans-unit id="ccab070da5c1f82a343ad8c2cf3a2649">
+        <source>The file could not be read.</source>
+        <target>The file could not be read.</target>
+      </trans-unit>
+      <trans-unit id="f09bc49e98e94cb04dc058087fbb3878">
+        <source>The file is empty.</source>
+        <target>The file is empty.</target>
+      </trans-unit>
+      <trans-unit id="d585ae7eeef3f98e0493115622af375c">
+        <source>The file is missing columns.</source>
+        <target>The file is missing columns.</target>
+      </trans-unit>
+      <trans-unit id="c811ff138693f351361819d6dd2721d6">
+        <source>The rule needs a name.</source>
+        <target>The rule needs a name.</target>
+      </trans-unit>
+      <trans-unit id="28fd2bc0f08e526bfcb03139e2f716ad">
+        <source>Unknown filter type.</source>
+        <target>Unknown filter type.</target>
+      </trans-unit>
+      <trans-unit id="fca84b62d304b40b027ea2d985356cbb">
+        <source>The rule has no targets.</source>
+        <target>The rule has no targets.</target>
+      </trans-unit>
+      <trans-unit id="bca874269b5b6ac5354f2acdbf169015">
+        <source>The file repeats this rule name for the same shop.</source>
+        <target>The file repeats this rule name for the same shop.</target>
+      </trans-unit>
+      <trans-unit id="67cf528135aac224ea9cf00ea50c390b">
+        <source>Unknown shop.</source>
+        <target>Unknown shop.</target>
+      </trans-unit>
+      <trans-unit id="5f57999ee857a3fec2e02b5e52393a3b">
+        <source>Rules by spreadsheet</source>
+        <target>Rules by spreadsheet</target>
+      </trans-unit>
+      <trans-unit id="d7412a77783fe2a44dd9ba02377bde28">
+        <source>Export what you already have, edit it in your spreadsheet and upload it back. A rule is recognised by its name within its shop, so importing the same file twice updates the same rules instead of duplicating them.</source>
+        <target>Export what you already have, edit it in your spreadsheet and upload it back. A rule is recognised by its name within its shop, so importing the same file twice updates the same rules instead of duplicating them.</target>
+      </trans-unit>
+      <trans-unit id="4045ea6519104a21bb85547a7a276906">
+        <source>CSV separated by ; or , in UTF-8. Columns:</source>
+        <target>CSV separated by ; or , in UTF-8. Columns:</target>
+      </trans-unit>
+      <trans-unit id="8a112e579e4cf996e8e3dfa1be7b9837">
+        <source>Review the file</source>
+        <target>Review the file</target>
+      </trans-unit>
+      <trans-unit id="48bd88ebad13474399d666c915c9c2ad">
+        <source>Download template</source>
+        <target>Download template</target>
+      </trans-unit>
+      <trans-unit id="aa15fa811ab1f60875ddadb25eb533f4">
+        <source>Export rules</source>
+        <target>Export rules</target>
+      </trans-unit>
+      <trans-unit id="22af645d1859cb5ca6da0c484f1f37ea">
+        <source>new</source>
+        <target>new</target>
+      </trans-unit>
+      <trans-unit id="0f81d52e06caaa4860887488d18271c7">
+        <source>updated</source>
+        <target>updated</target>
+      </trans-unit>
+      <trans-unit id="e52e279299e912838f689d4380c81f4a">
+        <source>skipped</source>
+        <target>skipped</target>
+      </trans-unit>
+      <trans-unit id="f699b0c0b50ad9ba3e5f5906b7fa4bbd">
+        <source>Nothing has been written yet.</source>
+        <target>Nothing has been written yet.</target>
+      </trans-unit>
+      <trans-unit id="8eea62084ca7e541d918e823422bd82e">
+        <source>Result</source>
+        <target>Result</target>
+      </trans-unit>
+      <trans-unit id="ee5be93eeb4215803d7127570490b998">
+        <source>Will be created</source>
+        <target>Will be created</target>
+      </trans-unit>
+      <trans-unit id="2bf7e081fb977f1f869569fdc3a2a030">
+        <source>Will be updated</source>
+        <target>Will be updated</target>
+      </trans-unit>
+      <trans-unit id="d9c8f187972e6320a34e9c40b4cba605">
+        <source>Skipped</source>
+        <target>Skipped</target>
+      </trans-unit>
+      <trans-unit id="834728074e2c8c581428829a6fc33924">
+        <source>Import these rules</source>
+        <target>Import these rules</target>
+      </trans-unit>
+      <trans-unit id="a2895c99dc13e6860c02bff5d12c4f02">
+        <source>scannable</source>
+        <target>scannable</target>
+      </trans-unit>
+      <trans-unit id="0423fa423baf1ea8139f6662869faf2f">
+        <source>tight</source>
+        <target>tight</target>
+      </trans-unit>
+      <trans-unit id="6a3f0eb6d9c4fa20039a170c29be7100">
+        <source>too small</source>
+        <target>too small</target>
+      </trans-unit>
+      <trans-unit id="202d1b1a0b046cef73f6947a3e831e0f">
+        <source>Being served</source>
+        <target>Being served</target>
+      </trans-unit>
+      <trans-unit id="d15305d7a4e34e02489c74a5ef542f36">
+        <source>Off</source>
+        <target>Off</target>
+      </trans-unit>
+      <trans-unit id="3a08e2e340ab29fd9263af48193cbf8e">
+        <source>Languages</source>
+        <target>Languages</target>
+      </trans-unit>
+      <trans-unit id="fb54c8d2a4bda62f5b69853e53901ee9">
+        <source>GARAN rules</source>
+        <target>GARAN rules</target>
+      </trans-unit>
+      <trans-unit id="d004dd7c7a784e356b9181c8c8619cf9">
+        <source>The notice is served exactly as the Official Journal publishes it; what you set here is where it goes and how wide.</source>
+        <target>The notice is served exactly as the Official Journal publishes it; what you set here is where it goes and how wide.</target>
+      </trans-unit>
+      <trans-unit id="bc30065d6c08bac1c69a56f200a675a3">
+        <source>The badge is the nested figure of Annex II itself, and the full label opens on the first click, hover or touch. The regulation grants this to the label only, never to the notice.</source>
+        <target>The badge is the nested figure of Annex II itself, and the full label opens on the first click, hover or touch. The regulation grants this to the label only, never to the notice.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

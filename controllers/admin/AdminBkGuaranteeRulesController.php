@@ -13,6 +13,9 @@ if (!defined('_PS_VERSION_')) {
 
 class AdminBkGuaranteeRulesController extends ModuleAdminController
 {
+    /** Vista previa de la importación en curso; vacía mientras no se sube ningún fichero */
+    private $preview = [];
+
     public function __construct()
     {
         $this->bootstrap = true;
@@ -99,6 +102,163 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
         $this->addJS($this->module->assetUrl('views/js/rules.js'), false);
     }
 
+    /**
+     * Fichero de trabajo de la importación del empleado que la está haciendo: se conserva entre la
+     * vista previa y la confirmación, y se borra en cuanto se aplica.
+     *
+     * @return string
+     */
+    private function importPath()
+    {
+        return _PS_CACHE_DIR_ . 'bkguarantee-import-' . (int) $this->context->employee->id . '.csv';
+    }
+
+    /**
+     * @param string $name
+     * @param string $content
+     */
+    private function download($name, $content)
+    {
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $name . '"');
+        header('Content-Length: ' . strlen($content));
+        echo $content;
+        exit;
+    }
+
+    public function postProcess()
+    {
+        if (Tools::isSubmit('submitBkGuarTemplate')) {
+            $this->download('bkguarantee-rules-template.csv', BkGuaranteeRuleCsv::template());
+        }
+
+        if (Tools::isSubmit('submitBkGuarExport')) {
+            $rules = Db::getInstance()->executeS(
+                'SELECT * FROM `' . _DB_PREFIX_ . 'bk_guarantee_rule` ORDER BY `id_guarantee_rule`'
+            );
+            $this->download('bkguarantee-rules.csv', BkGuaranteeRuleCsv::export((array) $rules));
+        }
+
+        if (Tools::isSubmit('submitBkGuarImport')) {
+            $this->processUpload();
+
+            return true;
+        }
+
+        if (Tools::isSubmit('submitBkGuarImportConfirm')) {
+            $this->processImport();
+
+            return true;
+        }
+
+        return parent::postProcess();
+    }
+
+    /**
+     * Subir no importa nada: deja el fichero listo y enseña lo que se haría con él.
+     */
+    private function processUpload()
+    {
+        if (empty($_FILES['bkguar_csv']['tmp_name']) || !is_uploaded_file($_FILES['bkguar_csv']['tmp_name'])) {
+            $this->errors[] = $this->module->t('Choose a CSV file to import.', [], 'Modules.Bkguarantee.Admin');
+
+            return;
+        }
+
+        if (!move_uploaded_file($_FILES['bkguar_csv']['tmp_name'], $this->importPath())) {
+            $this->errors[] = $this->module->t('The file could not be stored for review.', [], 'Modules.Bkguarantee.Admin');
+
+            return;
+        }
+
+        $parsed = BkGuaranteeRuleCsv::parse($this->importPath());
+        if ($parsed['fatal'] !== null) {
+            @unlink($this->importPath());
+            $this->errors[] = trim(
+                $this->module->t($parsed['fatal'], [], 'Modules.Bkguarantee.Admin') . ' ' . $parsed['detail']
+            );
+
+            return;
+        }
+
+        if (empty($parsed['rows'])) {
+            @unlink($this->importPath());
+            $this->errors[] = $this->module->t('The file has no rows.', [], 'Modules.Bkguarantee.Admin');
+
+            return;
+        }
+
+        $this->preview = $parsed['rows'];
+    }
+
+    /**
+     * Aplica exactamente lo que se enseñó en la vista previa: se vuelve a leer el mismo fichero.
+     */
+    private function processImport()
+    {
+        $parsed = BkGuaranteeRuleCsv::parse($this->importPath());
+        if ($parsed['fatal'] !== null || empty($parsed['rows'])) {
+            $this->errors[] = $this->module->t('The file to import is no longer available. Upload it again.', [], 'Modules.Bkguarantee.Admin');
+
+            return;
+        }
+
+        $result = BkGuaranteeRuleCsv::apply($parsed['rows']);
+        @unlink($this->importPath());
+
+        $this->confirmations[] = sprintf(
+            $this->module->t('Import finished: %1$d rules created, %2$d updated, %3$d skipped.', [], 'Modules.Bkguarantee.Admin'),
+            $result['created'],
+            $result['updated'],
+            $result['skipped']
+        );
+    }
+
+    /**
+     * El panel de CSV va sobre el listado: es la herramienta de quien tiene el catálogo en una hoja
+     * de cálculo, y ahí es donde la busca.
+     *
+     * @return string
+     */
+    public function renderList()
+    {
+        return $this->renderCsvPanel() . parent::renderList();
+    }
+
+    /**
+     * @return string
+     */
+    private function renderCsvPanel()
+    {
+        $rows = [];
+        foreach ($this->preview as $row) {
+            $errors = [];
+            foreach ($row['errors'] as $error) {
+                $errors[] = $this->module->t($error, [], 'Modules.Bkguarantee.Admin');
+            }
+            $row['errors'] = $errors;
+            $row['filter_label'] = $this->renderFilterType($row['data']['filter_type']);
+            $rows[] = $row;
+        }
+
+        $counts = ['new' => 0, 'update' => 0, 'skip' => 0];
+        foreach ($this->preview as $row) {
+            ++$counts[$row['action']];
+        }
+
+        $this->context->smarty->assign([
+            'bkguar_csv_action' => self::$currentIndex . '&token=' . $this->token,
+            'bkguar_preview' => $rows,
+            'bkguar_counts' => $counts,
+            'bkguar_max_rows' => BkGuaranteeRuleCsv::MAX_ROWS,
+            'bkguar_columns' => implode(', ', BkGuaranteeRuleCsv::COLUMNS),
+        ]);
+
+        return $this->context->smarty->fetch(
+            _PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/import.tpl'
+        );
+    }
+
     public function initPageHeaderToolbar()
     {
         if (empty($this->display)) {
@@ -106,6 +266,11 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
                 'href' => self::$currentIndex . '&add' . $this->table . '&token=' . $this->token,
                 'desc' => $this->module->t('Add a rule', [], 'Modules.Bkguarantee.Admin'),
                 'icon' => 'process-icon-new',
+            ];
+            $this->page_header_toolbar_btn['bkguar_export'] = [
+                'href' => self::$currentIndex . '&submitBkGuarExport=1&token=' . $this->token,
+                'desc' => $this->module->t('Export to CSV', [], 'Modules.Bkguarantee.Admin'),
+                'icon' => 'process-icon-export',
             ];
         }
 

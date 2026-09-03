@@ -173,8 +173,59 @@
 }
 
 /* ---- pantalla de configuración de bkguarantee ---- */
-.bkguar-tabs { margin: 0 0 18px; padding: 0 12px; }
-.bkguar-config .tab-content { padding: 8px 4px 0; }
+
+/* Tira de estado: lo que se lee sin abrir ninguna pestaña */
+.bkguar-summary {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 12px 16px; border-bottom: 1px solid #eceff0; background: #f8fafb;
+}
+.bkguar-chip-state {
+    display: inline-flex; align-items: baseline; gap: 6px;
+    padding: 5px 12px; border: 1px solid #dfe5e8; border-radius: 999px;
+    background: #fff; font-size: 12px; line-height: 1.4; color: #6c868e;
+}
+.bkguar-chip-state i { position: relative; top: 1px; }
+.bkguar-chip-state strong { color: #363a41; font-weight: 600; }
+.bkguar-chip-state--ok { border-color: #b6e0c6; }
+.bkguar-chip-state--ok i, .bkguar-chip-state--ok strong { color: #00723d; }
+.bkguar-chip-state--warn { border-color: #f5dda4; }
+.bkguar-chip-state--warn i, .bkguar-chip-state--warn strong { color: #8a6100; }
+.bkguar-chip-state--bad { border-color: #f0c2c2; }
+.bkguar-chip-state--bad i, .bkguar-chip-state--bad strong { color: #a72020; }
+.bkguar-chip-state--info i { color: #25b9d7; }
+
+/* Menú de la pantalla: propio, para que sea el mismo en 1.7.5 y en 9.x */
+.bkguar-nav {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    padding: 10px 12px 0; border-bottom: 1px solid #eceff0; background: #fff;
+}
+.bkguar-nav__item {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 14px; border: 1px solid transparent; border-bottom: 0;
+    border-radius: 6px 6px 0 0; margin-bottom: -1px;
+    color: #6c868e; font-size: 13px; font-weight: 600;
+    /* El back office subraya todos los enlaces; un menú subrayado no se lee como un menú. */
+    text-decoration: none !important;
+    transition: background-color .15s, color .15s;
+}
+.bkguar-nav__item:hover, .bkguar-nav__item:focus { background: #f2f6f7; color: #363a41; }
+.bkguar-nav__item.is-active {
+    border-color: #eceff0; background: #fff; color: #25b9d7;
+    box-shadow: inset 0 3px 0 #25b9d7;
+}
+.bkguar-nav__item i { font-size: 14px; }
+.bkguar-nav__badge {
+    display: inline-block; min-width: 18px; padding: 1px 6px;
+    border-radius: 999px; background: #cf2020; color: #fff;
+    font-size: 11px; font-weight: 700; text-align: center;
+}
+.bkguar-config .tab-content { padding: 18px 16px 0; }
+.bkguar-config .tab-pane { display: none; }
+.bkguar-config .tab-pane.active { display: block; }
+
+/* Pie de guardado: la regla que gobierna la pantalla, junto al botón que la aplica */
+.bkguar-save { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+.bkguar-save__hint { flex: 1 1 320px; min-width: 0; color: #6c868e; font-size: 12px; }
 .bkguar-config .bkguar-row[hidden] { display: none !important; }
 .bkguar-langs { max-width: 460px; }
 .bkguar-fullsize img { max-width: 260px; width: 100%; border: 1px solid #d6dbe0; border-radius: 3px; }
@@ -212,3 +263,21 @@
 .bkguar-chip small { color: #9aa4ad; }
 .bkguar-chip__x { color: #a5abb5; text-decoration: none; font-size: 15px; line-height: 1; }
 .bkguar-chip__x:hover { color: #cf2020; text-decoration: none; }
+
+/* Reglas por hoja de cálculo: el mismo fichero sale y entra, y subirlo nunca escribe nada */
+.bkguar-csv__intro { padding: 0 12px 12px; color: #6c868e; max-width: 70ch; }
+.bkguar-csv__form {
+    display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start;
+    padding: 12px; border-top: 1px solid #eceff0; background: #f8fafb;
+}
+.bkguar-csv__file { flex: 1 1 320px; min-width: 0; }
+.bkguar-csv__file .help-block { margin: 6px 0 0; font-size: 12px; }
+.bkguar-csv__file code { font-size: 11px; }
+.bkguar-csv__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.bkguar-csv__preview { padding: 12px; border-top: 1px solid #eceff0; }
+.bkguar-csv__counts { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; }
+.bkguar-csv__table { margin-bottom: 12px; font-size: 13px; }
+.bkguar-csv__row--skip { background: #fdf4f4; }
+.bkguar-csv__row--new td:first-child { box-shadow: inset 3px 0 0 #00723d; }
+.bkguar-csv__row--update td:first-child { box-shadow: inset 3px 0 0 #25b9d7; }
+.bkguar-csv__errors { margin: 4px 0 0 16px; font-size: 12px; color: #a72020; }

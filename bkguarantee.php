@@ -27,6 +27,9 @@ class BkGuarantee extends Module
 {
     /** Controlador de la pantalla de configuración, y nombre de su pestaña en el back office */
     const TAB_CLASS = 'AdminBkGuaranteeTab';
+
+    /** Ancho máximo de la figura anidada: por encima deja de leerse como una insignia */
+    const GARAN_BADGE_MAX_WIDTH = 240;
     /**
      * displayProductAdditionalInfo cae bajo el bloque de compra, que es donde la oferta queda a
      * la vista; displayPaymentTop repite el aviso justo encima de las formas de pago, que es la
@@ -284,19 +287,26 @@ class BkGuarantee extends Module
             return '';
         }
 
+        $width = BkGuaranteeConfig::getGaranWidth();
+
         $this->smarty->assign([
             'bkgaran_art' => $this->assetUrl('views/img/garan-blank.png'),
-            'bkgaran_width' => BkGuaranteeConfig::getGaranWidth(),
+            'bkgaran_nested_art' => $this->assetUrl('views/img/garan-nested.png'),
+            'bkgaran_width' => $width,
+            // La figura anidada es apaisada: al ancho de la etiqueta entera se vuelve un cartel.
+            'bkgaran_badge_width' => min($width, self::GARAN_BADGE_MAX_WIDTH),
             'bkgaran_nested' => BkGuaranteeConfig::isOn(BkGuaranteeConfig::GARAN_NESTED),
             'bkgaran_years' => (int) $label['years'],
             'bkgaran_brand' => $label['brand'],
             'bkgaran_model' => $label['model'],
+            'bkgaran_uid' => $idProduct . '-' . $placement,
             'bkgaran_alt' => $this->trans(
                 'GARAN label: producer durability guarantee in years',
                 [],
                 'Modules.Bkguarantee.Shop'
             ),
             'bkgaran_toggle' => $this->trans('Producer guarantee in years', [], 'Modules.Bkguarantee.Shop'),
+            'bkgaran_more' => $this->trans('See the full label', [], 'Modules.Bkguarantee.Shop'),
         ]);
 
         return $this->fetch('module:bkguarantee/views/templates/hook/garan.tpl');

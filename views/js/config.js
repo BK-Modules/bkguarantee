@@ -3,6 +3,10 @@
  *
  * Un ajuste que gobierna a otros los esconde hasta que hacen falta: enseñar la lista de grupos B2B
  * cuando la exclusión está apagada invita a rellenar algo que no se va a usar.
+ *
+ * Las pestañas son propias y no dependen de ningún plugin del back office: el menú es el mismo en
+ * 1.7.5 y en 9.x, que son back offices distintos. La pestaña abierta viaja en el ancla, así que al
+ * guardar se vuelve a la que se estaba tocando.
  */
 (function ($) {
     'use strict';
@@ -17,6 +21,63 @@
             var sel = document.querySelector('select[name="' + row.getAttribute('data-when-select') + '"]');
             row.hidden = !(sel && sel.value === row.getAttribute('data-value'));
         });
+    }
+
+    function tabs() {
+        var items = [].slice.call(document.querySelectorAll('.bkguar-nav__item'));
+        var panes = [].slice.call(document.querySelectorAll('.bkguar-config .tab-pane'));
+        if (!items.length) {
+            return;
+        }
+
+        function show(id) {
+            var found = false;
+            items.forEach(function (item) {
+                var on = item.getAttribute('href') === id;
+                item.classList.toggle('is-active', on);
+                item.setAttribute('aria-selected', on ? 'true' : 'false');
+                found = found || on;
+            });
+            panes.forEach(function (pane) {
+                pane.classList.toggle('active', '#' + pane.id === id);
+            });
+
+            // Guardar recarga la pantalla y el ancla no sobrevive al redirect, así que la pestaña
+            // abierta se recuerda: se vuelve a la que se estaba tocando, no a la primera.
+            if (found) {
+                try {
+                    window.sessionStorage.setItem('bkguarTab', id);
+                } catch (e) {
+                    // Sin almacenamiento la pestaña simplemente no se recuerda.
+                }
+            }
+
+            return found;
+        }
+
+        items.forEach(function (item) {
+            item.addEventListener('click', function (event) {
+                event.preventDefault();
+                var id = item.getAttribute('href');
+                show(id);
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState(null, '', window.location.pathname + window.location.search + id);
+                }
+            });
+        });
+
+        var remembered = null;
+        try {
+            remembered = window.sessionStorage.getItem('bkguarTab');
+        } catch (e) {
+            remembered = null;
+        }
+
+        if (!(window.location.hash && show(window.location.hash))
+            && !(remembered && show(remembered))
+        ) {
+            show(items[0].getAttribute('href'));
+        }
     }
 
     function picker() {
@@ -108,6 +169,7 @@
         if ($.fn.chosen) {
             $('.bkguar-chosen').chosen({ width: '100%', search_contains: true });
         }
+        tabs();
         picker();
         toggleRows();
         $('#bkguar-form').on('change', 'input[type=radio], select', toggleRows);

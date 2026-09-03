@@ -10,16 +10,26 @@
     <i class="icon-shield"></i> {l s='EU guarantee notice' d='Modules.Bkguarantee.Admin'}
   </div>
 
-  <ul class="nav nav-tabs bkguar-tabs" role="tablist">
-    <li class="active"><a href="#bkguar-tab-status" data-toggle="tab">
+  <div class="bkguar-summary">
+    {foreach from=$bkguar_summary item=chip}
+      <span class="bkguar-chip-state bkguar-chip-state--{$chip.level|escape:'htmlall':'UTF-8'}">
+        <i class="icon-{$chip.icon|escape:'htmlall':'UTF-8'}"></i>
+        <span class="bkguar-chip-state__label">{$chip.label|escape:'htmlall':'UTF-8'}</span>
+        <strong>{$chip.value|escape:'htmlall':'UTF-8'}</strong>
+      </span>
+    {/foreach}
+  </div>
+
+  <nav class="bkguar-nav" role="tablist">
+    <a class="bkguar-nav__item" href="#bkguar-tab-status" role="tab">
       <i class="icon-flag"></i> {l s='Status' d='Modules.Bkguarantee.Admin'}
-      {if $bkguar_missing|@count}<span class="badge badge-danger">{$bkguar_missing|@count}</span>{/if}
-    </a></li>
-    <li><a href="#bkguar-tab-look" data-toggle="tab"><i class="icon-paint-brush"></i> {l s='Presentation' d='Modules.Bkguarantee.Admin'}</a></li>
-    <li><a href="#bkguar-tab-scope" data-toggle="tab"><i class="icon-filter"></i> {l s='Catalogue' d='Modules.Bkguarantee.Admin'}</a></li>
-    <li><a href="#bkguar-tab-garan" data-toggle="tab"><i class="icon-certificate"></i> GARAN</a></li>
-    <li><a href="#bkguar-tab-mail" data-toggle="tab"><i class="icon-envelope"></i> {l s='Email' d='Modules.Bkguarantee.Admin'}</a></li>
-  </ul>
+      {if $bkguar_missing|@count}<span class="bkguar-nav__badge">{$bkguar_missing|@count}</span>{/if}
+    </a>
+    <a class="bkguar-nav__item" href="#bkguar-tab-look" role="tab"><i class="icon-paint-brush"></i> {l s='Presentation' d='Modules.Bkguarantee.Admin'}</a>
+    <a class="bkguar-nav__item" href="#bkguar-tab-scope" role="tab"><i class="icon-filter"></i> {l s='Catalogue' d='Modules.Bkguarantee.Admin'}</a>
+    <a class="bkguar-nav__item" href="#bkguar-tab-garan" role="tab"><i class="icon-certificate"></i> GARAN</a>
+    <a class="bkguar-nav__item" href="#bkguar-tab-mail" role="tab"><i class="icon-envelope"></i> {l s='Email' d='Modules.Bkguarantee.Admin'}</a>
+  </nav>
 
   <form id="bkguar-form" class="form-horizontal" method="post" action="{$bkguar_action|escape:'htmlall':'UTF-8'}">
     <input type="hidden" name="submitBkGuaranteeConfig" value="1">
@@ -248,7 +258,7 @@
         <div class="bkguar-row" data-when="BK_GUAR_GARAN">
           {include file=$bkguar_switch on=$bkguar_v.BK_GUAR_GARAN_NEST name='BK_GUAR_GARAN_NEST'
             label={l s='Nested display for GARAN' d='Modules.Bkguarantee.Admin'}
-            desc={l s='A compact badge that opens the full label on the first click, hover or touch. The regulation allows this for the label only, never for the notice.' d='Modules.Bkguarantee.Admin'}}
+            desc={l s='The badge is the nested figure of Annex II itself, and the full label opens on the first click, hover or touch. The regulation grants this to the label only, never to the notice.' d='Modules.Bkguarantee.Admin'}}
         </div>
 
         <div class="form-group">
@@ -278,8 +288,9 @@
       </div>
     </div>
 
-    <div class="panel-footer">
-      <button type="submit" class="btn btn-default pull-right">
+    <div class="panel-footer bkguar-save">
+      <span class="bkguar-save__hint">{l s='The notice is served exactly as the Official Journal publishes it; what you set here is where it goes and how wide.' d='Modules.Bkguarantee.Admin'}</span>
+      <button type="submit" class="btn btn-primary">
         <i class="process-icon-save"></i> {l s='Save' d='Modules.Bkguarantee.Admin'}
       </button>
     </div>

@@ -30,6 +30,10 @@
         <source>Producer guarantee in years</source>
         <target>Producer guarantee in years</target>
       </trans-unit>
+      <trans-unit id="06b48f7915a08d38abe2799956fc2aef">
+        <source>See the full label</source>
+        <target>See the full label</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

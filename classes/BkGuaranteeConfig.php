@@ -107,7 +107,7 @@ class BkGuaranteeConfig
             self::GARAN_ON => '1',
             self::GARAN_PLACEMENT => 'thumbs',
             self::GARAN_WIDTH => '420',
-            self::GARAN_NESTED => '0',
+            self::GARAN_NESTED => '1',
             self::ON_EMAIL => '1',
             self::EMAIL_ATTACH => '1',
             self::SCOPE_MODE => 'all',

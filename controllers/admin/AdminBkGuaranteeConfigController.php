@@ -226,10 +226,67 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             'bkguar_finder' => $dir . '_finder.tpl',
             'bkguar_action' => self::$currentIndex . '&token=' . $this->token,
             'bkguar_rules_url' => $this->context->link->getAdminLink('AdminBkGuaranteeRules'),
+            'bkguar_summary' => $this->summary($rows),
         ]);
 
         return '<script>var bkguarSearchUrl = ' . json_encode($searchUrl) . ';</script>'
             . $this->context->smarty->fetch($dir . 'config.tpl');
+    }
+
+    /**
+     * Tira de estado de la cabecera: lo que hay que poder leer sin abrir ninguna pestaña, en el
+     * orden en que importa —si el módulo está sirviendo algo, si lo sirve en todos los idiomas y
+     * si el código QR se escanea al ancho elegido.
+     *
+     * @param array $rows Cobertura por idioma
+     *
+     * @return array
+     */
+    private function summary(array $rows)
+    {
+        $on = BkGuaranteeConfig::isOn(BkGuaranteeConfig::ENABLED);
+        $ready = 0;
+        foreach ($rows as $row) {
+            $ready += $row['ready'] ? 1 : 0;
+        }
+        $qr = BkGuaranteeNotice::qrCheck(BkGuaranteeConfig::getWidth());
+        $qrWords = [
+            'ok' => $this->module->t('scannable', [], 'Modules.Bkguarantee.Admin'),
+            'tight' => $this->module->t('tight', [], 'Modules.Bkguarantee.Admin'),
+            'bad' => $this->module->t('too small', [], 'Modules.Bkguarantee.Admin'),
+        ];
+        $rules = (int) Db::getInstance()->getValue(
+            'SELECT COUNT(*) FROM `' . _DB_PREFIX_ . 'bk_guarantee_rule` WHERE `active` = 1'
+        );
+
+        return [
+            [
+                'icon' => 'power-off',
+                'label' => $this->module->t('Notice', [], 'Modules.Bkguarantee.Admin'),
+                'value' => $on
+                    ? $this->module->t('Being served', [], 'Modules.Bkguarantee.Admin')
+                    : $this->module->t('Off', [], 'Modules.Bkguarantee.Admin'),
+                'level' => $on ? 'ok' : 'bad',
+            ],
+            [
+                'icon' => 'flag',
+                'label' => $this->module->t('Languages', [], 'Modules.Bkguarantee.Admin'),
+                'value' => $ready . '/' . count($rows),
+                'level' => $ready === count($rows) ? 'ok' : 'bad',
+            ],
+            [
+                'icon' => 'qrcode',
+                'label' => $this->module->t('QR code', [], 'Modules.Bkguarantee.Admin'),
+                'value' => $qr['side'] . ' px, ' . $qrWords[$qr['level']],
+                'level' => $qr['level'] === 'ok' ? 'ok' : ($qr['level'] === 'tight' ? 'warn' : 'bad'),
+            ],
+            [
+                'icon' => 'certificate',
+                'label' => $this->module->t('GARAN rules', [], 'Modules.Bkguarantee.Admin'),
+                'value' => (string) $rules,
+                'level' => 'info',
+            ],
+        ];
     }
 
     /**

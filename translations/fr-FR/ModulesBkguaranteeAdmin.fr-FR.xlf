@@ -498,6 +498,158 @@
         <source>Shop</source>
         <target>Boutique</target>
       </trans-unit>
+      <trans-unit id="9ff0c55a3be1bde86007ea783fe10e30">
+        <source>Choose a CSV file to import.</source>
+        <target>Choisissez un fichier CSV à importer.</target>
+      </trans-unit>
+      <trans-unit id="2f577cb84af79d69a15bf3c518cee480">
+        <source>The file could not be stored for review.</source>
+        <target>Le fichier n'a pas pu être enregistré pour la relecture.</target>
+      </trans-unit>
+      <trans-unit id="cadf15b7c4580b8a069ec0d9f8649d8d">
+        <source>The file has no rows.</source>
+        <target>Le fichier ne contient aucune ligne.</target>
+      </trans-unit>
+      <trans-unit id="dc34fec11da686609329d93f0df5cea8">
+        <source>The file to import is no longer available. Upload it again.</source>
+        <target>Le fichier à importer n'est plus disponible. Téléversez-le à nouveau.</target>
+      </trans-unit>
+      <trans-unit id="14a25a47b074b9f986276b40f3d6e8de">
+        <source>Import finished: %1$d rules created, %2$d updated, %3$d skipped.</source>
+        <target>Import terminé : %1$d règles créées, %2$d mises à jour, %3$d ignorées.</target>
+      </trans-unit>
+      <trans-unit id="3629d01920a945712d30867ceba48ef3">
+        <source>Export to CSV</source>
+        <target>Exporter en CSV</target>
+      </trans-unit>
+      <trans-unit id="ccab070da5c1f82a343ad8c2cf3a2649">
+        <source>The file could not be read.</source>
+        <target>Le fichier n'a pas pu être lu.</target>
+      </trans-unit>
+      <trans-unit id="f09bc49e98e94cb04dc058087fbb3878">
+        <source>The file is empty.</source>
+        <target>Le fichier est vide.</target>
+      </trans-unit>
+      <trans-unit id="d585ae7eeef3f98e0493115622af375c">
+        <source>The file is missing columns.</source>
+        <target>Il manque des colonnes au fichier.</target>
+      </trans-unit>
+      <trans-unit id="c811ff138693f351361819d6dd2721d6">
+        <source>The rule needs a name.</source>
+        <target>La règle a besoin d’un nom.</target>
+      </trans-unit>
+      <trans-unit id="28fd2bc0f08e526bfcb03139e2f716ad">
+        <source>Unknown filter type.</source>
+        <target>Type de filtre inconnu.</target>
+      </trans-unit>
+      <trans-unit id="fca84b62d304b40b027ea2d985356cbb">
+        <source>The rule has no targets.</source>
+        <target>La règle ne vise rien.</target>
+      </trans-unit>
+      <trans-unit id="bca874269b5b6ac5354f2acdbf169015">
+        <source>The file repeats this rule name for the same shop.</source>
+        <target>Le fichier répète ce nom de règle pour la même boutique.</target>
+      </trans-unit>
+      <trans-unit id="67cf528135aac224ea9cf00ea50c390b">
+        <source>Unknown shop.</source>
+        <target>Boutique inconnue.</target>
+      </trans-unit>
+      <trans-unit id="5f57999ee857a3fec2e02b5e52393a3b">
+        <source>Rules by spreadsheet</source>
+        <target>Les règles par tableur</target>
+      </trans-unit>
+      <trans-unit id="d7412a77783fe2a44dd9ba02377bde28">
+        <source>Export what you already have, edit it in your spreadsheet and upload it back. A rule is recognised by its name within its shop, so importing the same file twice updates the same rules instead of duplicating them.</source>
+        <target>Exportez ce que vous avez déjà, modifiez-le dans votre tableur et renvoyez-le. Une règle est reconnue par son nom au sein de sa boutique : importer deux fois le même fichier met à jour les mêmes règles au lieu de les dupliquer.</target>
+      </trans-unit>
+      <trans-unit id="4045ea6519104a21bb85547a7a276906">
+        <source>CSV separated by ; or , in UTF-8. Columns:</source>
+        <target>CSV séparé par ; ou , en UTF-8. Colonnes :</target>
+      </trans-unit>
+      <trans-unit id="8a112e579e4cf996e8e3dfa1be7b9837">
+        <source>Review the file</source>
+        <target>Relire le fichier</target>
+      </trans-unit>
+      <trans-unit id="48bd88ebad13474399d666c915c9c2ad">
+        <source>Download template</source>
+        <target>Télécharger le modèle</target>
+      </trans-unit>
+      <trans-unit id="aa15fa811ab1f60875ddadb25eb533f4">
+        <source>Export rules</source>
+        <target>Exporter les règles</target>
+      </trans-unit>
+      <trans-unit id="22af645d1859cb5ca6da0c484f1f37ea">
+        <source>new</source>
+        <target>nouvelles</target>
+      </trans-unit>
+      <trans-unit id="0f81d52e06caaa4860887488d18271c7">
+        <source>updated</source>
+        <target>mises à jour</target>
+      </trans-unit>
+      <trans-unit id="e52e279299e912838f689d4380c81f4a">
+        <source>skipped</source>
+        <target>ignorées</target>
+      </trans-unit>
+      <trans-unit id="f699b0c0b50ad9ba3e5f5906b7fa4bbd">
+        <source>Nothing has been written yet.</source>
+        <target>Rien n'a encore été écrit.</target>
+      </trans-unit>
+      <trans-unit id="8eea62084ca7e541d918e823422bd82e">
+        <source>Result</source>
+        <target>Résultat</target>
+      </trans-unit>
+      <trans-unit id="ee5be93eeb4215803d7127570490b998">
+        <source>Will be created</source>
+        <target>Sera créée</target>
+      </trans-unit>
+      <trans-unit id="2bf7e081fb977f1f869569fdc3a2a030">
+        <source>Will be updated</source>
+        <target>Sera mise à jour</target>
+      </trans-unit>
+      <trans-unit id="d9c8f187972e6320a34e9c40b4cba605">
+        <source>Skipped</source>
+        <target>Ignorée</target>
+      </trans-unit>
+      <trans-unit id="834728074e2c8c581428829a6fc33924">
+        <source>Import these rules</source>
+        <target>Importer ces règles</target>
+      </trans-unit>
+      <trans-unit id="a2895c99dc13e6860c02bff5d12c4f02">
+        <source>scannable</source>
+        <target>lisible</target>
+      </trans-unit>
+      <trans-unit id="0423fa423baf1ea8139f6662869faf2f">
+        <source>tight</source>
+        <target>juste</target>
+      </trans-unit>
+      <trans-unit id="6a3f0eb6d9c4fa20039a170c29be7100">
+        <source>too small</source>
+        <target>trop petit</target>
+      </trans-unit>
+      <trans-unit id="202d1b1a0b046cef73f6947a3e831e0f">
+        <source>Being served</source>
+        <target>Affiché</target>
+      </trans-unit>
+      <trans-unit id="d15305d7a4e34e02489c74a5ef542f36">
+        <source>Off</source>
+        <target>Désactivé</target>
+      </trans-unit>
+      <trans-unit id="3a08e2e340ab29fd9263af48193cbf8e">
+        <source>Languages</source>
+        <target>Langues</target>
+      </trans-unit>
+      <trans-unit id="fb54c8d2a4bda62f5b69853e53901ee9">
+        <source>GARAN rules</source>
+        <target>Règles GARAN</target>
+      </trans-unit>
+      <trans-unit id="d004dd7c7a784e356b9181c8c8619cf9">
+        <source>The notice is served exactly as the Official Journal publishes it; what you set here is where it goes and how wide.</source>
+        <target>L'avis est servi exactement tel que le Journal officiel le publie ; ce qui se décide ici, c'est son emplacement et sa largeur.</target>
+      </trans-unit>
+      <trans-unit id="bc30065d6c08bac1c69a56f200a675a3">
+        <source>The badge is the nested figure of Annex II itself, and the full label opens on the first click, hover or touch. The regulation grants this to the label only, never to the notice.</source>
+        <target>Le badge est la figure imbriquée de l'annexe II elle-même, et l'étiquette complète s'ouvre au premier clic, au survol ou au toucher. Le règlement l'accorde à l'étiquette seule, jamais à l'avis.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
