@@ -2,9 +2,9 @@
 /**
  * Pantalla de configuración del módulo.
  *
- * Tres bloques: cobertura del arte oficial por idioma, comportamiento, y el panel
- * "Más de BK Modules". La cobertura va primero a propósito — un idioma sin arte es una tienda
- * que no cumple, y eso tiene que verse antes que ningún ajuste.
+ * La plantilla es propia y no un HelperForm: los ajustes son demasiados para una lista plana, y
+ * hacían falta cosas que el helper no da — el selector de presentación por imagen, los campos que
+ * se pliegan hasta que hacen falta y el buscador de productos por AJAX.
  *
  * @author BK Modules
  */
@@ -14,6 +14,9 @@ if (!defined('_PS_VERSION_')) {
 
 class AdminBkGuaranteeConfigController extends ModuleAdminController
 {
+    /** Resultados que devuelve el buscador de productos */
+    const SEARCH_LIMIT = 12;
+
     public function __construct()
     {
         $this->bootstrap = true;
@@ -24,9 +27,11 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
     {
         parent::setMedia($isNewTheme);
         $this->addCSS($this->module->assetUrl('views/css/admin.css'), 'all', null, false);
-        // El CSS del front se carga también aquí para que la comparativa de presentaciones se vea
-        // exactamente como se verá en la tienda. Todo cuelga de .bkguar, así que no toca el BO.
+        // El CSS del front se carga también aquí: el selector de presentación enseña el aviso tal
+        // como se verá en la tienda, y todo cuelga de .bkguar, así que no toca el back office.
         $this->addCSS($this->module->assetUrl('views/css/front.css'), 'all', null, false);
+        $this->addJqueryPlugin('chosen');
+        $this->addJS($this->module->assetUrl('views/js/config.js'), false);
     }
 
     public function initContent()
@@ -35,79 +40,111 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             $this->processForm();
         }
 
-        $this->content .= $this->renderCoverage();
-        $this->content .= $this->renderConfigForm();
+        $this->content .= $this->renderConfig();
         $this->content .= $this->renderInfoPanel();
 
         parent::initContent();
     }
 
+    /**
+     * Buscador del campo de productos excluidos. Devuelve JSON y termina aquí: la pantalla entera
+     * no hace falta para resolver una búsqueda.
+     */
+    public function ajaxProcessBkSearchProduct()
+    {
+        $query = trim((string) Tools::getValue('bkguar_q'));
+        $out = [];
+
+        if (Tools::strlen($query) >= 2) {
+            $escaped = pSQL($query);
+            $rows = Db::getInstance()->executeS(
+                'SELECT p.`id_product`, pl.`name`, p.`reference`
+                 FROM `' . _DB_PREFIX_ . 'product` p
+                 INNER JOIN `' . _DB_PREFIX_ . 'product_lang` pl
+                    ON pl.`id_product` = p.`id_product` AND pl.`id_lang` = ' . (int) $this->context->language->id . '
+                 WHERE pl.`name` LIKE "%' . $escaped . '%"
+                    OR p.`reference` LIKE "%' . $escaped . '%"
+                    OR p.`id_product` = ' . (int) $query . '
+                 GROUP BY p.`id_product`
+                 ORDER BY pl.`name` ASC
+                 LIMIT ' . (int) self::SEARCH_LIMIT
+            );
+
+            foreach ((array) $rows as $row) {
+                $out[] = [
+                    'id' => (int) $row['id_product'],
+                    'name' => $row['name'],
+                    'reference' => $row['reference'],
+                ];
+            }
+        }
+
+        header('Content-Type: application/json');
+        exit(json_encode($out));
+    }
+
     private function processForm()
     {
         $width = (int) Tools::getValue(BkGuaranteeConfig::WIDTH);
-        $width = max(BkGuaranteeConfig::WIDTH_MIN, min(BkGuaranteeConfig::WIDTH_MAX, $width ?: 380));
-
-        $groups = Tools::getValue(BkGuaranteeConfig::B2B_GROUPS);
-        $groups = is_array($groups) ? implode(',', array_map('intval', $groups)) : '';
-
-        Configuration::updateValue(BkGuaranteeConfig::ENABLED, (int) Tools::getValue(BkGuaranteeConfig::ENABLED));
-        Configuration::updateValue(BkGuaranteeConfig::ON_PRODUCT, (int) Tools::getValue(BkGuaranteeConfig::ON_PRODUCT));
-        Configuration::updateValue(BkGuaranteeConfig::ON_CHECKOUT, (int) Tools::getValue(BkGuaranteeConfig::ON_CHECKOUT));
-        Configuration::updateValue(BkGuaranteeConfig::ON_EMAIL, (int) Tools::getValue(BkGuaranteeConfig::ON_EMAIL));
-        Configuration::updateValue(BkGuaranteeConfig::GARAN_ON, (int) Tools::getValue(BkGuaranteeConfig::GARAN_ON));
-        Configuration::updateValue(BkGuaranteeConfig::GARAN_NESTED, (int) Tools::getValue(BkGuaranteeConfig::GARAN_NESTED));
-        $garanPlace = Tools::getValue(BkGuaranteeConfig::GARAN_PLACEMENT);
-        Configuration::updateValue(
-            BkGuaranteeConfig::GARAN_PLACEMENT,
-            isset(BkGuaranteeConfig::PLACEMENTS[$garanPlace]) ? $garanPlace : 'thumbs'
-        );
         $garanWidth = (int) Tools::getValue(BkGuaranteeConfig::GARAN_WIDTH);
-        Configuration::updateValue(BkGuaranteeConfig::GARAN_WIDTH, max(180, min(520, $garanWidth ?: 300)));
-        Configuration::updateValue(BkGuaranteeConfig::EMAIL_ATTACH, (int) Tools::getValue(BkGuaranteeConfig::EMAIL_ATTACH));
-        Configuration::updateValue(BkGuaranteeConfig::WIDTH, $width);
-        Configuration::updateValue(BkGuaranteeConfig::HIDE_FOR_B2B, (int) Tools::getValue(BkGuaranteeConfig::HIDE_FOR_B2B));
-        Configuration::updateValue(BkGuaranteeConfig::B2B_GROUPS, $groups);
 
-        $style = Tools::getValue(BkGuaranteeConfig::STYLE);
-        $align = Tools::getValue(BkGuaranteeConfig::ALIGN);
-        $placement = Tools::getValue(BkGuaranteeConfig::PLACEMENT);
-        Configuration::updateValue(
-            BkGuaranteeConfig::STYLE,
-            in_array($style, BkGuaranteeConfig::STYLES, true) ? $style : 'card'
-        );
-        Configuration::updateValue(
-            BkGuaranteeConfig::ALIGN,
-            in_array($align, BkGuaranteeConfig::ALIGNS, true) ? $align : 'left'
-        );
-        Configuration::updateValue(
-            BkGuaranteeConfig::PLACEMENT,
-            isset(BkGuaranteeConfig::PLACEMENTS[$placement]) ? $placement : 'info'
-        );
+        $bools = [
+            BkGuaranteeConfig::ENABLED, BkGuaranteeConfig::ON_PRODUCT, BkGuaranteeConfig::ON_CHECKOUT,
+            BkGuaranteeConfig::ON_EMAIL, BkGuaranteeConfig::EMAIL_ATTACH, BkGuaranteeConfig::HIDE_FOR_B2B,
+            BkGuaranteeConfig::SKIP_VIRTUAL, BkGuaranteeConfig::GARAN_ON, BkGuaranteeConfig::GARAN_NESTED,
+            BkGuaranteeConfig::DEBUG,
+        ];
+        foreach ($bools as $key) {
+            Configuration::updateValue($key, (int) Tools::getValue($key));
+        }
 
-        $coPlacement = Tools::getValue(BkGuaranteeConfig::CHECKOUT_PLACEMENT);
         Configuration::updateValue(
-            BkGuaranteeConfig::CHECKOUT_PLACEMENT,
-            isset(BkGuaranteeConfig::CHECKOUT_PLACEMENTS[$coPlacement]) ? $coPlacement : 'payment'
+            BkGuaranteeConfig::WIDTH,
+            max(BkGuaranteeConfig::WIDTH_MIN, min(BkGuaranteeConfig::WIDTH_MAX, $width ?: 620))
         );
+        Configuration::updateValue(BkGuaranteeConfig::GARAN_WIDTH, max(180, min(520, $garanWidth ?: 420)));
 
-        $mode = Tools::getValue(BkGuaranteeConfig::SCOPE_MODE);
-        Configuration::updateValue(
-            BkGuaranteeConfig::SCOPE_MODE,
-            in_array($mode, BkGuaranteeConfig::SCOPE_MODES, true) ? $mode : 'all'
-        );
-        Configuration::updateValue(BkGuaranteeConfig::INCLUDED_CATEGORIES, $this->idListFrom(BkGuaranteeConfig::INCLUDED_CATEGORIES));
-        Configuration::updateValue(BkGuaranteeConfig::EXCLUDED_CATEGORIES, $this->idListFrom(BkGuaranteeConfig::EXCLUDED_CATEGORIES));
-        Configuration::updateValue(BkGuaranteeConfig::EXCLUDED_PRODUCTS, $this->idListFrom(BkGuaranteeConfig::EXCLUDED_PRODUCTS));
-        Configuration::updateValue(BkGuaranteeConfig::SKIP_VIRTUAL, (int) Tools::getValue(BkGuaranteeConfig::SKIP_VIRTUAL));
-        Configuration::updateValue(BkGuaranteeConfig::DEBUG, (int) Tools::getValue(BkGuaranteeConfig::DEBUG));
+        $this->saveFromList(BkGuaranteeConfig::STYLE, BkGuaranteeConfig::STYLES, 'band');
+        $this->saveFromList(BkGuaranteeConfig::ALIGN, BkGuaranteeConfig::ALIGNS, 'left');
+        $this->saveFromList(BkGuaranteeConfig::SCOPE_MODE, BkGuaranteeConfig::SCOPE_MODES, 'all');
+        $this->saveFromKeys(BkGuaranteeConfig::PLACEMENT, BkGuaranteeConfig::PLACEMENTS, 'footer');
+        $this->saveFromKeys(BkGuaranteeConfig::GARAN_PLACEMENT, BkGuaranteeConfig::PLACEMENTS, 'thumbs');
+        $this->saveFromKeys(BkGuaranteeConfig::CHECKOUT_PLACEMENT, BkGuaranteeConfig::CHECKOUT_PLACEMENTS, 'summary');
+
+        foreach ([BkGuaranteeConfig::INCLUDED_CATEGORIES, BkGuaranteeConfig::EXCLUDED_CATEGORIES,
+                  BkGuaranteeConfig::EXCLUDED_PRODUCTS, BkGuaranteeConfig::B2B_GROUPS] as $key) {
+            Configuration::updateValue($key, $this->idListFrom($key));
+        }
 
         BkGuaranteeLogger::confirmation('Configuración guardada');
         $this->confirmations[] = $this->module->t('Settings updated.', [], 'Modules.Bkguarantee.Admin');
     }
 
     /**
-     * Normaliza a lista de enteros separados por comas, venga de un multiselect o de un campo de
-     * texto donde el comerciante haya pegado los identificadores como le haya parecido.
+     * @param string $key
+     * @param array  $allowed
+     * @param string $fallback
+     */
+    private function saveFromList($key, array $allowed, $fallback)
+    {
+        $value = Tools::getValue($key);
+        Configuration::updateValue($key, in_array($value, $allowed, true) ? $value : $fallback);
+    }
+
+    /**
+     * @param string $key
+     * @param array  $allowed Mapa clave => hook
+     * @param string $fallback
+     */
+    private function saveFromKeys($key, array $allowed, $fallback)
+    {
+        $value = Tools::getValue($key);
+        Configuration::updateValue($key, isset($allowed[$value]) ? $value : $fallback);
+    }
+
+    /**
+     * Normaliza a lista de enteros separados por comas, venga de un multiselect o del campo oculto
+     * del buscador de productos.
      *
      * @param string $field
      *
@@ -122,18 +159,19 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         return implode(',', $ids);
     }
 
-    /**
-     * Cobertura del arte oficial y vista previa. La vista previa se pinta al ancho configurado,
-     * que es como lo verá el cliente: comprobar el aviso a tamaño completo no dice nada sobre si
-     * se lee en la ficha.
-     *
-     * @return string
-     */
-    private function renderCoverage()
+    private function renderConfig()
     {
-        $rows = BkGuaranteeNotice::coverage();
-        $missing = BkGuaranteeNotice::missingLanguages();
+        $categories = [];
+        foreach (Category::getSimpleCategories((int) $this->context->language->id) as $category) {
+            $categories[] = ['id' => (int) $category['id_category'], 'name' => $category['name']];
+        }
 
+        $groups = [];
+        foreach (Group::getGroups((int) $this->context->language->id) as $group) {
+            $groups[] = ['id' => (int) $group['id_group'], 'name' => $group['name']];
+        }
+
+        $rows = BkGuaranteeNotice::coverage();
         $preview = null;
         $iso = $this->context->language->iso_code;
         if (BkGuaranteeNotice::pathFor($iso) !== null) {
@@ -147,305 +185,80 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             }
         }
 
+        $values = [];
+        foreach (array_keys(BkGuaranteeConfig::getDefaults()) as $key) {
+            $values[$key] = Configuration::get($key);
+        }
+        $values[BkGuaranteeConfig::WIDTH] = BkGuaranteeConfig::getWidth();
+        $values[BkGuaranteeConfig::GARAN_WIDTH] = BkGuaranteeConfig::getGaranWidth();
+        $values[BkGuaranteeConfig::STYLE] = BkGuaranteeConfig::getStyle();
+        $values[BkGuaranteeConfig::ALIGN] = BkGuaranteeConfig::getAlign();
+        $values[BkGuaranteeConfig::PLACEMENT] = BkGuaranteeConfig::getPlacement();
+        $values[BkGuaranteeConfig::GARAN_PLACEMENT] = BkGuaranteeConfig::getGaranPlacement();
+        $values[BkGuaranteeConfig::CHECKOUT_PLACEMENT] = BkGuaranteeConfig::getCheckoutPlacement();
+        $values[BkGuaranteeConfig::SCOPE_MODE] = BkGuaranteeConfig::getScopeMode();
+
+        $dir = _PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/';
+        $searchUrl = self::$currentIndex . '&token=' . $this->token . '&ajax=1&action=BkSearchProduct';
+
         $this->context->smarty->assign([
             'bkguar_rows' => $rows,
-            'bkguar_missing' => $missing,
+            'bkguar_missing' => BkGuaranteeNotice::missingLanguages(),
             'bkguar_preview' => $preview,
-            'bkguar_width' => BkGuaranteeConfig::getWidth(),
             'bkguar_dir' => 'modules/bkguarantee/' . BkGuaranteeNotice::DIR,
+            'bkguar_styles' => BkGuaranteeConfig::STYLES,
+            'bkguar_style' => BkGuaranteeConfig::getStyle(),
             'bkguar_qr' => BkGuaranteeNotice::qrCheck(BkGuaranteeConfig::getWidth()),
             'bkguar_qr_garan' => BkGuaranteeNotice::qrCheck(
                 BkGuaranteeConfig::getGaranWidth(),
                 BkGuaranteeNotice::QR_RATIO_LABEL
             ),
             'bkguar_qr_ideal' => BkGuaranteeNotice::widthForComfortableQr(),
-            'bkguar_qr_ideal_garan' => BkGuaranteeNotice::widthForComfortableQr(BkGuaranteeNotice::QR_RATIO_LABEL),
             'bkguar_garan_width' => BkGuaranteeConfig::getGaranWidth(),
-            'bkguar_styles' => BkGuaranteeConfig::STYLES,
-            'bkguar_style' => BkGuaranteeConfig::getStyle(),
+            'bkguar_categories' => $categories,
+            'bkguar_groups' => $groups,
+            'bkguar_cat_in' => BkGuaranteeConfig::getIncludedCategories(),
+            'bkguar_cat_out' => BkGuaranteeConfig::getExcludedCategories(),
+            'bkguar_b2b' => BkGuaranteeConfig::getB2bGroups(),
+            'bkguar_prod_out' => $this->productChips(BkGuaranteeConfig::getExcludedProducts()),
+            'bkguar_v' => $values,
+            'bkguar_switch' => $dir . '_switch.tpl',
+            'bkguar_finder' => $dir . '_finder.tpl',
+            'bkguar_action' => self::$currentIndex . '&token=' . $this->token,
+            'bkguar_rules_url' => $this->context->link->getAdminLink('AdminBkGuaranteeRules'),
         ]);
 
-        return $this->context->smarty->fetch(
-            _PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/coverage.tpl'
+        return '<script>var bkguarSearchUrl = ' . json_encode($searchUrl) . ';</script>'
+            . $this->context->smarty->fetch($dir . 'config.tpl');
+    }
+
+    /**
+     * Nombre de cada producto excluido, para que las fichas digan algo más que un número.
+     *
+     * @param array $ids
+     *
+     * @return array
+     */
+    private function productChips(array $ids)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $rows = Db::getInstance()->executeS(
+            'SELECT p.`id_product`, pl.`name` FROM `' . _DB_PREFIX_ . 'product` p
+             INNER JOIN `' . _DB_PREFIX_ . 'product_lang` pl
+                ON pl.`id_product` = p.`id_product` AND pl.`id_lang` = ' . (int) $this->context->language->id . '
+             WHERE p.`id_product` IN (' . implode(',', array_map('intval', $ids)) . ')
+             GROUP BY p.`id_product`'
         );
-    }
 
-    private function renderConfigForm()
-    {
-        $categories = [];
-        foreach (Category::getSimpleCategories((int) $this->context->language->id) as $category) {
-            $categories[] = ['id' => (int) $category['id_category'], 'name' => $category['name']];
+        $out = [];
+        foreach ((array) $rows as $row) {
+            $out[] = ['id' => (int) $row['id_product'], 'name' => $row['name']];
         }
 
-        $groups = [];
-        foreach (Group::getGroups($this->context->language->id) as $group) {
-            $groups[] = ['id' => (int) $group['id_group'], 'name' => $group['name']];
-        }
-
-        $fields = [
-            'form' => [
-                'legend' => [
-                    'title' => $this->module->t('Behaviour', [], 'Modules.Bkguarantee.Admin'),
-                    'icon' => 'icon-cogs',
-                ],
-                'input' => [
-                    $this->buildSwitch(
-                        BkGuaranteeConfig::ENABLED,
-                        $this->module->t('Show the notice', [], 'Modules.Bkguarantee.Admin'),
-                        $this->module->t('Master switch. Turn it off only if this shop sells exclusively to businesses.', [], 'Modules.Bkguarantee.Admin')
-                    ),
-                    $this->buildSwitch(
-                        BkGuaranteeConfig::ON_PRODUCT,
-                        $this->module->t('On the product page', [], 'Modules.Bkguarantee.Admin'),
-                        $this->module->t('Below the add-to-cart block, where the offer is presented.', [], 'Modules.Bkguarantee.Admin')
-                    ),
-                    $this->buildSwitch(
-                        BkGuaranteeConfig::ON_CHECKOUT,
-                        $this->module->t('On the order summary', [], 'Modules.Bkguarantee.Admin'),
-                        $this->module->t('The last screen before the contract is concluded.', [], 'Modules.Bkguarantee.Admin')
-                    ),
-                    [
-                        'type' => 'select',
-                        'label' => $this->module->t('Presentation', [], 'Modules.Bkguarantee.Admin'),
-                        'name' => BkGuaranteeConfig::STYLE,
-                        'desc' => $this->module->t('The frame around the notice. The notice itself never changes. The wide band is meant for the bottom of the product page, where it has room.', [], 'Modules.Bkguarantee.Admin'),
-                        'options' => [
-                            'query' => [
-                                ['id' => 'card', 'name' => $this->module->t('Card with blue header', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'framed', 'name' => $this->module->t('Thin frame only', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'plain', 'name' => $this->module->t('No frame', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'band', 'name' => $this->module->t('Wide band with a heading beside it', [], 'Modules.Bkguarantee.Admin')],
-                            ],
-                            'id' => 'id',
-                            'name' => 'name',
-                        ],
-                    ],
-                    [
-                        'type' => 'select',
-                        'label' => $this->module->t('Position on the product page', [], 'Modules.Bkguarantee.Admin'),
-                        'name' => BkGuaranteeConfig::PLACEMENT,
-                        'desc' => $this->module->t('Not every theme renders every position. If one of them shows nothing, try another or move the module from Design > Positions.', [], 'Modules.Bkguarantee.Admin'),
-                        'options' => [
-                            'query' => [
-                                ['id' => 'info', 'name' => $this->module->t('Below the add-to-cart block', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'thumbs', 'name' => $this->module->t('Under the product gallery', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'footer', 'name' => $this->module->t('At the bottom of the product page', [], 'Modules.Bkguarantee.Admin')],
-                            ],
-                            'id' => 'id',
-                            'name' => 'name',
-                        ],
-                    ],
-                    [
-                        'type' => 'select',
-                        'label' => $this->module->t('Alignment', [], 'Modules.Bkguarantee.Admin'),
-                        'name' => BkGuaranteeConfig::ALIGN,
-                        'options' => [
-                            'query' => [
-                                ['id' => 'left', 'name' => $this->module->t('Left', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'center', 'name' => $this->module->t('Centred', [], 'Modules.Bkguarantee.Admin')],
-                            ],
-                            'id' => 'id',
-                            'name' => 'name',
-                        ],
-                    ],
-                    [
-                        'type' => 'text',
-                        'label' => $this->module->t('Width in pixels', [], 'Modules.Bkguarantee.Admin'),
-                        'name' => BkGuaranteeConfig::WIDTH,
-                        'class' => 'fixed-width-sm',
-                        'desc' => $this->module->t('Between 240 and 720. On phones the notice always uses the full width available.', [], 'Modules.Bkguarantee.Admin'),
-                    ],
-                    $this->buildSwitch(
-                        BkGuaranteeConfig::GARAN_ON,
-                        $this->module->t('Show the GARAN label', [], 'Modules.Bkguarantee.Admin'),
-                        $this->module->t('Only appears on products covered by a durability guarantee rule with all three fields resolved.', [], 'Modules.Bkguarantee.Admin')
-                    ),
-                    [
-                        'type' => 'select',
-                        'label' => $this->module->t('Position of the GARAN label', [], 'Modules.Bkguarantee.Admin'),
-                        'name' => BkGuaranteeConfig::GARAN_PLACEMENT,
-                        'desc' => $this->module->t('The regulation places it next to the image of the goods.', [], 'Modules.Bkguarantee.Admin'),
-                        'options' => [
-                            'query' => [
-                                ['id' => 'thumbs', 'name' => $this->module->t('Under the product gallery', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'info', 'name' => $this->module->t('Below the add-to-cart block', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'footer', 'name' => $this->module->t('At the bottom of the product page', [], 'Modules.Bkguarantee.Admin')],
-                            ],
-                            'id' => 'id',
-                            'name' => 'name',
-                        ],
-                    ],
-                    [
-                        'type' => 'text',
-                        'label' => $this->module->t('GARAN width in pixels', [], 'Modules.Bkguarantee.Admin'),
-                        'name' => BkGuaranteeConfig::GARAN_WIDTH,
-                        'class' => 'fixed-width-sm',
-                        'desc' => $this->module->t('Between 180 and 520.', [], 'Modules.Bkguarantee.Admin'),
-                    ],
-                    $this->buildSwitch(
-                        BkGuaranteeConfig::GARAN_NESTED,
-                        $this->module->t('Nested display for GARAN', [], 'Modules.Bkguarantee.Admin'),
-                        $this->module->t('A compact badge that opens the full label on the first click, hover or touch. The regulation allows this for the label only, never for the notice.', [], 'Modules.Bkguarantee.Admin')
-                    ),
-                    $this->buildSwitch(
-                        BkGuaranteeConfig::ON_EMAIL,
-                        $this->module->t('In the order confirmation email', [], 'Modules.Bkguarantee.Admin'),
-                        $this->module->t('The notice has to stay available to the customer after the purchase, and the confirmation email is the durable medium that already reaches everyone.', [], 'Modules.Bkguarantee.Admin')
-                    ),
-                    $this->buildSwitch(
-                        BkGuaranteeConfig::EMAIL_ATTACH,
-                        $this->module->t('Attach it to the email as well', [], 'Modules.Bkguarantee.Admin'),
-                        $this->module->t('Half the inboxes block remote images. The attachment is what guarantees the notice actually arrives.', [], 'Modules.Bkguarantee.Admin')
-                    ),
-                    [
-                        'type' => 'select',
-                        'label' => $this->module->t('Position in the checkout', [], 'Modules.Bkguarantee.Admin'),
-                        'name' => BkGuaranteeConfig::CHECKOUT_PLACEMENT,
-                        'desc' => $this->module->t('The order summary is visible from the first step. Above the payment methods the notice only appears once the customer has finished the address and shipping steps.', [], 'Modules.Bkguarantee.Admin'),
-                        'options' => [
-                            'query' => [
-                                ['id' => 'summary', 'name' => $this->module->t('Top of the order summary', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'payment', 'name' => $this->module->t('Above the payment methods', [], 'Modules.Bkguarantee.Admin')],
-                            ],
-                            'id' => 'id',
-                            'name' => 'name',
-                        ],
-                    ],
-                    [
-                        'type' => 'select',
-                        'label' => $this->module->t('Catalogue covered', [], 'Modules.Bkguarantee.Admin'),
-                        'name' => BkGuaranteeConfig::SCOPE_MODE,
-                        'desc' => $this->module->t('The notice is mandatory on the sale of goods. Services and pure digital content are not goods, and that is the reason to leave part of the catalogue out.', [], 'Modules.Bkguarantee.Admin'),
-                        'options' => [
-                            'query' => [
-                                ['id' => 'all', 'name' => $this->module->t('Every product', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'categories', 'name' => $this->module->t('Only the categories I choose', [], 'Modules.Bkguarantee.Admin')],
-                            ],
-                            'id' => 'id',
-                            'name' => 'name',
-                        ],
-                    ],
-                    [
-                        'type' => 'select',
-                        'multiple' => true,
-                        'class' => 'chosen',
-                        'label' => $this->module->t('Categories covered', [], 'Modules.Bkguarantee.Admin'),
-                        'name' => BkGuaranteeConfig::INCLUDED_CATEGORIES . '[]',
-                        'desc' => $this->module->t('Only used when the catalogue is limited to chosen categories.', [], 'Modules.Bkguarantee.Admin'),
-                        'options' => ['query' => $categories, 'id' => 'id', 'name' => 'name'],
-                    ],
-                    [
-                        'type' => 'select',
-                        'multiple' => true,
-                        'class' => 'chosen',
-                        'label' => $this->module->t('Categories left out', [], 'Modules.Bkguarantee.Admin'),
-                        'name' => BkGuaranteeConfig::EXCLUDED_CATEGORIES . '[]',
-                        'desc' => $this->module->t('Wins over anything else: a product in one of these never shows the notice.', [], 'Modules.Bkguarantee.Admin'),
-                        'options' => ['query' => $categories, 'id' => 'id', 'name' => 'name'],
-                    ],
-                    [
-                        'type' => 'text',
-                        'label' => $this->module->t('Products left out', [], 'Modules.Bkguarantee.Admin'),
-                        'name' => BkGuaranteeConfig::EXCLUDED_PRODUCTS,
-                        'desc' => $this->module->t('Product IDs separated by commas.', [], 'Modules.Bkguarantee.Admin'),
-                    ],
-                    $this->buildSwitch(
-                        BkGuaranteeConfig::SKIP_VIRTUAL,
-                        $this->module->t('Leave virtual products out', [], 'Modules.Bkguarantee.Admin'),
-                        $this->module->t('Downloads and services are not goods under the sale of goods directive. Check your own catalogue before turning this on: a physical product flagged as virtual would lose the notice too.', [], 'Modules.Bkguarantee.Admin')
-                    ),
-                    $this->buildSwitch(
-                        BkGuaranteeConfig::HIDE_FOR_B2B,
-                        $this->module->t('Hide it from business customers', [], 'Modules.Bkguarantee.Admin'),
-                        $this->module->t('Only a shop selling exclusively to businesses falls outside the obligation. In a mixed shop this is your call, not a recommendation.', [], 'Modules.Bkguarantee.Admin')
-                    ),
-                    [
-                        'type' => 'checkbox',
-                        'label' => $this->module->t('Business customer groups', [], 'Modules.Bkguarantee.Admin'),
-                        'name' => BkGuaranteeConfig::B2B_GROUPS,
-                        'values' => ['query' => $groups, 'id' => 'id', 'name' => 'name'],
-                    ],
-                    $this->buildSwitch(
-                        BkGuaranteeConfig::DEBUG,
-                        $this->module->t('Debug log', [], 'Modules.Bkguarantee.Admin'),
-                        $this->module->t('Writes to log/bkguarantee.log inside the module.', [], 'Modules.Bkguarantee.Admin')
-                    ),
-                ],
-                'submit' => ['title' => $this->module->t('Save', [], 'Modules.Bkguarantee.Admin')],
-            ],
-        ];
-
-        $helper = new HelperForm();
-        $helper->module = $this->module;
-        $helper->default_form_language = (int) $this->context->language->id;
-        $helper->identifier = $this->module->name;
-        $helper->submit_action = 'submitBkGuaranteeConfig';
-        $helper->currentIndex = self::$currentIndex;
-        $helper->token = Tools::getAdminTokenLite('AdminBkGuaranteeConfig');
-        $helper->tpl_vars = ['fields_value' => $this->buildFieldsValue($groups)];
-
-        return $helper->generateForm([$fields]);
-    }
-
-    /**
-     * @param string $name
-     * @param string $label
-     * @param string $desc
-     *
-     * @return array
-     */
-    private function buildSwitch($name, $label, $desc)
-    {
-        return [
-            'type' => 'switch',
-            'label' => $label,
-            'name' => $name,
-            'desc' => $desc,
-            'is_bool' => true,
-            'values' => [
-                ['id' => $name . '_on', 'value' => 1, 'label' => $this->module->t('Yes', [], 'Modules.Bkguarantee.Admin')],
-                ['id' => $name . '_off', 'value' => 0, 'label' => $this->module->t('No', [], 'Modules.Bkguarantee.Admin')],
-            ],
-        ];
-    }
-
-    /**
-     * @param array $groups
-     *
-     * @return array
-     */
-    private function buildFieldsValue(array $groups)
-    {
-        $values = [
-            BkGuaranteeConfig::ENABLED => (int) Configuration::get(BkGuaranteeConfig::ENABLED),
-            BkGuaranteeConfig::ON_PRODUCT => (int) Configuration::get(BkGuaranteeConfig::ON_PRODUCT),
-            BkGuaranteeConfig::ON_CHECKOUT => (int) Configuration::get(BkGuaranteeConfig::ON_CHECKOUT),
-            BkGuaranteeConfig::ON_EMAIL => (int) Configuration::get(BkGuaranteeConfig::ON_EMAIL),
-            BkGuaranteeConfig::GARAN_ON => (int) Configuration::get(BkGuaranteeConfig::GARAN_ON),
-            BkGuaranteeConfig::GARAN_PLACEMENT => BkGuaranteeConfig::getGaranPlacement(),
-            BkGuaranteeConfig::GARAN_WIDTH => BkGuaranteeConfig::getGaranWidth(),
-            BkGuaranteeConfig::GARAN_NESTED => (int) Configuration::get(BkGuaranteeConfig::GARAN_NESTED),
-            BkGuaranteeConfig::EMAIL_ATTACH => (int) Configuration::get(BkGuaranteeConfig::EMAIL_ATTACH),
-            BkGuaranteeConfig::WIDTH => BkGuaranteeConfig::getWidth(),
-            BkGuaranteeConfig::STYLE => BkGuaranteeConfig::getStyle(),
-            BkGuaranteeConfig::ALIGN => BkGuaranteeConfig::getAlign(),
-            BkGuaranteeConfig::PLACEMENT => BkGuaranteeConfig::getPlacement(),
-            BkGuaranteeConfig::CHECKOUT_PLACEMENT => BkGuaranteeConfig::getCheckoutPlacement(),
-            BkGuaranteeConfig::SCOPE_MODE => BkGuaranteeConfig::getScopeMode(),
-            BkGuaranteeConfig::INCLUDED_CATEGORIES . '[]' => BkGuaranteeConfig::getIncludedCategories(),
-            BkGuaranteeConfig::EXCLUDED_CATEGORIES . '[]' => BkGuaranteeConfig::getExcludedCategories(),
-            BkGuaranteeConfig::EXCLUDED_PRODUCTS => implode(', ', BkGuaranteeConfig::getExcludedProducts()),
-            BkGuaranteeConfig::SKIP_VIRTUAL => (int) Configuration::get(BkGuaranteeConfig::SKIP_VIRTUAL),
-            BkGuaranteeConfig::HIDE_FOR_B2B => (int) Configuration::get(BkGuaranteeConfig::HIDE_FOR_B2B),
-            BkGuaranteeConfig::DEBUG => (int) Configuration::get(BkGuaranteeConfig::DEBUG),
-        ];
-
-        $selected = BkGuaranteeConfig::getB2bGroups();
-        foreach ($groups as $group) {
-            $values[BkGuaranteeConfig::B2B_GROUPS . '_' . $group['id']] = in_array($group['id'], $selected, true);
-        }
-
-        return $values;
+        return $out;
     }
 
     private function renderInfoPanel()

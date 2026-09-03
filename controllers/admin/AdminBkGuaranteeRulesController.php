@@ -94,6 +94,8 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
     {
         parent::setMedia($isNewTheme);
         $this->addCSS($this->module->assetUrl('views/css/admin.css'), 'all', null, false);
+        $this->addJqueryPlugin('chosen');
+        $this->addJS($this->module->assetUrl('views/js/config.js'), false);
         $this->addJS($this->module->assetUrl('views/js/rules.js'), false);
     }
 
@@ -248,10 +250,10 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
                     'form_group_class' => 'bkguar-row bkguar-row--manufacturer',
                 ],
                 [
-                    'type' => 'text',
+                    'type' => 'html',
                     'label' => $this->module->t('Products', [], 'Modules.Bkguarantee.Admin'),
-                    'name' => 'bkguar_products',
-                    'desc' => $this->module->t('Product IDs separated by commas.', [], 'Modules.Bkguarantee.Admin'),
+                    'name' => 'bkguar_products_finder',
+                    'html_content' => $this->renderFinder(),
                     'form_group_class' => 'bkguar-row bkguar-row--products',
                 ],
                 [
@@ -319,6 +321,47 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
         }
 
         return parent::renderForm();
+    }
+
+    /**
+     * Buscador de productos del formulario, el mismo que usa la pantalla de configuración: se
+     * escribe el nombre o la referencia y se van añadiendo fichas, y lo que viaja al servidor sigue
+     * siendo la lista de identificadores.
+     *
+     * @return string
+     */
+    private function renderFinder()
+    {
+        $rule = $this->loadObject(true);
+        $ids = ($rule instanceof BkGuaranteeRule && $rule->id && $rule->filter_type === BkGuaranteeRule::FILTER_PRODUCTS)
+            ? $rule->values()
+            : [];
+
+        $items = [];
+        if (!empty($ids)) {
+            $rows = Db::getInstance()->executeS(
+                'SELECT p.`id_product`, pl.`name` FROM `' . _DB_PREFIX_ . 'product` p
+                 INNER JOIN `' . _DB_PREFIX_ . 'product_lang` pl
+                    ON pl.`id_product` = p.`id_product` AND pl.`id_lang` = ' . (int) $this->context->language->id . '
+                 WHERE p.`id_product` IN (' . implode(',', array_map('intval', $ids)) . ')
+                 GROUP BY p.`id_product`'
+            );
+            foreach ((array) $rows as $row) {
+                $items[] = ['id' => (int) $row['id_product'], 'name' => $row['name']];
+            }
+        }
+
+        $this->context->smarty->assign([
+            'name' => 'bkguar_products',
+            'value' => implode(',', $ids),
+            'items' => $items,
+        ]);
+
+        return '<script>var bkguarSearchUrl = ' . json_encode(
+            $this->context->link->getAdminLink('AdminBkGuaranteeConfig') . '&ajax=1&action=BkSearchProduct'
+        ) . ';</script>' . $this->context->smarty->fetch(
+            _PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/_finder.tpl'
+        );
     }
 
     /**
