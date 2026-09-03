@@ -183,6 +183,16 @@ class BkGuarantee extends Module
             $params['fileAttachment'] = BkGuaranteeEmail::mergeAttachments($params['fileAttachment'], $garan);
         }
 
+        // Deja constancia de lo que se adjuntó: cuando un comerciante dice que el aviso no le
+        // llega, esta línea distingue entre "no se adjuntó" y "el correo no salió".
+        $names = [];
+        foreach ((array) $params['fileAttachment'] as $file) {
+            if (isset($file['name'])) {
+                $names[] = $file['name'];
+            }
+        }
+        BkGuaranteeLogger::debug('Correo order_conf con adjuntos: ' . implode(', ', $names));
+
         return true;
     }
 
