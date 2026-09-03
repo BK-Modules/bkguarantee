@@ -102,7 +102,7 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         Configuration::updateValue(BkGuaranteeConfig::DEBUG, (int) Tools::getValue(BkGuaranteeConfig::DEBUG));
 
         BkGuaranteeLogger::confirmation('Configuración guardada');
-        $this->confirmations[] = $this->trans('Settings updated.', [], 'Modules.Bkguarantee.Admin');
+        $this->confirmations[] = $this->module->t('Settings updated.', [], 'Modules.Bkguarantee.Admin');
     }
 
     /**
@@ -185,36 +185,36 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         $fields = [
             'form' => [
                 'legend' => [
-                    'title' => $this->trans('Behaviour', [], 'Modules.Bkguarantee.Admin'),
+                    'title' => $this->module->t('Behaviour', [], 'Modules.Bkguarantee.Admin'),
                     'icon' => 'icon-cogs',
                 ],
                 'input' => [
                     $this->buildSwitch(
                         BkGuaranteeConfig::ENABLED,
-                        $this->trans('Show the notice', [], 'Modules.Bkguarantee.Admin'),
-                        $this->trans('Master switch. Turn it off only if this shop sells exclusively to businesses.', [], 'Modules.Bkguarantee.Admin')
+                        $this->module->t('Show the notice', [], 'Modules.Bkguarantee.Admin'),
+                        $this->module->t('Master switch. Turn it off only if this shop sells exclusively to businesses.', [], 'Modules.Bkguarantee.Admin')
                     ),
                     $this->buildSwitch(
                         BkGuaranteeConfig::ON_PRODUCT,
-                        $this->trans('On the product page', [], 'Modules.Bkguarantee.Admin'),
-                        $this->trans('Below the add-to-cart block, where the offer is presented.', [], 'Modules.Bkguarantee.Admin')
+                        $this->module->t('On the product page', [], 'Modules.Bkguarantee.Admin'),
+                        $this->module->t('Below the add-to-cart block, where the offer is presented.', [], 'Modules.Bkguarantee.Admin')
                     ),
                     $this->buildSwitch(
                         BkGuaranteeConfig::ON_CHECKOUT,
-                        $this->trans('On the order summary', [], 'Modules.Bkguarantee.Admin'),
-                        $this->trans('The last screen before the contract is concluded.', [], 'Modules.Bkguarantee.Admin')
+                        $this->module->t('On the order summary', [], 'Modules.Bkguarantee.Admin'),
+                        $this->module->t('The last screen before the contract is concluded.', [], 'Modules.Bkguarantee.Admin')
                     ),
                     [
                         'type' => 'select',
-                        'label' => $this->trans('Presentation', [], 'Modules.Bkguarantee.Admin'),
+                        'label' => $this->module->t('Presentation', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::STYLE,
-                        'desc' => $this->trans('The frame around the notice. The notice itself never changes. The wide band is meant for the bottom of the product page, where it has room.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->module->t('The frame around the notice. The notice itself never changes. The wide band is meant for the bottom of the product page, where it has room.', [], 'Modules.Bkguarantee.Admin'),
                         'options' => [
                             'query' => [
-                                ['id' => 'card', 'name' => $this->trans('Card with blue header', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'framed', 'name' => $this->trans('Thin frame only', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'plain', 'name' => $this->trans('No frame', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'band', 'name' => $this->trans('Wide band with a heading beside it', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'card', 'name' => $this->module->t('Card with blue header', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'framed', 'name' => $this->module->t('Thin frame only', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'plain', 'name' => $this->module->t('No frame', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'band', 'name' => $this->module->t('Wide band with a heading beside it', [], 'Modules.Bkguarantee.Admin')],
                             ],
                             'id' => 'id',
                             'name' => 'name',
@@ -222,14 +222,14 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
                     ],
                     [
                         'type' => 'select',
-                        'label' => $this->trans('Position on the product page', [], 'Modules.Bkguarantee.Admin'),
+                        'label' => $this->module->t('Position on the product page', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::PLACEMENT,
-                        'desc' => $this->trans('Not every theme renders every position. If one of them shows nothing, try another or move the module from Design > Positions.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->module->t('Not every theme renders every position. If one of them shows nothing, try another or move the module from Design > Positions.', [], 'Modules.Bkguarantee.Admin'),
                         'options' => [
                             'query' => [
-                                ['id' => 'info', 'name' => $this->trans('Below the add-to-cart block', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'thumbs', 'name' => $this->trans('Under the product gallery', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'footer', 'name' => $this->trans('At the bottom of the product page', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'info', 'name' => $this->module->t('Below the add-to-cart block', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'thumbs', 'name' => $this->module->t('Under the product gallery', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'footer', 'name' => $this->module->t('At the bottom of the product page', [], 'Modules.Bkguarantee.Admin')],
                             ],
                             'id' => 'id',
                             'name' => 'name',
@@ -237,12 +237,12 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
                     ],
                     [
                         'type' => 'select',
-                        'label' => $this->trans('Alignment', [], 'Modules.Bkguarantee.Admin'),
+                        'label' => $this->module->t('Alignment', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::ALIGN,
                         'options' => [
                             'query' => [
-                                ['id' => 'left', 'name' => $this->trans('Left', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'center', 'name' => $this->trans('Centred', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'left', 'name' => $this->module->t('Left', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'center', 'name' => $this->module->t('Centred', [], 'Modules.Bkguarantee.Admin')],
                             ],
                             'id' => 'id',
                             'name' => 'name',
@@ -250,26 +250,26 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->trans('Width in pixels', [], 'Modules.Bkguarantee.Admin'),
+                        'label' => $this->module->t('Width in pixels', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::WIDTH,
                         'class' => 'fixed-width-sm',
-                        'desc' => $this->trans('Between 240 and 720. On phones the notice always uses the full width available.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->module->t('Between 240 and 720. On phones the notice always uses the full width available.', [], 'Modules.Bkguarantee.Admin'),
                     ],
                     $this->buildSwitch(
                         BkGuaranteeConfig::GARAN_ON,
-                        $this->trans('Show the GARAN label', [], 'Modules.Bkguarantee.Admin'),
-                        $this->trans('Only appears on products covered by a durability guarantee rule with all three fields resolved.', [], 'Modules.Bkguarantee.Admin')
+                        $this->module->t('Show the GARAN label', [], 'Modules.Bkguarantee.Admin'),
+                        $this->module->t('Only appears on products covered by a durability guarantee rule with all three fields resolved.', [], 'Modules.Bkguarantee.Admin')
                     ),
                     [
                         'type' => 'select',
-                        'label' => $this->trans('Position of the GARAN label', [], 'Modules.Bkguarantee.Admin'),
+                        'label' => $this->module->t('Position of the GARAN label', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::GARAN_PLACEMENT,
-                        'desc' => $this->trans('The regulation places it next to the image of the goods.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->module->t('The regulation places it next to the image of the goods.', [], 'Modules.Bkguarantee.Admin'),
                         'options' => [
                             'query' => [
-                                ['id' => 'thumbs', 'name' => $this->trans('Under the product gallery', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'info', 'name' => $this->trans('Below the add-to-cart block', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'footer', 'name' => $this->trans('At the bottom of the product page', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'thumbs', 'name' => $this->module->t('Under the product gallery', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'info', 'name' => $this->module->t('Below the add-to-cart block', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'footer', 'name' => $this->module->t('At the bottom of the product page', [], 'Modules.Bkguarantee.Admin')],
                             ],
                             'id' => 'id',
                             'name' => 'name',
@@ -277,35 +277,35 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->trans('GARAN width in pixels', [], 'Modules.Bkguarantee.Admin'),
+                        'label' => $this->module->t('GARAN width in pixels', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::GARAN_WIDTH,
                         'class' => 'fixed-width-sm',
-                        'desc' => $this->trans('Between 180 and 520.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->module->t('Between 180 and 520.', [], 'Modules.Bkguarantee.Admin'),
                     ],
                     $this->buildSwitch(
                         BkGuaranteeConfig::GARAN_NESTED,
-                        $this->trans('Nested display for GARAN', [], 'Modules.Bkguarantee.Admin'),
-                        $this->trans('A compact badge that opens the full label on the first click, hover or touch. The regulation allows this for the label only, never for the notice.', [], 'Modules.Bkguarantee.Admin')
+                        $this->module->t('Nested display for GARAN', [], 'Modules.Bkguarantee.Admin'),
+                        $this->module->t('A compact badge that opens the full label on the first click, hover or touch. The regulation allows this for the label only, never for the notice.', [], 'Modules.Bkguarantee.Admin')
                     ),
                     $this->buildSwitch(
                         BkGuaranteeConfig::ON_EMAIL,
-                        $this->trans('In the order confirmation email', [], 'Modules.Bkguarantee.Admin'),
-                        $this->trans('The notice has to stay available to the customer after the purchase, and the confirmation email is the durable medium that already reaches everyone.', [], 'Modules.Bkguarantee.Admin')
+                        $this->module->t('In the order confirmation email', [], 'Modules.Bkguarantee.Admin'),
+                        $this->module->t('The notice has to stay available to the customer after the purchase, and the confirmation email is the durable medium that already reaches everyone.', [], 'Modules.Bkguarantee.Admin')
                     ),
                     $this->buildSwitch(
                         BkGuaranteeConfig::EMAIL_ATTACH,
-                        $this->trans('Attach it to the email as well', [], 'Modules.Bkguarantee.Admin'),
-                        $this->trans('Half the inboxes block remote images. The attachment is what guarantees the notice actually arrives.', [], 'Modules.Bkguarantee.Admin')
+                        $this->module->t('Attach it to the email as well', [], 'Modules.Bkguarantee.Admin'),
+                        $this->module->t('Half the inboxes block remote images. The attachment is what guarantees the notice actually arrives.', [], 'Modules.Bkguarantee.Admin')
                     ),
                     [
                         'type' => 'select',
-                        'label' => $this->trans('Position in the checkout', [], 'Modules.Bkguarantee.Admin'),
+                        'label' => $this->module->t('Position in the checkout', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::CHECKOUT_PLACEMENT,
-                        'desc' => $this->trans('The order summary is visible from the first step. Above the payment methods the notice only appears once the customer has finished the address and shipping steps.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->module->t('The order summary is visible from the first step. Above the payment methods the notice only appears once the customer has finished the address and shipping steps.', [], 'Modules.Bkguarantee.Admin'),
                         'options' => [
                             'query' => [
-                                ['id' => 'summary', 'name' => $this->trans('Top of the order summary', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'payment', 'name' => $this->trans('Above the payment methods', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'summary', 'name' => $this->module->t('Top of the order summary', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'payment', 'name' => $this->module->t('Above the payment methods', [], 'Modules.Bkguarantee.Admin')],
                             ],
                             'id' => 'id',
                             'name' => 'name',
@@ -313,13 +313,13 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
                     ],
                     [
                         'type' => 'select',
-                        'label' => $this->trans('Catalogue covered', [], 'Modules.Bkguarantee.Admin'),
+                        'label' => $this->module->t('Catalogue covered', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::SCOPE_MODE,
-                        'desc' => $this->trans('The notice is mandatory on the sale of goods. Services and pure digital content are not goods, and that is the reason to leave part of the catalogue out.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->module->t('The notice is mandatory on the sale of goods. Services and pure digital content are not goods, and that is the reason to leave part of the catalogue out.', [], 'Modules.Bkguarantee.Admin'),
                         'options' => [
                             'query' => [
-                                ['id' => 'all', 'name' => $this->trans('Every product', [], 'Modules.Bkguarantee.Admin')],
-                                ['id' => 'categories', 'name' => $this->trans('Only the categories I choose', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'all', 'name' => $this->module->t('Every product', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => 'categories', 'name' => $this->module->t('Only the categories I choose', [], 'Modules.Bkguarantee.Admin')],
                             ],
                             'id' => 'id',
                             'name' => 'name',
@@ -329,49 +329,49 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
                         'type' => 'select',
                         'multiple' => true,
                         'class' => 'chosen',
-                        'label' => $this->trans('Categories covered', [], 'Modules.Bkguarantee.Admin'),
+                        'label' => $this->module->t('Categories covered', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::INCLUDED_CATEGORIES . '[]',
-                        'desc' => $this->trans('Only used when the catalogue is limited to chosen categories.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->module->t('Only used when the catalogue is limited to chosen categories.', [], 'Modules.Bkguarantee.Admin'),
                         'options' => ['query' => $categories, 'id' => 'id', 'name' => 'name'],
                     ],
                     [
                         'type' => 'select',
                         'multiple' => true,
                         'class' => 'chosen',
-                        'label' => $this->trans('Categories left out', [], 'Modules.Bkguarantee.Admin'),
+                        'label' => $this->module->t('Categories left out', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::EXCLUDED_CATEGORIES . '[]',
-                        'desc' => $this->trans('Wins over anything else: a product in one of these never shows the notice.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->module->t('Wins over anything else: a product in one of these never shows the notice.', [], 'Modules.Bkguarantee.Admin'),
                         'options' => ['query' => $categories, 'id' => 'id', 'name' => 'name'],
                     ],
                     [
                         'type' => 'text',
-                        'label' => $this->trans('Products left out', [], 'Modules.Bkguarantee.Admin'),
+                        'label' => $this->module->t('Products left out', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::EXCLUDED_PRODUCTS,
-                        'desc' => $this->trans('Product IDs separated by commas.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->module->t('Product IDs separated by commas.', [], 'Modules.Bkguarantee.Admin'),
                     ],
                     $this->buildSwitch(
                         BkGuaranteeConfig::SKIP_VIRTUAL,
-                        $this->trans('Leave virtual products out', [], 'Modules.Bkguarantee.Admin'),
-                        $this->trans('Downloads and services are not goods under the sale of goods directive. Check your own catalogue before turning this on: a physical product flagged as virtual would lose the notice too.', [], 'Modules.Bkguarantee.Admin')
+                        $this->module->t('Leave virtual products out', [], 'Modules.Bkguarantee.Admin'),
+                        $this->module->t('Downloads and services are not goods under the sale of goods directive. Check your own catalogue before turning this on: a physical product flagged as virtual would lose the notice too.', [], 'Modules.Bkguarantee.Admin')
                     ),
                     $this->buildSwitch(
                         BkGuaranteeConfig::HIDE_FOR_B2B,
-                        $this->trans('Hide it from business customers', [], 'Modules.Bkguarantee.Admin'),
-                        $this->trans('Only a shop selling exclusively to businesses falls outside the obligation. In a mixed shop this is your call, not a recommendation.', [], 'Modules.Bkguarantee.Admin')
+                        $this->module->t('Hide it from business customers', [], 'Modules.Bkguarantee.Admin'),
+                        $this->module->t('Only a shop selling exclusively to businesses falls outside the obligation. In a mixed shop this is your call, not a recommendation.', [], 'Modules.Bkguarantee.Admin')
                     ),
                     [
                         'type' => 'checkbox',
-                        'label' => $this->trans('Business customer groups', [], 'Modules.Bkguarantee.Admin'),
+                        'label' => $this->module->t('Business customer groups', [], 'Modules.Bkguarantee.Admin'),
                         'name' => BkGuaranteeConfig::B2B_GROUPS,
                         'values' => ['query' => $groups, 'id' => 'id', 'name' => 'name'],
                     ],
                     $this->buildSwitch(
                         BkGuaranteeConfig::DEBUG,
-                        $this->trans('Debug log', [], 'Modules.Bkguarantee.Admin'),
-                        $this->trans('Writes to log/bkguarantee.log inside the module.', [], 'Modules.Bkguarantee.Admin')
+                        $this->module->t('Debug log', [], 'Modules.Bkguarantee.Admin'),
+                        $this->module->t('Writes to log/bkguarantee.log inside the module.', [], 'Modules.Bkguarantee.Admin')
                     ),
                 ],
-                'submit' => ['title' => $this->trans('Save', [], 'Modules.Bkguarantee.Admin')],
+                'submit' => ['title' => $this->module->t('Save', [], 'Modules.Bkguarantee.Admin')],
             ],
         ];
 
@@ -403,8 +403,8 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             'desc' => $desc,
             'is_bool' => true,
             'values' => [
-                ['id' => $name . '_on', 'value' => 1, 'label' => $this->trans('Yes', [], 'Modules.Bkguarantee.Admin')],
-                ['id' => $name . '_off', 'value' => 0, 'label' => $this->trans('No', [], 'Modules.Bkguarantee.Admin')],
+                ['id' => $name . '_on', 'value' => 1, 'label' => $this->module->t('Yes', [], 'Modules.Bkguarantee.Admin')],
+                ['id' => $name . '_off', 'value' => 0, 'label' => $this->module->t('No', [], 'Modules.Bkguarantee.Admin')],
             ],
         ];
     }

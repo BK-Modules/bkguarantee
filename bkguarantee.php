@@ -53,7 +53,7 @@ class BkGuarantee extends Module
         $this->author = 'BK Modules';
         $this->need_instance = 0;
         $this->bootstrap = true;
-        $this->ps_versions_compliancy = ['min' => '1.7.6.0', 'max' => '9.99.99'];
+        $this->ps_versions_compliancy = ['min' => '1.7.5.0', 'max' => '9.99.99'];
 
         parent::__construct();
 
@@ -345,6 +345,24 @@ class BkGuarantee extends Module
         }
 
         return $this->renderNotice('checkout');
+    }
+
+    /**
+     * Traducción accesible desde los controladores del módulo.
+     *
+     * `Module::trans()` es protected y los controladores no la alcanzan; y `AdminController` no
+     * tiene `trans()` propio hasta 1.7.6, así que llamarlo desde allí revienta en 1.7.5. Este
+     * envoltorio, que sí vive dentro de la clase del módulo, funciona igual de 1.7.5 a 9.
+     *
+     * @param string $id
+     * @param array  $parameters
+     * @param string $domain
+     *
+     * @return string
+     */
+    public function t($id, array $parameters = [], $domain = null)
+    {
+        return $this->trans($id, $parameters, $domain);
     }
 
     /**
