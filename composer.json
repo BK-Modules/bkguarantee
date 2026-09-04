@@ -2,7 +2,14 @@
     "name": "bkmodules/bkguarantee",
     "description": "BK EU Guarantee — aviso armonizado sobre la garantía legal de conformidad",
     "type": "prestashop-module",
-    "keywords": ["prestashop", "guarantee", "warranty", "eu", "compliance", "garan"],
+    "keywords": [
+        "prestashop",
+        "guarantee",
+        "warranty",
+        "eu",
+        "compliance",
+        "garan"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -29,7 +36,7 @@
     "extra": {
         "prestashop": {
             "name": "bkguarantee",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "displayName": "BK EU Guarantee",
             "description": "Aviso armonizado sobre la garantía legal de conformidad",
             "tab": "front_office_features",
