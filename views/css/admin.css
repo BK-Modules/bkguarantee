@@ -230,6 +230,48 @@
 .bkguar-langs { max-width: 460px; }
 .bkguar-fullsize img { max-width: 260px; width: 100%; border: 1px solid #d6dbe0; border-radius: 3px; }
 
+/* Puesta en marcha: cuatro pasos en la primera pantalla, para quien acaba de instalar */
+.bkguar-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 12px;
+    margin: 0 0 22px;
+    padding: 0;
+    list-style: none;
+    counter-reset: none;
+}
+.bkguar-step {
+    position: relative;
+    padding: 14px 16px 14px 46px;
+    border: 1px solid #e3e9ec;
+    border-radius: 10px;
+    background: #fff;
+}
+.bkguar-step__n {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #eef4f7;
+    color: #00769e;
+    font-size: 12px;
+    font-weight: 700;
+}
+.bkguar-step__t { display: block; font-size: 13px; color: #363a41; }
+.bkguar-step__d { display: block; margin-top: 3px; font-size: 12px; line-height: 1.45; color: #6c868e; }
+.bkguar-step__go {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none !important;
+}
+
 /* Selector de presentación: la imagen es el control, no un adorno al lado de un desplegable */
 .bkguar-picker { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 6px; }
 .bkguar-pick { display: block; width: 150px; margin: 0; cursor: pointer; font-weight: 400; }

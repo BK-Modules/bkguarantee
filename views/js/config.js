@@ -55,6 +55,17 @@
             return found;
         }
 
+        // Los pasos de la puesta en marcha llevan al mismo sitio que el menú
+        [].slice.call(document.querySelectorAll('.bkguar-config a[href^="#bkguar-tab-"]'))
+            .filter(function (link) { return items.indexOf(link) === -1; })
+            .forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    show(link.getAttribute('href'));
+                    window.scrollTo({ top: document.querySelector('.bkguar-nav').getBoundingClientRect().top + window.scrollY - 20, behavior: 'smooth' });
+                });
+            });
+
         items.forEach(function (item) {
             item.addEventListener('click', function (event) {
                 event.preventDefault();

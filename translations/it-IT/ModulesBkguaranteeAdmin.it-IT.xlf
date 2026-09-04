@@ -650,6 +650,38 @@
         <source>The badge is the nested figure of Annex II itself, and the full label opens on the first click, hover or touch. The regulation grants this to the label only, never to the notice.</source>
         <target>Il badge è la figura annidata dell'allegato II stesso, e l'etichetta completa si apre al primo clic, al passaggio del mouse o al tocco. Il regolamento lo concede solo all'etichetta, mai all'avviso.</target>
       </trans-unit>
+      <trans-unit id="5038ee319b46c7620d5630a0869f6a46">
+        <source>It is already being served</source>
+        <target>È già in pubblicazione</target>
+      </trans-unit>
+      <trans-unit id="ffc7a0bf7447d08a298315ac28725783">
+        <source>The official notice travels inside the module in the 24 EU languages. Check below that your shop languages are covered and that the QR code scans.</source>
+        <target>L'avviso ufficiale viaggia dentro il modulo nelle 24 lingue dell'UE. Verifica qui sotto che le tue lingue siano coperte e che il codice QR si scansioni.</target>
+      </trans-unit>
+      <trans-unit id="b1c93b48e60795957874ddb35c1bff67">
+        <source>Choose how it looks</source>
+        <target>Scegli come si vede</target>
+      </trans-unit>
+      <trans-unit id="50cfa24c243d3c2cea536d6adf320974">
+        <source>Frame, position and width, so it reads as part of your theme.</source>
+        <target>Cornice, posizione e larghezza, perché si legga come parte del tuo tema.</target>
+      </trans-unit>
+      <trans-unit id="dc4b53c02cc685bdb15eb9411fa64f22">
+        <source>Narrow the catalogue, if you need to</source>
+        <target>Restringi il catalogo, se serve</target>
+      </trans-unit>
+      <trans-unit id="17f169064b421cb40630a83f8e30cfa6">
+        <source>Services and digital content are not goods: leave them out by category or by product.</source>
+        <target>Servizi e contenuti digitali non sono beni: lasciali fuori per categoria o per prodotto.</target>
+      </trans-unit>
+      <trans-unit id="90c4f4678d02519857e5d18fcca105ba">
+        <source>Add producer guarantees, if there are any</source>
+        <target>Aggiungi le garanzie del produttore, se ce ne sono</target>
+      </trans-unit>
+      <trans-unit id="6cd235b2c6ae8aeb1363dd3186de3448">
+        <source>Only for products the producer covers for more than two years, free of charge. One rule by brand or category is enough.</source>
+        <target>Solo per i prodotti che il produttore copre per più di due anni e senza costi. Basta una regola per marca o categoria.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

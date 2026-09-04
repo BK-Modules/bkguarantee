@@ -37,6 +37,34 @@
 
       {* ---------------- estado ---------------- *}
       <div class="tab-pane active" id="bkguar-tab-status">
+        {* Puesta en marcha: lo que hay que mirar y en qué orden. El aviso ya se está sirviendo
+           desde la instalación, así que el primer paso es comprobarlo, no encenderlo. *}
+        <ol class="bkguar-steps">
+          <li class="bkguar-step">
+            <span class="bkguar-step__n">1</span>
+            <strong class="bkguar-step__t">{l s='It is already being served' d='Modules.Bkguarantee.Admin'}</strong>
+            <span class="bkguar-step__d">{l s='The official notice travels inside the module in the 24 EU languages. Check below that your shop languages are covered and that the QR code scans.' d='Modules.Bkguarantee.Admin'}</span>
+          </li>
+          <li class="bkguar-step">
+            <span class="bkguar-step__n">2</span>
+            <strong class="bkguar-step__t">{l s='Choose how it looks' d='Modules.Bkguarantee.Admin'}</strong>
+            <span class="bkguar-step__d">{l s='Frame, position and width, so it reads as part of your theme.' d='Modules.Bkguarantee.Admin'}</span>
+            <a class="bkguar-step__go" href="#bkguar-tab-look">{l s='Presentation' d='Modules.Bkguarantee.Admin'} &rsaquo;</a>
+          </li>
+          <li class="bkguar-step">
+            <span class="bkguar-step__n">3</span>
+            <strong class="bkguar-step__t">{l s='Narrow the catalogue, if you need to' d='Modules.Bkguarantee.Admin'}</strong>
+            <span class="bkguar-step__d">{l s='Services and digital content are not goods: leave them out by category or by product.' d='Modules.Bkguarantee.Admin'}</span>
+            <a class="bkguar-step__go" href="#bkguar-tab-scope">{l s='Catalogue' d='Modules.Bkguarantee.Admin'} &rsaquo;</a>
+          </li>
+          <li class="bkguar-step">
+            <span class="bkguar-step__n">4</span>
+            <strong class="bkguar-step__t">{l s='Add producer guarantees, if there are any' d='Modules.Bkguarantee.Admin'}</strong>
+            <span class="bkguar-step__d">{l s='Only for products the producer covers for more than two years, free of charge. One rule by brand or category is enough.' d='Modules.Bkguarantee.Admin'}</span>
+            <a class="bkguar-step__go" href="#bkguar-tab-garan">GARAN &rsaquo;</a>
+          </li>
+        </ol>
+
         {if $bkguar_missing|@count}
           <div class="alert alert-warning">
             <strong>{l s='These languages show no notice at all:' d='Modules.Bkguarantee.Admin'}</strong>
