@@ -14,6 +14,9 @@ if (!defined('_PS_VERSION_')) {
 
 class AdminBkGuaranteeConfigController extends ModuleAdminController
 {
+    /** @var array|null Catálogo y artículos de bkmodules.com, una sola petición por pantalla */
+    private $remote = null;
+
     /** Resultados que devuelve el buscador de productos */
     const SEARCH_LIMIT = 12;
 
@@ -40,6 +43,8 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             $this->processForm();
         }
 
+        // El aviso de actualización va lo primero: tiene que verse al abrir la pantalla.
+        $this->content .= $this->renderUpdateNotice();
         $this->content .= $this->renderConfig();
         $this->content .= $this->renderInfoPanel();
 
@@ -320,7 +325,30 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
 
     private function renderInfoPanel()
     {
-        $remote = \BkModules\Registry\V1\Catalog::fetch(
+        $this->context->smarty->assign([
+            'bk_remote' => $this->remote(),
+            'bkguar_version' => $this->versionState(),
+            'bkguar_display_name' => $this->module->displayName,
+        ]);
+
+        return $this->context->smarty->fetch(
+            _PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/info-panel.tpl'
+        );
+    }
+
+    /**
+     * Módulos, artículos y última versión publicada, con caché de un día. Si no hay red se pinta
+     * la lista que viaja con el módulo: el panel nunca se queda vacío.
+     *
+     * @return array
+     */
+    private function remote()
+    {
+        if ($this->remote !== null) {
+            return $this->remote;
+        }
+
+        $remote = \BkModules\Registry\V2\Catalog::fetch(
             _PS_CACHE_DIR_ . 'bkguarantee_catalog.json',
             $this->context->language->iso_code,
             $this->module->name
@@ -344,10 +372,50 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             array_filter(isset($remote['links']) ? $remote['links'] : [])
         );
 
-        $this->context->smarty->assign('bk_remote', $remote);
+        $this->remote = $remote;
+
+        return $this->remote;
+    }
+
+    /**
+     * Versión instalada frente a la última publicada.
+     *
+     * `known` distingue «estás al día» de «hoy no se ha podido preguntar»: sin red, o con un
+     * módulo que todavía no tiene ninguna release, no se afirma ninguna de las dos cosas.
+     *
+     * @return array
+     */
+    private function versionState()
+    {
+        $remote = $this->remote();
+        $latest = isset($remote['latest']['version']) ? (string) $remote['latest']['version'] : '';
+
+        return [
+            'installed' => $this->module->version,
+            'latest' => $latest,
+            'known' => $latest !== '',
+            'outdated' => $latest !== '' && version_compare($this->module->version, $latest, '<'),
+            'url' => !empty($remote['latest']['url']) ? $remote['latest']['url'] : $remote['links']['licenses'],
+        ];
+    }
+
+    /**
+     * Aviso de versión nueva: una actualización pendiente tiene que verse al abrir la pantalla.
+     *
+     * @return string
+     */
+    private function renderUpdateNotice()
+    {
+        $version = $this->versionState();
+
+        if (!$version['outdated']) {
+            return '';
+        }
+
+        $this->context->smarty->assign('bkguar_version', $version);
 
         return $this->context->smarty->fetch(
-            _PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/info-panel.tpl'
+            _PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/update-notice.tpl'
         );
     }
 

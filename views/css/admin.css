@@ -1,67 +1,14 @@
-/* Bloque del interruptor "sin envío" en la pestaña Envío de la ficha moderna */
-.bkvc-shipping-block {
-    border: 1px solid #dfe2e5;
-    border-radius: 4px;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    background: #fafbfc;
-}
-
-.bkvc-shipping-block .form-group {
-    margin-bottom: 0;
-}
-
-/* Resto de campos de envío atenuados mientras el producto no se envía */
-.bkvc-shipping-muted {
-    display: none;
-}
-
-.bkvc-legacy-field {
-    border-top: 1px solid #dfe2e5;
-    padding-top: 1rem;
-}
-
-/* Panel del módulo en la pestaña Módulos de la ficha de producto */
-.bkvc-extra-switch label {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    font-weight: 400;
-}
-
-.bkvc-extra-switch p {
-    margin: .35rem 0 0;
-    font-size: 13px;
-}
-
-.bkvc-files {
-    margin-top: 1.25rem;
-    border-top: 1px solid #dfe2e5;
-    padding-top: 1rem;
-}
-
-.bkvc-files h4 {
-    font-size: 15px;
-    margin: 0 0 .75rem;
-}
-
-.bkvc-files-table td {
-    vertical-align: middle;
-}
-
-.bkvc-file-name {
-    word-break: break-all;
-}
+/* BK EU Guarantee — pantalla de configuración */
 
 /* Panel "Más de BK Modules": mismas tarjetas que en el resto de módulos bk* */
-.bkvc-info-links {
+.bkguar-info-links {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 1.25rem;
 }
 
-.bkvc-info-title {
+.bkguar-info-title {
     font-size: 14px;
     font-weight: 600;
     margin: 1.25rem 0 .75rem;
@@ -323,3 +270,66 @@
 .bkguar-csv__row--new td:first-child { box-shadow: inset 3px 0 0 #00723d; }
 .bkguar-csv__row--update td:first-child { box-shadow: inset 3px 0 0 #25b9d7; }
 .bkguar-csv__errors { margin: 4px 0 0 16px; font-size: 12px; color: #a72020; }
+
+/* Estado de versión del módulo */
+.bkguar-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+    padding: 12px 16px;
+    border: 1px solid #e7ebed;
+    border-left-width: 4px;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.bkguar-status-icon {
+    flex: 0 0 26px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: 700;
+    line-height: 26px;
+    text-align: center;
+}
+
+.bkguar-status-text {
+    flex: 1 1 auto;
+}
+
+.bkguar-status-current {
+    border-left-color: #4caf50;
+}
+
+.bkguar-status-current .bkguar-status-icon {
+    background: #4caf50;
+}
+
+.bkguar-status-outdated {
+    border-left-color: #f0ad4e;
+    background: #fff8e8;
+}
+
+.bkguar-status-outdated .bkguar-status-icon {
+    background: #f0ad4e;
+}
+
+.bkguar-status-unknown {
+    border-left-color: #9aa5ab;
+}
+
+.bkguar-status-unknown .bkguar-status-icon {
+    background: #9aa5ab;
+}
+
+/* Aviso de versión nueva publicada */
+.bkguar-update {
+    margin-bottom: 16px;
+}
+
+.bkguar-update-title {
+    margin: 0 0 4px;
+    font-weight: 600;
+}

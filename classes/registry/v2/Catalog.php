@@ -1,22 +1,26 @@
 <?php
 /**
- * BK Modules - Catálogo remoto de módulos y artículos (revisión 1)
+ * BK Modules - Catálogo remoto de módulos y artículos (revisión 2)
  *
  * Fichero compartido, idéntico en todos los módulos bk*. Trae de bkmodules.com los módulos
- * a la venta y los últimos artículos del blog para pintarlos en el back office del cliente,
- * con caché en disco para no salir a la red en cada carga de página.
+ * a la venta, los últimos artículos del blog y la última versión publicada del módulo que
+ * pregunta, con caché en disco para no salir a la red en cada carga de página.
  *
  * Se rige por el mismo contrato congelado que InstallReporter: los ficheros de un
  * namespace V* no se editan una vez publicados y la clase no depende de nada del módulo
  * que la trae — quien llama pasa la ruta de la caché, el idioma y su propio nombre.
+ *
+ * Frente a la revisión 1, esta **conserva las claves que no conoce**: una clave nueva en el
+ * endpoint llega a los módulos sin abrir otra revisión. La 1 se quedó fija devolviendo solo
+ * `catalog`, `posts` y `links`, y por eso hubo que abrir esta.
  */
 
-namespace BkModules\Registry\V1;
+namespace BkModules\Registry\V2;
 
 final class Catalog
 {
     /** Revisión del contrato; solo para diagnóstico */
-    const REVISION = 1;
+    const REVISION = 2;
 
     /**
      * Endpoint público de bkmodules.com. `ajax=1` evita las redirecciones de idioma del
@@ -42,7 +46,7 @@ final class Catalog
      * @param string $moduleName Módulo que pregunta; no se le ofrece a sí mismo
      * @param int    $ttl        Segundos de vida de la caché
      *
-     * @return array ['catalog' => [...], 'posts' => [...], 'links' => [...]]
+     * @return array ['catalog' => [...], 'posts' => [...], 'links' => [...], y lo que traiga el hub]
      */
     public static function fetch($cacheFile, $isoCode = 'en', $moduleName = '', $ttl = self::TTL)
     {
@@ -153,10 +157,13 @@ final class Catalog
             return null;
         }
 
-        return [
-            'catalog' => isset($decoded['catalog']) && is_array($decoded['catalog']) ? $decoded['catalog'] : [],
-            'posts' => isset($decoded['posts']) && is_array($decoded['posts']) ? $decoded['posts'] : [],
-            'links' => isset($decoded['links']) && is_array($decoded['links']) ? $decoded['links'] : [],
-        ];
+        // Las tres listas se normalizan porque quien llama las recorre sin mirar; el resto de
+        // claves pasa tal cual, que es lo que evita tener que abrir una revisión por cada una.
+        unset($decoded['success']);
+        $decoded['catalog'] = isset($decoded['catalog']) && is_array($decoded['catalog']) ? $decoded['catalog'] : [];
+        $decoded['posts'] = isset($decoded['posts']) && is_array($decoded['posts']) ? $decoded['posts'] : [];
+        $decoded['links'] = isset($decoded['links']) && is_array($decoded['links']) ? $decoded['links'] : [];
+
+        return $decoded;
     }
 }

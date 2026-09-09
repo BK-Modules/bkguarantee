@@ -682,6 +682,62 @@
         <source>Only for products the producer covers for more than two years, free of charge. One rule by brand or category is enough.</source>
         <target>Solo para los productos que el fabricante cubre más de dos años y sin coste. Basta una regla por marca o por categoría.</target>
       </trans-unit>
+      <trans-unit id="9c62fbb5e8bc787487b4de5f3d9ddb5c">
+        <source>More from BK Modules</source>
+        <target>Más de BK Modules</target>
+      </trans-unit>
+      <trans-unit id="ad119d5ea30f6c26b58e0af5bc43c9fe">
+        <source>Contact support</source>
+        <target>Contactar con soporte</target>
+      </trans-unit>
+      <trans-unit id="dc595aa2d05d211629633762f27a53e0">
+        <source>My licenses and downloads</source>
+        <target>Mis licencias y descargas</target>
+      </trans-unit>
+      <trans-unit id="12297dfe16dcad97bde64053872f380e">
+        <source>My licences and downloads</source>
+        <target>Mis licencias y descargas</target>
+      </trans-unit>
+      <trans-unit id="2ddf8a5e8b8e9212c3f8a5fc2fd720d7">
+        <source>Guides and news</source>
+        <target>Guías y novedades</target>
+      </trans-unit>
+      <trans-unit id="4cc5ca399c9c71a84c69cfc612251805">
+        <source>Other BK Modules modules</source>
+        <target>Otros módulos de BK Modules</target>
+      </trans-unit>
+      <trans-unit id="555d9e486fc0ff4e1fcd8486b1601c25">
+        <source>View the module</source>
+        <target>Ver el módulo</target>
+      </trans-unit>
+      <trans-unit id="2cd1992e0356c17be8d3e96a39d84804">
+        <source>See the module</source>
+        <target>Ver el módulo</target>
+      </trans-unit>
+      <trans-unit id="bb5cf8edf3e6c94e11597e754cefaa15">
+        <source>Latest blog posts</source>
+        <target>Últimos artículos del blog</target>
+      </trans-unit>
+      <trans-unit id="76ab6c81133e3493e8dadf59e7712738">
+        <source>The latest published version could not be checked right now.</source>
+        <target>Ahora mismo no se ha podido comprobar cuál es la última versión publicada.</target>
+      </trans-unit>
+      <trans-unit id="a0d5a7fbab28816e8a58b3f5e2555c0e">
+        <source>You have version %installed%; the latest published version is %latest%.</source>
+        <target>Tiene instalada la versión %installed%; la última publicada es la %latest%.</target>
+      </trans-unit>
+      <trans-unit id="bac630adb4d5cd6ed5c91c79ad168a1d">
+        <source>Your module is up to date.</source>
+        <target>El módulo está al día.</target>
+      </trans-unit>
+      <trans-unit id="a1f2061c8613565d6bab38a126051a35">
+        <source>Get the update</source>
+        <target>Obtener la actualización</target>
+      </trans-unit>
+      <trans-unit id="e0232916f003ab14762b75e8b3c9cbd2">
+        <source>There is a newer version of this module</source>
+        <target>Hay una versión más reciente de este módulo</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

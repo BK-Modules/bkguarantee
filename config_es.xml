@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>bkguarantee</name>
+    <displayName><![CDATA[BK Garant&iacute;a UE]]></displayName>
+    <version><![CDATA[1.1.0]]></version>
+    <description><![CDATA[Muestra el aviso armonizado de la UE sobre la garant&iacute;a legal de conformidad en las fichas de producto y en el resumen del pedido.]]></description>
+    <author><![CDATA[BK Modules]]></author>
+    <tab><![CDATA[front_office_features]]></tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>0</need_instance>
+</module>
