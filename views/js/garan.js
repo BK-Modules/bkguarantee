@@ -77,9 +77,13 @@
             }
         });
 
+        // Con ratón, salir de la caja cierra siempre, también tras un clic: el clic fija solo donde
+        // no existe «salir» (dedo y teclado). Así el puntero manda y la etiqueta nunca se queda
+        // colgada sobre la ficha.
         box.addEventListener(leave, function (event) {
             if (isMouse(event)) {
                 hovering = false;
+                pinned = false;
                 render();
             }
         });
@@ -102,9 +106,39 @@
             }
         });
 
+        // El clic fija o suelta. Al soltar, la etiqueta se cierra en el acto aunque el ratón siga
+        // encima: el hover vuelve a abrirla en la siguiente entrada, no en la misma.
         toggle.addEventListener('click', function () {
             pinned = !pinned;
+            if (!pinned) {
+                hovering = false;
+                focused = false;
+            }
             render();
+        });
+
+        // Fijada, se suelta también con Escape y con un clic fuera de la caja: la capa flota sobre
+        // la ficha y el cliente tiene que poder quitarla sin volver a encontrar el botón.
+        function unpin() {
+            if (!pinned) {
+                return;
+            }
+            pinned = false;
+            hovering = false;
+            focused = false;
+            render();
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' || event.key === 'Esc') {
+                unpin();
+            }
+        });
+
+        document.addEventListener(window.PointerEvent ? 'pointerdown' : 'mousedown', function (event) {
+            if (!box.contains(event.target)) {
+                unpin();
+            }
         });
     }
 

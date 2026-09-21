@@ -1,20 +1,23 @@
 /**
  * Aviso armonizado en el front.
  *
- * Tres presentaciones para que el aviso encaje en cualquier tema; ninguna lo recorta, lo tapa ni
+ * Cuatro presentaciones para que el aviso encaje en cualquier tema; ninguna lo recorta, lo tapa ni
  * le superpone nada, porque el anexo I no lo permite:
  *
  *   .bkguar--card    tarjeta con cabecera azul. Destaca en temas con mucho blanco.
  *   .bkguar--framed  solo un marco fino. Para temas que ya tienen mucha caja.
  *   .bkguar--plain   el aviso a secas. Para temas minimalistas o de fondo oscuro,
  *                    donde cualquier caja desentona.
- *   .bkguar--band    seccion a lo ancho con titular al lado. Para el pie de la ficha.
+ *   .bkguar--band    sección a lo ancho con titular al lado. Para el pie de la ficha.
  *
  * El ancho lo manda --bkguar-w y es un máximo: por debajo de él la imagen ocupa todo el espacio
- * disponible, que es lo que la mantiene legible en móvil.
+ * disponible, que es lo que la mantiene legible en móvil. El aviso entero es un enlace al fichero
+ * oficial a tamaño completo: en pantalla estrecha el QR baja del tamaño escaneable y abrirlo es lo
+ * que lo recupera.
  */
 .bkguar {
     --bkguar-blue: #003399;
+    --bkguar-ink: #1a1f36;
     display: block;
     max-width: var(--bkguar-w, 380px);
     margin: 1.5rem 0;
@@ -28,6 +31,17 @@
     margin-right: auto;
 }
 
+.bkguar__figure {
+    display: block;
+    line-height: 0;
+    border-radius: inherit;
+    outline-offset: 2px;
+}
+
+.bkguar__figure:focus-visible {
+    outline: 2px solid var(--bkguar-blue);
+}
+
 .bkguar__notice {
     display: block;
     width: 100%;
@@ -35,17 +49,40 @@
     border: 0;
 }
 
+/* El enlace a tamaño completo es un control táctil de 44 px, no una línea de texto de 12 px. */
 .bkguar__full {
-    display: block;
-    font-size: .75rem;
-    line-height: 1.3;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    min-height: 44px;
+    padding: .5rem .85rem;
+    border: 1px solid rgba(0, 51, 153, .28);
+    border-radius: 999px;
+    font-size: .875rem;
+    font-weight: 600;
+    line-height: 1.2;
     color: var(--bkguar-blue);
+    background: #fff;
     text-decoration: none;
+    transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease;
+}
+
+.bkguar__full svg {
+    flex: 0 0 auto;
 }
 
 .bkguar__full:hover,
-.bkguar__full:focus {
-    text-decoration: underline;
+.bkguar__full:focus-visible {
+    color: var(--bkguar-blue);
+    border-color: var(--bkguar-blue);
+    background: rgba(0, 51, 153, .06);
+    text-decoration: none;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 51, 153, .18);
+}
+
+.bkguar__aside {
+    min-width: 0;
 }
 
 /* ---- card: cabecera azul, borde y sombra ---- */
@@ -76,8 +113,9 @@
     line-height: 1.2;
 }
 
-.bkguar--card .bkguar__full {
-    padding: .5rem .85rem .6rem;
+.bkguar--card .bkguar__aside,
+.bkguar--framed .bkguar__aside {
+    padding: .6rem .85rem .75rem;
     border-top: 1px solid rgba(0, 51, 153, .12);
 }
 
@@ -87,9 +125,8 @@
     border-radius: 6px;
 }
 
-.bkguar--framed .bkguar__full {
-    padding: .45rem .7rem .55rem;
-    border-top: 1px solid rgba(0, 0, 0, .09);
+.bkguar--framed .bkguar__aside {
+    border-top-color: rgba(0, 0, 0, .09);
 }
 
 /* ---- plain: el aviso y nada más ---- */
@@ -97,13 +134,13 @@
     background: transparent;
 }
 
-.bkguar--plain .bkguar__notice {
+.bkguar--plain .bkguar__figure {
     border-radius: 4px;
+    overflow: hidden;
 }
 
-.bkguar--plain .bkguar__full {
-    padding: .4rem 0 0;
-    opacity: .8;
+.bkguar--plain .bkguar__aside {
+    padding: .6rem 0 0;
 }
 
 /* ---- el resumen del pedido siempre va centrado, sea cual sea la alineación de la ficha ---- */
@@ -117,58 +154,61 @@
  * Es la presentación que mejor resuelve el problema de fondo: un cartel A4 metido junto al precio
  * queda huérfano, y aquí pasa a ser una sección con su titular y su columna de texto. El aviso
  * sigue completo y a la vista; lo que se añade al lado es contenido propio de la tienda.
+ *
+ * Las dos columnas se reparten con flex-wrap, no con un punto de corte fijo: el aviso reclama su
+ * ancho (--bkguar-w) y la columna de texto un mínimo legible; si los dos no caben en la línea, el
+ * texto baja debajo del aviso. Así el cambio de una a dos columnas depende del ancho real de la
+ * columna del tema y del ancho configurado, no de una anchura de ventana adivinada.
  */
 .bkguar--band {
     max-width: none;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-    align-items: center;
-    padding: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 1.25rem 2.5rem;
+    padding: clamp(1rem, 3vw, 2rem);
     border: 1px solid rgba(0, 51, 153, .14);
     border-radius: 12px;
     background: linear-gradient(180deg, rgba(0, 51, 153, .04), rgba(0, 51, 153, .015));
-}
-
-@media (min-width: 700px) {
-    .bkguar--band {
-        grid-template-columns: minmax(0, var(--bkguar-w, 380px)) minmax(0, 1fr);
-        gap: 2rem;
-        padding: 1.75rem 2rem;
-    }
+    color: var(--bkguar-ink);
+    overflow: visible; /* la columna de texto es sticky y un overflow recortado la dejaría fija */
 }
 
 .bkguar--band .bkguar__figure {
+    flex: 1 1 min(100%, var(--bkguar-w, 380px));
     max-width: var(--bkguar-w, 380px);
-    width: 100%;
-}
-
-.bkguar--band .bkguar__notice {
+    min-width: 0;
     border-radius: 6px;
+    overflow: hidden;
     box-shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 14px 30px -22px rgba(0, 51, 153, .5);
 }
 
+/* La columna de texto acompaña al aviso mientras se recorre: el cartel es alto y el enlace a
+   tamaño completo tiene que seguir a mano. --bkguar-sticky-top deja sitio a la cabecera fija del
+   tema; el tema lo ajusta si la suya es más alta. */
 .bkguar--band .bkguar__aside {
-    min-width: 0;
+    flex: 1 1 17rem;
+    position: sticky;
+    top: var(--bkguar-sticky-top, 5.5rem);
+    align-self: flex-start;
 }
 
 .bkguar__band-title {
     margin: 0 0 .5rem;
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     line-height: 1.25;
     font-weight: 700;
+    letter-spacing: -.01em;
+    text-wrap: balance;
 }
 
 .bkguar__band-text {
-    margin: 0 0 .75rem;
+    margin: 0 0 1rem;
     font-size: .9375rem;
     line-height: 1.55;
-    opacity: .85;
+    color: rgba(26, 31, 54, .78);
     max-width: 46ch;
-}
-
-.bkguar--band .bkguar__full {
-    padding: 0;
+    text-wrap: pretty;
 }
 
 /* ---- etiqueta GARAN ----
