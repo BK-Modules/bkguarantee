@@ -46,17 +46,19 @@ class BkGuaranteeTabsInstaller
             'wording_domain' => 'Modules.Bkguarantee.Admin',
         ],
         [
+            // Lo que dice el fabricante de cada producto: garantía GARAN, actualizaciones y
+            // reparación. install() renombra también la pestaña de una instalación anterior.
             'name' => [
-                'en' => 'Durability guarantees',
-                'es' => 'Garantías de durabilidad',
-                'fr' => 'Garanties de durabilité',
-                'de' => 'Haltbarkeitsgarantien',
-                'it' => 'Garanzie di durabilità',
-                'pt' => 'Garantias de durabilidade',
+                'en' => 'Producer data',
+                'es' => 'Datos del fabricante',
+                'fr' => 'Données du fabricant',
+                'de' => 'Herstellerangaben',
+                'it' => 'Dati del produttore',
+                'pt' => 'Dados do fabricante',
             ],
             'class_name' => 'AdminBkGuaranteeRules',
             'parent_class_name' => 'AdminBkGuaranteeTab',
-            'wording' => 'Durability guarantees',
+            'wording' => 'Producer data',
             'wording_domain' => 'Modules.Bkguarantee.Admin',
         ],
     ];

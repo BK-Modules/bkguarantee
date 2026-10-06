@@ -1,9 +1,11 @@
 <?php
 /**
- * Reglas de garantía comercial de durabilidad: listado y formulario.
+ * Datos del fabricante: listado y formulario de las reglas.
  *
  * Listado y CRUD estándar de PrestaShop sobre el ObjectModel, para que el comerciante ordene,
- * pagine, filtre y borre con lo que ya conoce del back office.
+ * pagine, filtre y borre con lo que ya conoce del back office. Una regla dice qué afirma el
+ * fabricante de un conjunto de productos en tres bloques —garantía GARAN, actualizaciones de
+ * software y reparación— y el formulario tiene una sección por bloque.
  *
  * @author BK Modules
  */
@@ -52,9 +54,10 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
                 'callback' => 'renderTargets',
             ],
             'years' => [
-                'title' => $this->module->t('Years', [], 'Modules.Bkguarantee.Admin'),
+                'title' => 'GARAN',
                 'align' => 'center',
                 'class' => 'fixed-width-xs',
+                'callback' => 'renderYears',
             ],
             'brand' => [
                 'title' => $this->module->t('Producer', [], 'Modules.Bkguarantee.Admin'),
@@ -63,6 +66,18 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
             'model' => [
                 'title' => $this->module->t('Model identifier', [], 'Modules.Bkguarantee.Admin'),
                 'callback' => 'renderInherited',
+            ],
+            'updates_mode' => [
+                'title' => $this->module->t('Software updates', [], 'Modules.Bkguarantee.Admin'),
+                'search' => false,
+                'orderby' => false,
+                'callback' => 'renderUpdates',
+            ],
+            'repair_mode' => [
+                'title' => $this->module->t('Repair', [], 'Modules.Bkguarantee.Admin'),
+                'search' => false,
+                'orderby' => false,
+                'callback' => 'renderRepair',
             ],
             'id_shop' => [
                 'title' => $this->module->t('Shop', [], 'Modules.Bkguarantee.Admin'),
@@ -133,10 +148,7 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
         }
 
         if (Tools::isSubmit('submitBkGuarExport')) {
-            $rules = Db::getInstance()->executeS(
-                'SELECT * FROM `' . _DB_PREFIX_ . 'bk_guarantee_rule` ORDER BY `id_guarantee_rule`'
-            );
-            $this->download('bkguarantee-rules.csv', BkGuaranteeRuleCsv::export((array) $rules));
+            $this->download('bkguarantee-rules.csv', BkGuaranteeRuleCsv::exportAll());
         }
 
         if (Tools::isSubmit('submitBkGuarImport')) {
@@ -238,6 +250,14 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
             }
             $row['errors'] = $errors;
             $row['filter_label'] = $this->renderFilterType($row['data']['filter_type']);
+            // Una columna que el fichero no trae deja la regla como está; una regla nueva, heredando.
+            $blocks = $row['data'] + ['updates_mode' => '', 'repair_mode' => ''];
+            $row['updates_label'] = array_key_exists('updates_mode', $row['data']) || $row['action'] === 'new'
+                ? $this->updatesStatus($blocks)
+                : $this->unchanged();
+            $row['repair_label'] = array_key_exists('repair_mode', $row['data']) || $row['action'] === 'new'
+                ? $this->repairStatus($blocks, [])
+                : $this->unchanged();
             $rows[] = $row;
         }
 
@@ -251,7 +271,7 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
             'bkguar_preview' => $rows,
             'bkguar_counts' => $counts,
             'bkguar_max_rows' => BkGuaranteeRuleCsv::MAX_ROWS,
-            'bkguar_columns' => implode(', ', BkGuaranteeRuleCsv::COLUMNS),
+            'bkguar_columns' => implode(', ', BkGuaranteeRuleCsv::columns()),
         ]);
 
         return $this->context->smarty->fetch(
@@ -322,6 +342,119 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
     }
 
     /**
+     * @param int $value
+     *
+     * @return string
+     */
+    public function renderYears($value)
+    {
+        return (int) $value > 0 ? (string) (int) $value : '<span class="text-muted">&mdash;</span>';
+    }
+
+    /**
+     * @param string $value
+     * @param array  $row
+     *
+     * @return string
+     */
+    public function renderUpdates($value, $row)
+    {
+        return $this->updatesStatus($row);
+    }
+
+    /**
+     * La reparación avisa en el propio listado de los idiomas a los que les falta un texto: en ellos
+     * esa línea no sale, y es aquí donde el comerciante lo ve sin abrir regla por regla.
+     *
+     * @param string $value
+     * @param array  $row
+     *
+     * @return string
+     */
+    public function renderRepair($value, $row)
+    {
+        $missing = (string) $value === BkGuaranteeRule::REPAIR_PARTS
+            ? BkGuaranteeRule::missingTextLanguages((int) $row['id_guarantee_rule'])
+            : [];
+
+        return $this->repairStatus($row, $missing);
+    }
+
+    /**
+     * @param array $data Fila de la regla
+     *
+     * @return string HTML corto para el listado y la vista previa del CSV
+     */
+    private function updatesStatus(array $data)
+    {
+        switch ((string) $data['updates_mode']) {
+            case BkGuaranteeRule::UPDATES_NONE:
+                return $this->muted($this->module->t('Not provided', [], 'Modules.Bkguarantee.Admin'));
+            case BkGuaranteeRule::UPDATES_DATE:
+                return sprintf(
+                    $this->module->t('Until %s', [], 'Modules.Bkguarantee.Admin'),
+                    Tools::displayDate((string) $data['updates_until'])
+                );
+            case BkGuaranteeRule::UPDATES_YEARS:
+                return sprintf(
+                    $this->module->t('%d years', [], 'Modules.Bkguarantee.Admin'),
+                    (int) $data['updates_years']
+                );
+        }
+
+        return $this->muted($this->module->t('Inherits', [], 'Modules.Bkguarantee.Admin'));
+    }
+
+    /**
+     * @param array $data    Fila de la regla
+     * @param array $missing Idiomas sin alguno de los textos
+     *
+     * @return string
+     */
+    private function repairStatus(array $data, array $missing)
+    {
+        switch ((string) $data['repair_mode']) {
+            case BkGuaranteeRule::REPAIR_NONE:
+                return $this->muted($this->module->t('Not provided', [], 'Modules.Bkguarantee.Admin'));
+            case BkGuaranteeRule::REPAIR_SCORE:
+                return sprintf(
+                    $this->module->t('Score %s', [], 'Modules.Bkguarantee.Admin'),
+                    Tools::safeOutput((string) $data['repair_score'])
+                );
+            case BkGuaranteeRule::REPAIR_PARTS:
+                $out = $this->module->t('Spare parts', [], 'Modules.Bkguarantee.Admin');
+                if (!empty($missing)) {
+                    $out .= ' <span class="badge badge-warning">' . Tools::safeOutput(sprintf(
+                        $this->module->t('missing in %s', [], 'Modules.Bkguarantee.Admin'),
+                        implode(', ', $missing)
+                    )) . '</span>';
+                }
+
+                return $out;
+        }
+
+        return $this->muted($this->module->t('Inherits', [], 'Modules.Bkguarantee.Admin'));
+    }
+
+    /**
+     * @return string
+     */
+    private function unchanged()
+    {
+        return $this->muted($this->module->t('Unchanged', [], 'Modules.Bkguarantee.Admin'));
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return string
+     */
+    private function muted($text)
+    {
+        return '<span class="text-muted"><em>' . Tools::safeOutput($text) . '</em></span>';
+    }
+
+    /**
      * @param string $value
      *
      * @return string
@@ -368,110 +501,220 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
             $manufacturers[] = ['id' => (int) $manufacturer['id_manufacturer'], 'name' => $manufacturer['name']];
         }
 
+        $rule = $this->loadObject(true);
+        $isNew = !($rule instanceof BkGuaranteeRule) || !$rule->id;
+
+        // Lo que se escribe aquí obliga a la tienda: el aviso va junto a los campos que lo causan.
+        $contract = Tools::safeOutput($this->module->t('What you enter here is shown to your customers before they buy and again in the order confirmation, and becomes part of the contract (§ 312d BGB, § 4 Abs. 4 FAGG, art. 49 c.5 Codice del consumo). Enter only what the manufacturer or provider states.', [], 'Modules.Bkguarantee.Admin'));
+        $repairWarning = $contract;
+        $missing = $isNew ? [] : BkGuaranteeRule::missingTextLanguages((int) $rule->id);
+        if (!empty($missing)) {
+            $repairWarning .= '<br><strong>' . Tools::safeOutput(sprintf(
+                $this->module->t('Some texts are missing in %s: customers browsing in those languages do not see those lines.', [], 'Modules.Bkguarantee.Admin'),
+                implode(', ', $missing)
+            )) . '</strong>';
+        }
+
+        $inherit = $this->module->t('Inherit: what another matching rule says, for example the brand rule', [], 'Modules.Bkguarantee.Admin');
+        $none = $this->module->t('Not applicable, or the manufacturer does not provide it: nothing is shown', [], 'Modules.Bkguarantee.Admin');
+
+        $scores = [['id' => '', 'name' => '—']];
+        foreach (BkGuaranteeRule::REPAIR_SCORES as $score) {
+            $scores[] = ['id' => $score, 'name' => $score];
+        }
+
+        $texts = [];
+        foreach (BkGuaranteeDurability::PARTS_LABELS as $field => $label) {
+            $texts[] = [
+                'type' => 'textarea',
+                'lang' => true,
+                'label' => $this->module->t($label, [], 'Modules.Bkguarantee.Admin'),
+                'name' => $field,
+                'maxlength' => BkGuaranteeRule::TEXT_MAX,
+                'form_group_class' => 'bkguar-when--repair_mode--parts',
+            ];
+        }
+        $texts[0]['desc'] = $this->module->t('An empty text is not shown, in that language only. Addresses starting with https:// become links.', [], 'Modules.Bkguarantee.Admin');
+
+        $this->multiple_fieldsets = true;
         $this->fields_form = [
-            'legend' => [
-                'title' => $this->module->t('Durability guarantee rule', [], 'Modules.Bkguarantee.Admin'),
-                'icon' => 'icon-certificate',
-            ],
-            'input' => [
-                [
-                    'type' => 'text',
-                    'label' => $this->module->t('Rule', [], 'Modules.Bkguarantee.Admin'),
-                    'name' => 'name',
-                    'required' => true,
-                    'desc' => $this->module->t('Only a name for you, so you can find it in the list.', [], 'Modules.Bkguarantee.Admin'),
+            ['form' => [
+                'legend' => [
+                    'title' => $this->module->t('Producer data rule', [], 'Modules.Bkguarantee.Admin'),
+                    'icon' => 'icon-certificate',
                 ],
-                [
-                    'type' => 'select',
-                    'label' => $this->module->t('Applies by', [], 'Modules.Bkguarantee.Admin'),
-                    'name' => 'filter_type',
-                    'required' => true,
-                    'options' => [
-                        'query' => [
-                            ['id' => BkGuaranteeRule::FILTER_CATEGORY, 'name' => $this->module->t('Category', [], 'Modules.Bkguarantee.Admin')],
-                            ['id' => BkGuaranteeRule::FILTER_MANUFACTURER, 'name' => $this->module->t('Brand', [], 'Modules.Bkguarantee.Admin')],
-                            ['id' => BkGuaranteeRule::FILTER_PRODUCTS, 'name' => $this->module->t('Specific products', [], 'Modules.Bkguarantee.Admin')],
-                        ],
-                        'id' => 'id',
+                'input' => [
+                    [
+                        'type' => 'text',
+                        'label' => $this->module->t('Rule', [], 'Modules.Bkguarantee.Admin'),
                         'name' => 'name',
+                        'required' => true,
+                        'desc' => $this->module->t('Only a name for you, so you can find it in the list.', [], 'Modules.Bkguarantee.Admin'),
+                    ],
+                    [
+                        'type' => 'select',
+                        'label' => $this->module->t('Applies by', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'filter_type',
+                        'required' => true,
+                        'options' => [
+                            'query' => [
+                                ['id' => BkGuaranteeRule::FILTER_CATEGORY, 'name' => $this->module->t('Category', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => BkGuaranteeRule::FILTER_MANUFACTURER, 'name' => $this->module->t('Brand', [], 'Modules.Bkguarantee.Admin')],
+                                ['id' => BkGuaranteeRule::FILTER_PRODUCTS, 'name' => $this->module->t('Specific products', [], 'Modules.Bkguarantee.Admin')],
+                            ],
+                            'id' => 'id',
+                            'name' => 'name',
+                        ],
+                    ],
+                    [
+                        'type' => 'select',
+                        'multiple' => true,
+                        'class' => 'chosen bkguar-target bkguar-target--category',
+                        'label' => $this->module->t('Categories', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'bkguar_categories[]',
+                        'options' => ['query' => $categories, 'id' => 'id', 'name' => 'name'],
+                        'form_group_class' => 'bkguar-row bkguar-row--category',
+                    ],
+                    [
+                        'type' => 'select',
+                        'multiple' => true,
+                        'class' => 'chosen bkguar-target bkguar-target--manufacturer',
+                        'label' => $this->module->t('Brands', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'bkguar_manufacturers[]',
+                        'options' => ['query' => $manufacturers, 'id' => 'id', 'name' => 'name'],
+                        'form_group_class' => 'bkguar-row bkguar-row--manufacturer',
+                    ],
+                    [
+                        'type' => 'html',
+                        'label' => $this->module->t('Products', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'bkguar_products_finder',
+                        'html_content' => $this->renderFinder(),
+                        'form_group_class' => 'bkguar-row bkguar-row--products',
+                    ],
+                    [
+                        'type' => 'select',
+                        'label' => $this->module->t('Shop', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'id_shop',
+                        'desc' => $this->module->t('A rule for one shop wins over an equivalent rule for all of them.', [], 'Modules.Bkguarantee.Admin'),
+                        'options' => ['query' => $shops, 'id' => 'id', 'name' => 'name'],
+                    ],
+                    [
+                        'type' => 'text',
+                        'label' => $this->module->t('Priority', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'priority',
+                        'class' => 'fixed-width-xs',
+                        'desc' => $this->module->t('When two rules match the same product, the higher priority wins, block by block: a product rule with only an update date still takes the repair from its brand rule.', [], 'Modules.Bkguarantee.Admin'),
+                    ],
+                    [
+                        'type' => 'switch',
+                        'label' => $this->module->t('Enabled', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'active',
+                        'is_bool' => true,
+                        'values' => [
+                            ['id' => 'active_on', 'value' => 1, 'label' => $this->module->t('Yes', [], 'Modules.Bkguarantee.Admin')],
+                            ['id' => 'active_off', 'value' => 0, 'label' => $this->module->t('No', [], 'Modules.Bkguarantee.Admin')],
+                        ],
                     ],
                 ],
-                [
-                    'type' => 'select',
-                    'multiple' => true,
-                    'class' => 'chosen bkguar-target bkguar-target--category',
-                    'label' => $this->module->t('Categories', [], 'Modules.Bkguarantee.Admin'),
-                    'name' => 'bkguar_categories[]',
-                    'options' => ['query' => $categories, 'id' => 'id', 'name' => 'name'],
-                    'form_group_class' => 'bkguar-row bkguar-row--category',
+            ]],
+            ['form' => [
+                'legend' => [
+                    'title' => $this->module->t('Producer durability guarantee (GARAN)', [], 'Modules.Bkguarantee.Admin'),
+                    'icon' => 'icon-certificate',
                 ],
-                [
-                    'type' => 'select',
-                    'multiple' => true,
-                    'class' => 'chosen bkguar-target bkguar-target--manufacturer',
-                    'label' => $this->module->t('Brands', [], 'Modules.Bkguarantee.Admin'),
-                    'name' => 'bkguar_manufacturers[]',
-                    'options' => ['query' => $manufacturers, 'id' => 'id', 'name' => 'name'],
-                    'form_group_class' => 'bkguar-row bkguar-row--manufacturer',
-                ],
-                [
-                    'type' => 'html',
-                    'label' => $this->module->t('Products', [], 'Modules.Bkguarantee.Admin'),
-                    'name' => 'bkguar_products_finder',
-                    'html_content' => $this->renderFinder(),
-                    'form_group_class' => 'bkguar-row bkguar-row--products',
-                ],
-                [
-                    'type' => 'text',
-                    'label' => $this->module->t('Years', [], 'Modules.Bkguarantee.Admin'),
-                    'name' => 'years',
-                    'required' => true,
-                    'class' => 'fixed-width-xs',
-                    'desc' => $this->module->t('The producer guarantee only earns a label above two years, because two is what the legal guarantee already covers.', [], 'Modules.Bkguarantee.Admin'),
-                ],
-                [
-                    'type' => 'text',
-                    'label' => $this->module->t('Producer', [], 'Modules.Bkguarantee.Admin'),
-                    'name' => 'brand',
-                    'desc' => $this->module->t('Leave it empty to use the brand of each product.', [], 'Modules.Bkguarantee.Admin'),
-                ],
-                [
-                    'type' => 'text',
-                    'label' => $this->module->t('Model identifier', [], 'Modules.Bkguarantee.Admin'),
-                    'name' => 'model',
-                    'desc' => $this->module->t('Leave it empty to use the MPN of each product. A rule covering several models needs it empty, or they would all claim the same one.', [], 'Modules.Bkguarantee.Admin'),
-                ],
-                [
-                    'type' => 'select',
-                    'label' => $this->module->t('Shop', [], 'Modules.Bkguarantee.Admin'),
-                    'name' => 'id_shop',
-                    'desc' => $this->module->t('A rule for one shop wins over an equivalent rule for all of them.', [], 'Modules.Bkguarantee.Admin'),
-                    'options' => ['query' => $shops, 'id' => 'id', 'name' => 'name'],
-                ],
-                [
-                    'type' => 'text',
-                    'label' => $this->module->t('Priority', [], 'Modules.Bkguarantee.Admin'),
-                    'name' => 'priority',
-                    'class' => 'fixed-width-xs',
-                    'desc' => $this->module->t('When two rules match the same product, the higher priority wins.', [], 'Modules.Bkguarantee.Admin'),
-                ],
-                [
-                    'type' => 'switch',
-                    'label' => $this->module->t('Enabled', [], 'Modules.Bkguarantee.Admin'),
-                    'name' => 'active',
-                    'is_bool' => true,
-                    'values' => [
-                        ['id' => 'active_on', 'value' => 1, 'label' => $this->module->t('Yes', [], 'Modules.Bkguarantee.Admin')],
-                        ['id' => 'active_off', 'value' => 0, 'label' => $this->module->t('No', [], 'Modules.Bkguarantee.Admin')],
+                'description' => Tools::safeOutput($this->module->t('Only a durability guarantee the producer gives free of charge, on the whole product and for more than two years. Art. 246a § 1 Abs. 1 Nr. 11a EGBGB (DE), § 4 Abs. 1 Z 12a FAGG (AT), art. 49 c.1 lett. n-bis Codice del consumo (IT).', [], 'Modules.Bkguarantee.Admin')),
+                'input' => [
+                    [
+                        'type' => 'text',
+                        'label' => $this->module->t('Years', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'years',
+                        'class' => 'fixed-width-xs',
+                        'desc' => $this->module->t('Leave it empty if this rule says nothing about the GARAN label. Otherwise 3 or more: the label only exists above the two years the legal guarantee already covers.', [], 'Modules.Bkguarantee.Admin'),
+                    ],
+                    [
+                        'type' => 'text',
+                        'label' => $this->module->t('Producer', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'brand',
+                        'desc' => $this->module->t('Leave it empty to use the brand of each product.', [], 'Modules.Bkguarantee.Admin'),
+                    ],
+                    [
+                        'type' => 'text',
+                        'label' => $this->module->t('Model identifier', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'model',
+                        'desc' => $this->module->t('Leave it empty to use the MPN of each product. A rule covering several models needs it empty, or they would all claim the same one.', [], 'Modules.Bkguarantee.Admin'),
                     ],
                 ],
-            ],
-            'submit' => ['title' => $this->module->t('Save', [], 'Modules.Bkguarantee.Admin')],
+            ]],
+            ['form' => [
+                'legend' => [
+                    'title' => $this->module->t('Software updates', [], 'Modules.Bkguarantee.Admin'),
+                    'icon' => 'icon-refresh',
+                ],
+                'description' => Tools::safeOutput($this->module->t('The minimum period during which the producer or provider supplies software updates, as a date or as a number of years, when they make it available. Art. 246a § 1 Abs. 1 Nr. 11c EGBGB (DE), § 4 Abs. 1 Z 12d FAGG (AT), art. 49 c.1 lett. n-quater Codice del consumo (IT).', [], 'Modules.Bkguarantee.Admin')),
+                'warning' => $contract,
+                'input' => [
+                    [
+                        'type' => 'radio',
+                        'label' => $this->module->t('Software updates', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'updates_mode',
+                        'values' => [
+                            ['id' => 'updates_mode_inherit', 'value' => '', 'label' => $inherit],
+                            ['id' => 'updates_mode_none', 'value' => BkGuaranteeRule::UPDATES_NONE, 'label' => $none],
+                            ['id' => 'updates_mode_date', 'value' => BkGuaranteeRule::UPDATES_DATE, 'label' => $this->module->t('Until a date', [], 'Modules.Bkguarantee.Admin')],
+                            ['id' => 'updates_mode_years', 'value' => BkGuaranteeRule::UPDATES_YEARS, 'label' => $this->module->t('For a number of years', [], 'Modules.Bkguarantee.Admin')],
+                        ],
+                    ],
+                    [
+                        'type' => 'date',
+                        'label' => $this->module->t('Updates at least until', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'updates_until',
+                        'form_group_class' => 'bkguar-when--updates_mode--date',
+                    ],
+                    [
+                        'type' => 'text',
+                        'label' => $this->module->t('Updates for at least, in years', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'updates_years',
+                        'class' => 'fixed-width-xs',
+                        'desc' => sprintf($this->module->t('Between 1 and %d.', [], 'Modules.Bkguarantee.Admin'), BkGuaranteeRule::UPDATES_MAX_YEARS),
+                        'form_group_class' => 'bkguar-when--updates_mode--years',
+                    ],
+                ],
+            ]],
+            ['form' => [
+                'legend' => [
+                    'title' => $this->module->t('Repair', [], 'Modules.Bkguarantee.Admin'),
+                    'icon' => 'icon-wrench',
+                ],
+                'description' => Tools::safeOutput($this->module->t('The EU repairability score where one applies; otherwise, when the producer makes it available, spare parts and repair information. Art. 246a § 1 Abs. 1 Nr. 20 and 21 EGBGB (DE), § 4 Abs. 1 Z 20 and 21 FAGG (AT), art. 49 c.1 lett. v-bis and v-ter Codice del consumo (IT).', [], 'Modules.Bkguarantee.Admin')),
+                'warning' => $repairWarning,
+                'input' => array_merge([
+                    [
+                        'type' => 'radio',
+                        'label' => $this->module->t('Repair', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'repair_mode',
+                        'values' => [
+                            ['id' => 'repair_mode_inherit', 'value' => '', 'label' => $inherit],
+                            ['id' => 'repair_mode_none', 'value' => BkGuaranteeRule::REPAIR_NONE, 'label' => $none],
+                            ['id' => 'repair_mode_score', 'value' => BkGuaranteeRule::REPAIR_SCORE, 'label' => $this->module->t('EU repairability score', [], 'Modules.Bkguarantee.Admin')],
+                            ['id' => 'repair_mode_parts', 'value' => BkGuaranteeRule::REPAIR_PARTS, 'label' => $this->module->t('Spare parts and repair information, when there is no EU score', [], 'Modules.Bkguarantee.Admin')],
+                        ],
+                    ],
+                    [
+                        'type' => 'select',
+                        'label' => $this->module->t('EU repairability score', [], 'Modules.Bkguarantee.Admin'),
+                        'name' => 'repair_score',
+                        'class' => 'fixed-width-sm',
+                        'options' => ['query' => $scores, 'id' => 'id', 'name' => 'name'],
+                        'desc' => $this->module->t('The A to E class of the EU energy label of smartphones and tablets (Regulation (EU) 2023/1669). National scores, such as the French index, do not count.', [], 'Modules.Bkguarantee.Admin'),
+                        'form_group_class' => 'bkguar-when--repair_mode--score',
+                    ],
+                ], $texts),
+                'submit' => ['title' => $this->module->t('Save', [], 'Modules.Bkguarantee.Admin')],
+            ]],
         ];
 
-        $rule = $this->loadObject(true);
-        $values = ($rule instanceof BkGuaranteeRule && $rule->id) ? $rule->values() : [];
-        $type = ($rule instanceof BkGuaranteeRule && $rule->id) ? $rule->filter_type : BkGuaranteeRule::FILTER_CATEGORY;
+        $values = $isNew ? [] : $rule->values();
+        $type = $isNew ? BkGuaranteeRule::FILTER_CATEGORY : $rule->filter_type;
 
         $this->fields_value['bkguar_categories[]'] = $type === BkGuaranteeRule::FILTER_CATEGORY ? $values : [];
         $this->fields_value['bkguar_manufacturers[]'] = $type === BkGuaranteeRule::FILTER_MANUFACTURER ? $values : [];
@@ -479,7 +722,7 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
 
         // Una regla recién creada nace activa: nadie da de alta una regla para dejarla apagada, y
         // el interruptor por defecto en 'No' hacía que la primera se guardara sin efecto.
-        if (!($rule instanceof BkGuaranteeRule) || !$rule->id) {
+        if ($isNew) {
             $this->fields_value['active'] = 1;
             $this->fields_value['priority'] = 0;
             $this->fields_value['id_shop'] = Shop::isFeatureActive() ? (int) $this->context->shop->id : 0;
@@ -555,9 +798,37 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
         if (empty($ids)) {
             $this->errors[] = $this->module->t('Choose at least one target for the rule.', [], 'Modules.Bkguarantee.Admin');
         }
-        if ((int) Tools::getValue('years') < BkGuaranteeRule::MIN_YEARS) {
-            $this->errors[] = $this->module->t('A durability guarantee earns a label only above two years.', [], 'Modules.Bkguarantee.Admin');
+
+        $updatesMode = (string) Tools::getValue('updates_mode');
+        $repairMode = (string) Tools::getValue('repair_mode');
+        $date = BkGuaranteeRule::normaliseDate(Tools::getValue('updates_until'));
+
+        $hasTexts = false;
+        foreach (BkGuaranteeRule::PARTS_FIELDS as $field) {
+            foreach (Language::getIDs(false) as $idLang) {
+                $hasTexts = $hasTexts || trim((string) Tools::getValue($field . '_' . (int) $idLang)) !== '';
+            }
         }
+
+        $errors = BkGuaranteeRule::blockErrors([
+            'years' => Tools::getValue('years'),
+            'updates_mode' => $updatesMode,
+            'updates_until' => (string) $date,
+            'updates_years' => Tools::getValue('updates_years'),
+            'repair_mode' => $repairMode,
+            'repair_score' => (string) Tools::getValue('repair_score'),
+            'has_texts' => $hasTexts,
+        ]);
+        foreach ($errors as $error) {
+            $this->errors[] = $this->module->t($error, [], 'Modules.Bkguarantee.Admin');
+        }
+
+        // Lo que el modo elegido no usa se vacía: una fecha olvidada no reaparece al cambiar de
+        // modo. Los textos de reparación se guardan siempre, para no perderlos si se vuelve a ellos.
+        $_POST['years'] = (int) Tools::getValue('years');
+        $_POST['updates_until'] = $updatesMode === BkGuaranteeRule::UPDATES_DATE ? (string) $date : '';
+        $_POST['updates_years'] = $updatesMode === BkGuaranteeRule::UPDATES_YEARS ? (int) Tools::getValue('updates_years') : 0;
+        $_POST['repair_score'] = $repairMode === BkGuaranteeRule::REPAIR_SCORE ? (string) Tools::getValue('repair_score') : '';
 
         if (!empty($this->errors)) {
             $this->display = Tools::getValue('id_guarantee_rule') ? 'edit' : 'add';

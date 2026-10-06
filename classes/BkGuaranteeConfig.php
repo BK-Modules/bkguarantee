@@ -40,6 +40,10 @@ class BkGuaranteeConfig
     const GARAN_CHECKOUT = 'BK_GUAR_GARAN_CO';
     /** Punto del checkout donde va la etiqueta: confirmation | payment */
     const GARAN_CHECKOUT_PLACEMENT = 'BK_GUAR_GARAN_CO_PLACE';
+    /** Actualizaciones de software y reparación en la ficha y en el correo */
+    const DURABILITY = 'BK_GUAR_DURA';
+    /** Punto de la ficha donde van: info | thumbs | footer */
+    const DURABILITY_PLACEMENT = 'BK_GUAR_DURA_PLACE';
     /** Aviso en el correo de confirmación de pedido */
     const ON_EMAIL = 'BK_GUAR_EMAIL';
     /** Adjunta además el aviso al correo, para que llegue aunque el cliente bloquee imágenes */
@@ -125,6 +129,8 @@ class BkGuaranteeConfig
             self::GARAN_NESTED => '1',
             self::GARAN_CHECKOUT => '1',
             self::GARAN_CHECKOUT_PLACEMENT => self::defaultGaranCheckoutPlacement(),
+            self::DURABILITY => '1',
+            self::DURABILITY_PLACEMENT => 'info',
             self::ON_EMAIL => '1',
             self::EMAIL_ATTACH => '1',
             self::SCOPE_MODE => 'all',
@@ -136,11 +142,17 @@ class BkGuaranteeConfig
         ];
     }
 
+    /**
+     * Da de alta, como valor global, las claves que falten. El global es el que heredan todas las
+     * tiendas: escrito en la tienda del contexto, en multitienda las demás se quedarían sin la
+     * clave y con la función apagada. Lo que una tienda ya tenga propio no se toca, y una
+     * actualización nunca pisa un ajuste del comerciante.
+     */
     public static function installDefaults()
     {
         foreach (self::getDefaults() as $key => $value) {
-            if (Configuration::get($key) === false) {
-                Configuration::updateValue($key, $value);
+            if (!Configuration::hasKey($key)) {
+                Configuration::updateGlobalValue($key, $value);
             }
         }
     }
@@ -217,6 +229,16 @@ class BkGuaranteeConfig
         $value = (string) Configuration::get(self::GARAN_PLACEMENT);
 
         return isset(self::PLACEMENTS[$value]) ? $value : 'thumbs';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getDurabilityPlacement()
+    {
+        $value = (string) Configuration::get(self::DURABILITY_PLACEMENT);
+
+        return isset(self::PLACEMENTS[$value]) ? $value : 'info';
     }
 
     /**

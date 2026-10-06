@@ -28,6 +28,7 @@
     <a class="bkguar-nav__item" href="#bkguar-tab-look" role="tab"><i class="icon-paint-brush"></i> {l s='Presentation' d='Modules.Bkguarantee.Admin'}</a>
     <a class="bkguar-nav__item" href="#bkguar-tab-scope" role="tab"><i class="icon-filter"></i> {l s='Catalogue' d='Modules.Bkguarantee.Admin'}</a>
     <a class="bkguar-nav__item" href="#bkguar-tab-garan" role="tab"><i class="icon-certificate"></i> GARAN</a>
+    <a class="bkguar-nav__item" href="#bkguar-tab-durability" role="tab"><i class="icon-wrench"></i> {l s='Updates and repair' d='Modules.Bkguarantee.Admin'}</a>
     <a class="bkguar-nav__item" href="#bkguar-tab-mail" role="tab"><i class="icon-envelope"></i> {l s='Email' d='Modules.Bkguarantee.Admin'}</a>
   </nav>
 
@@ -62,6 +63,12 @@
             <strong class="bkguar-step__t">{l s='Add producer guarantees, if there are any' d='Modules.Bkguarantee.Admin'}</strong>
             <span class="bkguar-step__d">{l s='Only for products the producer covers for more than two years, free of charge. One rule by brand or category is enough.' d='Modules.Bkguarantee.Admin'}</span>
             <a class="bkguar-step__go" href="#bkguar-tab-garan">GARAN &rsaquo;</a>
+          </li>
+          <li class="bkguar-step">
+            <span class="bkguar-step__n">5</span>
+            <strong class="bkguar-step__t">{l s='Add what the producer says about software updates and repair, if it says it' d='Modules.Bkguarantee.Admin'}</strong>
+            <span class="bkguar-step__d">{l s='Germany, Austria and Italy require it when the producer provides it: how long software updates last, the EU repairability score or how to get spare parts. One rule by brand is usually enough; a product rule can add its own update date.' d='Modules.Bkguarantee.Admin'}</span>
+            <a class="bkguar-step__go" href="#bkguar-tab-durability">{l s='Updates and repair' d='Modules.Bkguarantee.Admin'} &rsaquo;</a>
           </li>
         </ol>
 
@@ -304,6 +311,9 @@
                 <option value="payment"{if $bkguar_v.BK_GUAR_GARAN_CO_PLACE === 'payment'} selected{/if}>{l s='Top of the payment step — any theme, 1.7 included' d='Modules.Bkguarantee.Admin'}</option>
               </select>
               <p class="help-block">{l s='The PrestaShop 1.7 themes have no spot above the button: there the label would not show. If it does not appear in the last step of your checkout, choose the top of the payment step.' d='Modules.Bkguarantee.Admin'}</p>
+              {if $bkguar_final_summary}
+                <div class="alert alert-info">{l s='Your checkout shows the final order summary (Shop Parameters > Order Settings), and the themes place the spot above the button before that summary: the label heads the order review and the summary sits between it and the button. Turn the final summary off if you want the label right above the button.' d='Modules.Bkguarantee.Admin'}</div>
+              {/if}
             </div>
           </div>
         </div>
@@ -311,7 +321,35 @@
         <div class="form-group">
           <div class="col-lg-9 col-lg-offset-3">
             <a class="btn btn-default" href="{$bkguar_rules_url|escape:'htmlall':'UTF-8'}">
-              <i class="icon-list"></i> {l s='Durability guarantees' d='Modules.Bkguarantee.Admin'}
+              <i class="icon-list"></i> {l s='Producer data' d='Modules.Bkguarantee.Admin'}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {* ---------------- actualizaciones y reparación ---------------- *}
+      <div class="tab-pane" id="bkguar-tab-durability">
+        {include file=$bkguar_switch on=$bkguar_v.BK_GUAR_DURA name='BK_GUAR_DURA'
+          label={l s='Show software updates and repair' d='Modules.Bkguarantee.Admin'}
+          desc={l s='What the producer states about software updates, the EU repairability score or spare parts, on the product page before the purchase and again in the order confirmation email. Only products covered by a producer data rule show it.' d='Modules.Bkguarantee.Admin'}}
+
+        <div class="form-group bkguar-row" data-when="BK_GUAR_DURA">
+          <label class="control-label col-lg-3">{l s='Position on the product page' d='Modules.Bkguarantee.Admin'}</label>
+          <div class="col-lg-9">
+            <select name="BK_GUAR_DURA_PLACE" class="fixed-width-xxl">
+              <option value="info"{if $bkguar_v.BK_GUAR_DURA_PLACE === 'info'} selected{/if}>{l s='Below the add-to-cart block' d='Modules.Bkguarantee.Admin'}</option>
+              <option value="thumbs"{if $bkguar_v.BK_GUAR_DURA_PLACE === 'thumbs'} selected{/if}>{l s='Under the product gallery' d='Modules.Bkguarantee.Admin'}</option>
+              <option value="footer"{if $bkguar_v.BK_GUAR_DURA_PLACE === 'footer'} selected{/if}>{l s='At the bottom of the product page' d='Modules.Bkguarantee.Admin'}</option>
+            </select>
+            <p class="help-block">{l s='The law asks for it before the customer is bound by the order: next to the purchase is where it gets read.' d='Modules.Bkguarantee.Admin'}</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-lg-9 col-lg-offset-3">
+            <div class="alert alert-warning">{l s='What you enter here is shown to your customers before they buy and again in the order confirmation, and becomes part of the contract (§ 312d BGB, § 4 Abs. 4 FAGG, art. 49 c.5 Codice del consumo). Enter only what the manufacturer or provider states.' d='Modules.Bkguarantee.Admin'}</div>
+            <a class="btn btn-default" href="{$bkguar_rules_url|escape:'htmlall':'UTF-8'}">
+              <i class="icon-list"></i> {l s='Producer data' d='Modules.Bkguarantee.Admin'}
             </a>
           </div>
         </div>

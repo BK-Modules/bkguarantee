@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'BkGuaranteeConfig' => $baseDir . '/classes/BkGuaranteeConfig.php',
+    'BkGuaranteeDurability' => $baseDir . '/classes/BkGuaranteeDurability.php',
     'BkGuaranteeEmail' => $baseDir . '/classes/BkGuaranteeEmail.php',
     'BkGuaranteeLabelImage' => $baseDir . '/classes/BkGuaranteeLabelImage.php',
     'BkGuaranteeLogger' => $baseDir . '/classes/BkGuaranteeLogger.php',
@@ -16,6 +17,7 @@ return array(
     'BkGuaranteeRuleCsv' => $baseDir . '/classes/BkGuaranteeRuleCsv.php',
     'BkGuaranteeScope' => $baseDir . '/classes/BkGuaranteeScope.php',
     'BkGuaranteeTabsInstaller' => $baseDir . '/classes/BkGuaranteeTabsInstaller.php',
+    'BkModules\\I18n\\V1\\Translations' => $baseDir . '/classes/i18n/Translations.php',
     'BkModules\\Registry\\V1\\InstallReporter' => $baseDir . '/classes/registry/InstallReporter.php',
     'BkModules\\Registry\\V2\\Catalog' => $baseDir . '/classes/registry/v2/Catalog.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',

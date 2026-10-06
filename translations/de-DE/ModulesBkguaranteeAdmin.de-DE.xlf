@@ -706,6 +706,286 @@
         <source>The PrestaShop 1.7 themes have no spot above the button: there the label would not show. If it does not appear in the last step of your checkout, choose the top of the payment step.</source>
         <target>Die Themes von PrestaShop 1.7 haben über dem Button keinen Platz: Dort würde das Label nicht erscheinen. Wenn es im letzten Schritt Ihres Checkouts nicht zu sehen ist, wählen Sie „Oben im Zahlungsschritt“.</target>
       </trans-unit>
+      <trans-unit id="5009e1070e5138d1308165bc75e5706b">
+        <source>Software updates</source>
+        <target>Softwareaktualisierungen</target>
+      </trans-unit>
+      <trans-unit id="84a14caaa60228a9c8c3e25895766672">
+        <source>Spare parts: availability</source>
+        <target>Ersatzteile – Verfügbarkeit</target>
+      </trans-unit>
+      <trans-unit id="03a0deafd647afbf186ed9f8ff23a3a5">
+        <source>Spare parts: estimated cost</source>
+        <target>Ersatzteile – geschätzte Kosten</target>
+      </trans-unit>
+      <trans-unit id="056769dc6ef1b1dfca1d982225630440">
+        <source>Spare parts: how to order</source>
+        <target>Ersatzteile – Bestellverfahren</target>
+      </trans-unit>
+      <trans-unit id="fa158bd4c457ebfc40b1d4853f234a1f">
+        <source>Repair and maintenance instructions</source>
+        <target>Reparatur- und Wartungsanleitungen</target>
+      </trans-unit>
+      <trans-unit id="e7d3a5ee56354740cfa75b29ee3f1f5b">
+        <source>Repair restrictions</source>
+        <target>Reparatureinschränkungen</target>
+      </trans-unit>
+      <trans-unit id="86730d7947a117f6c049cfe444cff01f">
+        <source>%d years</source>
+        <target>%d Jahre</target>
+      </trans-unit>
+      <trans-unit id="ddec1b7b0d7c6763166ff1f5ca5130ce">
+        <source>Add what the producer says about software updates and repair, if it says it</source>
+        <target>Tragen Sie ein, was der Hersteller zu Softwareaktualisierungen und Reparatur angibt, sofern er es angibt</target>
+      </trans-unit>
+      <trans-unit id="277905110963cc4567aa017979907ede">
+        <source>An empty text is not shown, in that language only. Addresses starting with https:// become links.</source>
+        <target>Ein leerer Text wird nicht angezeigt, nur in dieser Sprache. Adressen, die mit https:// beginnen, werden zu Links.</target>
+      </trans-unit>
+      <trans-unit id="4a4e70769f7cae7cf2e4de90bcaa90d7">
+        <source>Between 1 and %d.</source>
+        <target>Zwischen 1 und %d.</target>
+      </trans-unit>
+      <trans-unit id="4a249d60ba1ed510cced6d1e9307cbc2">
+        <source>EU repairability score</source>
+        <target>EU-Reparierbarkeitswert</target>
+      </trans-unit>
+      <trans-unit id="403bc0ead5fc4f1fdd92f47fc07fdd91">
+        <source>For a number of years</source>
+        <target>Für eine Anzahl von Jahren</target>
+      </trans-unit>
+      <trans-unit id="0f8b596e40286b9c13eede7e23cc69d5">
+        <source>Germany, Austria and Italy require it when the producer provides it: how long software updates last, the EU repairability score or how to get spare parts. One rule by brand is usually enough; a product rule can add its own update date.</source>
+        <target>Deutschland, Österreich und Italien verlangen es, wenn der Hersteller es angibt: wie lange es Softwareaktualisierungen gibt, den EU-Reparierbarkeitswert oder wie man Ersatzteile bekommt. Meist genügt eine Regel pro Marke; eine Produktregel kann ihr eigenes Aktualisierungsdatum ergänzen.</target>
+      </trans-unit>
+      <trans-unit id="110a8c93d2975b36860d44527742bed0">
+        <source>Inherit: what another matching rule says, for example the brand rule</source>
+        <target>Erben: was eine andere passende Regel angibt, zum Beispiel die Markenregel</target>
+      </trans-unit>
+      <trans-unit id="3693890be222a98a638ed8a36b343155">
+        <source>Inherits</source>
+        <target>Geerbt</target>
+      </trans-unit>
+      <trans-unit id="0af5e330d5b142351d52e06ceff07692">
+        <source>Leave it empty if this rule says nothing about the GARAN label. Otherwise 3 or more: the label only exists above the two years the legal guarantee already covers.</source>
+        <target>Leer lassen, wenn diese Regel nichts zum GARAN-Label sagt. Sonst 3 oder mehr: Das Label gibt es erst über den zwei Jahren, die die gesetzliche Gewährleistung schon abdeckt.</target>
+      </trans-unit>
+      <trans-unit id="0d2fa3c19c7190a5c4d5e46733bac478">
+        <source>Not applicable, or the manufacturer does not provide it: nothing is shown</source>
+        <target>Nicht zutreffend oder vom Hersteller nicht angegeben: Es wird nichts angezeigt</target>
+      </trans-unit>
+      <trans-unit id="34fac42b8df8fffbdf65a132304f46fa">
+        <source>Not provided</source>
+        <target>Nicht angegeben</target>
+      </trans-unit>
+      <trans-unit id="198e7d5986570ba35803ba35fa090105">
+        <source>Only a durability guarantee the producer gives free of charge, on the whole product and for more than two years. Art. 246a § 1 Abs. 1 Nr. 11a EGBGB (DE), § 4 Abs. 1 Z 12a FAGG (AT), art. 49 c.1 lett. n-bis Codice del consumo (IT).</source>
+        <target>Nur eine Haltbarkeitsgarantie, die der Hersteller ohne Aufpreis, für die gesamte Ware und für mehr als zwei Jahre gibt. Art. 246a § 1 Abs. 1 Nr. 11a EGBGB (DE), § 4 Abs. 1 Z 12a FAGG (AT), art. 49 c.1 lett. n-bis Codice del consumo (IT).</target>
+      </trans-unit>
+      <trans-unit id="503bffda6cb655074583a8822a2af67b">
+        <source>Producer data</source>
+        <target>Herstellerangaben</target>
+      </trans-unit>
+      <trans-unit id="140e0f4dccb53a827717209a86611808">
+        <source>Producer data rule</source>
+        <target>Regel für Herstellerangaben</target>
+      </trans-unit>
+      <trans-unit id="f3fd5defcaadcc4c94948b5228500e0f">
+        <source>Producer durability guarantee (GARAN)</source>
+        <target>Haltbarkeitsgarantie des Herstellers (GARAN)</target>
+      </trans-unit>
+      <trans-unit id="0493d27e20d11e356e53e0a730b0ad08">
+        <source>Repair</source>
+        <target>Reparatur</target>
+      </trans-unit>
+      <trans-unit id="495fa1cb0d48559bead6b7f989dc39db">
+        <source>Score %s</source>
+        <target>Wert %s</target>
+      </trans-unit>
+      <trans-unit id="c693b5f73554eea9736c504349d7804e">
+        <source>Show software updates and repair</source>
+        <target>Softwareaktualisierungen und Reparatur anzeigen</target>
+      </trans-unit>
+      <trans-unit id="6dee4e96e197cf76d50500d7fd8bb2ba">
+        <source>Some texts are missing in %s: customers browsing in those languages do not see those lines.</source>
+        <target>In %s fehlen einige Texte: Kunden, die in diesen Sprachen einkaufen, sehen diese Zeilen nicht.</target>
+      </trans-unit>
+      <trans-unit id="54d68cbe22afdbe66dcbedc7048e5ad4">
+        <source>Spare parts</source>
+        <target>Ersatzteile</target>
+      </trans-unit>
+      <trans-unit id="aef6dd9cbe8f9b395287a492dbab363b">
+        <source>Spare parts and repair information, when there is no EU score</source>
+        <target>Ersatzteile und Reparaturinformationen, wenn es keinen EU-Wert gibt</target>
+      </trans-unit>
+      <trans-unit id="f7790acc630206d62214b1ac804fc69f">
+        <source>The A to E class of the EU energy label of smartphones and tablets (Regulation (EU) 2023/1669). National scores, such as the French index, do not count.</source>
+        <target>Die Klasse A bis E des EU-Energielabels für Smartphones und Tablets (Verordnung (EU) 2023/1669). Nationale Werte wie der französische Index zählen nicht.</target>
+      </trans-unit>
+      <trans-unit id="e3e7212922d2b2f0a98fe0de2ab91882">
+        <source>The EU repairability score where one applies; otherwise, when the producer makes it available, spare parts and repair information. Art. 246a § 1 Abs. 1 Nr. 20 and 21 EGBGB (DE), § 4 Abs. 1 Z 20 and 21 FAGG (AT), art. 49 c.1 lett. v-bis and v-ter Codice del consumo (IT).</source>
+        <target>Der EU-Reparierbarkeitswert, wo es einen gibt; sonst, wenn der Hersteller sie bereitstellt, die Angaben zu Ersatzteilen und Reparatur. Art. 246a § 1 Abs. 1 Nr. 20 und 21 EGBGB (DE), § 4 Abs. 1 Z 20 und 21 FAGG (AT), art. 49 c.1 lett. v-bis e v-ter Codice del consumo (IT).</target>
+      </trans-unit>
+      <trans-unit id="73e92b3c8e7677fda74ac1ac660f50ff">
+        <source>The law asks for it before the customer is bound by the order: next to the purchase is where it gets read.</source>
+        <target>Das Gesetz verlangt es, bevor der Kunde an die Bestellung gebunden ist: Neben dem Kauf wird es gelesen.</target>
+      </trans-unit>
+      <trans-unit id="445f956e3d22384f44c5c474ef5cf019">
+        <source>The minimum period during which the producer or provider supplies software updates, as a date or as a number of years, when they make it available. Art. 246a § 1 Abs. 1 Nr. 11c EGBGB (DE), § 4 Abs. 1 Z 12d FAGG (AT), art. 49 c.1 lett. n-quater Codice del consumo (IT).</source>
+        <target>Der Mindestzeitraum, in dem der Hersteller oder Anbieter Softwareaktualisierungen bereitstellt, als Datum oder als Anzahl von Jahren, wenn er ihn angibt. Art. 246a § 1 Abs. 1 Nr. 11c EGBGB (DE), § 4 Abs. 1 Z 12d FAGG (AT), art. 49 c.1 lett. n-quater Codice del consumo (IT).</target>
+      </trans-unit>
+      <trans-unit id="5ff3c6978f87d96febfdc8ed3899a97e">
+        <source>Unchanged</source>
+        <target>Unverändert</target>
+      </trans-unit>
+      <trans-unit id="b141fe457d6c5b21414ede82f9695c1b">
+        <source>Until %s</source>
+        <target>Bis %s</target>
+      </trans-unit>
+      <trans-unit id="0289e7176947b928e5b9cac7dba304a5">
+        <source>Until a date</source>
+        <target>Bis zu einem Datum</target>
+      </trans-unit>
+      <trans-unit id="d6f3d9c2fef81e227d86d9215d24e089">
+        <source>Updates and repair</source>
+        <target>Updates und Reparatur</target>
+      </trans-unit>
+      <trans-unit id="7e138d1a99391505d9c56f6798730c7d">
+        <source>Updates at least until</source>
+        <target>Aktualisierungen mindestens bis</target>
+      </trans-unit>
+      <trans-unit id="3c048881fcd5a07ee3fd19dc5f84622c">
+        <source>Updates for at least, in years</source>
+        <target>Aktualisierungen für mindestens, in Jahren</target>
+      </trans-unit>
+      <trans-unit id="fc12f0c0311aaadda04acd0730d33a5c">
+        <source>What the producer states about software updates, the EU repairability score or spare parts, on the product page before the purchase and again in the order confirmation email. Only products covered by a producer data rule show it.</source>
+        <target>Was der Hersteller zu Softwareaktualisierungen, zum EU-Reparierbarkeitswert oder zu Ersatzteilen angibt, auf der Produktseite vor dem Kauf und erneut in der Bestellbestätigung. Nur Produkte, für die eine Regel mit Herstellerangaben gilt, zeigen es.</target>
+      </trans-unit>
+      <trans-unit id="c91fde0be0cf3e1b6dd10b8ea4f0cb09">
+        <source>What you enter here is shown to your customers before they buy and again in the order confirmation, and becomes part of the contract (§ 312d BGB, § 4 Abs. 4 FAGG, art. 49 c.5 Codice del consumo). Enter only what the manufacturer or provider states.</source>
+        <target>Was Sie hier eintragen, sehen Ihre Kunden vor dem Kauf und erneut in der Bestellbestätigung, und es wird Vertragsinhalt (§ 312d BGB, § 4 Abs. 4 FAGG, art. 49 c.5 Codice del consumo). Tragen Sie nur ein, was der Hersteller oder Anbieter angibt.</target>
+      </trans-unit>
+      <trans-unit id="b0568e53296710471577ad9c4cc1ca27">
+        <source>When two rules match the same product, the higher priority wins, block by block: a product rule with only an update date still takes the repair from its brand rule.</source>
+        <target>Passen zwei Regeln auf dasselbe Produkt, gewinnt die höhere Priorität, Block für Block: Eine Produktregel mit nur einem Aktualisierungsdatum übernimmt die Reparatur weiterhin aus der Markenregel.</target>
+      </trans-unit>
+      <trans-unit id="c1c881b7f9c8e4ce0ee467a4ad928389">
+        <source>Your checkout shows the final order summary (Shop Parameters &gt; Order Settings), and the themes place the spot above the button before that summary: the label heads the order review and the summary sits between it and the button. Turn the final summary off if you want the label right above the button.</source>
+        <target>Ihr Checkout zeigt die abschließende Bestellübersicht (Shop-Parameter &gt; Bestellungseinstellungen), und die Themes setzen den Platz über dem Button vor diese Übersicht: Das Label steht oben in der Bestellprüfung, und die Übersicht liegt zwischen ihm und dem Button. Schalten Sie die Übersicht aus, wenn das Label direkt über dem Button stehen soll.</target>
+      </trans-unit>
+      <trans-unit id="5b5b8ddeb2de6a5bb73e221d97378916">
+        <source>missing in %s</source>
+        <target>fehlt in %s</target>
+      </trans-unit>
+      <trans-unit id="92ab49d01bed1a1f3ef6258f2203f675">
+        <source>updates: empty, none, a date (2031-12-31 or 31.12.2031) or a number of years. repair: empty, none or the EU score A to E; empty with any spare parts text means spare parts and repair. A column missing from the file is left as it is.</source>
+        <target>updates: leer, none, ein Datum (2031-12-31 oder 31.12.2031) oder eine Anzahl von Jahren. repair: leer, none oder der EU-Wert A bis E; leer mit einem Ersatzteiltext bedeutet Ersatzteile und Reparatur. Eine Spalte, die in der Datei fehlt, bleibt, wie sie ist.</target>
+      </trans-unit>
+      <trans-unit id="211c638c2ee357e3ee7bd255235befe2">
+        <source>Unknown software updates option.</source>
+        <target>Unbekannte Option für Softwareaktualisierungen.</target>
+      </trans-unit>
+      <trans-unit id="fa2df9a4a22627f0a5015ef6cd61a472">
+        <source>Enter a valid date for the software updates.</source>
+        <target>Geben Sie ein gültiges Datum für die Softwareaktualisierungen ein.</target>
+      </trans-unit>
+      <trans-unit id="a8360c113b53172557d25696633bbcec">
+        <source>Software updates take between 1 and 30 years.</source>
+        <target>Softwareaktualisierungen: zwischen 1 und 30 Jahren.</target>
+      </trans-unit>
+      <trans-unit id="3913eeefa0a9f16d130ff30648edbd31">
+        <source>Unknown repair option.</source>
+        <target>Unbekannte Option für die Reparatur.</target>
+      </trans-unit>
+      <trans-unit id="d5789b70f5de74629e44284a50e7597d">
+        <source>Choose the EU repairability score, from A to E.</source>
+        <target>Wählen Sie den EU-Reparierbarkeitswert von A bis E.</target>
+      </trans-unit>
+      <trans-unit id="2d4b14c41a7fb2aa2af113e4fc6eb362">
+        <source>Write at least one spare parts or repair text.</source>
+        <target>Schreiben Sie mindestens einen Text zu Ersatzteilen oder Reparatur.</target>
+      </trans-unit>
+      <trans-unit id="7d0c1de987d928b356017ca3edde7040">
+        <source>The rule says nothing yet: give it GARAN years, software updates or repair.</source>
+        <target>Die Regel sagt noch nichts: Geben Sie GARAN-Jahre, Softwareaktualisierungen oder Reparatur an.</target>
+      </trans-unit>
+      <trans-unit id="c4b6c24fe32980909e1622763bfcdd4c">
+        <source>A spare parts or repair text is longer than 512 characters.</source>
+        <target>Ein Text zu Ersatzteilen oder Reparatur ist länger als 512 Zeichen.</target>
+      </trans-unit>
+      <trans-unit id="a8567ec8887eb41c7870b3a624524a46">
+        <source>Catalogue</source>
+        <target>Katalog</target>
+      </trans-unit>
+      <trans-unit id="ad119d5ea30f6c26b58e0af5bc43c9fe">
+        <source>Contact support</source>
+        <target>Support kontaktieren</target>
+      </trans-unit>
+      <trans-unit id="c0463f00683634bcc85fe86cb46f5068">
+        <source>EU guarantee notice</source>
+        <target>EU-Gewährleistungshinweis</target>
+      </trans-unit>
+      <trans-unit id="ce8ae9da5b7cd6c3df2929543a9af92d">
+        <source>Email</source>
+        <target>E-Mail</target>
+      </trans-unit>
+      <trans-unit id="a1f2061c8613565d6bab38a126051a35">
+        <source>Get the update</source>
+        <target>Update holen</target>
+      </trans-unit>
+      <trans-unit id="2ddf8a5e8b8e9212c3f8a5fc2fd720d7">
+        <source>Guides and news</source>
+        <target>Anleitungen und Neuigkeiten</target>
+      </trans-unit>
+      <trans-unit id="bb5cf8edf3e6c94e11597e754cefaa15">
+        <source>Latest blog posts</source>
+        <target>Neueste Blogartikel</target>
+      </trans-unit>
+      <trans-unit id="9c62fbb5e8bc787487b4de5f3d9ddb5c">
+        <source>More from BK Modules</source>
+        <target>Mehr von BK Modules</target>
+      </trans-unit>
+      <trans-unit id="dc595aa2d05d211629633762f27a53e0">
+        <source>My licenses and downloads</source>
+        <target>Meine Lizenzen und Downloads</target>
+      </trans-unit>
+      <trans-unit id="4cc5ca399c9c71a84c69cfc612251805">
+        <source>Other BK Modules modules</source>
+        <target>Weitere Module von BK Modules</target>
+      </trans-unit>
+      <trans-unit id="6169a4647c2f87a45821bae1ada6aabe">
+        <source>Pick one. They are drawn with the CSS of your shop; the notice inside is identical in all of them.</source>
+        <target>Wählen Sie eine aus. Sie werden mit dem CSS Ihres Shops gezeichnet; der Hinweis darin ist bei allen identisch.</target>
+      </trans-unit>
+      <trans-unit id="1063e38cb53d94d386f21227fcd84717">
+        <source>Remove</source>
+        <target>Entfernen</target>
+      </trans-unit>
+      <trans-unit id="ec53a8c4f07baed5d8825072c89799be">
+        <source>Status</source>
+        <target>Status</target>
+      </trans-unit>
+      <trans-unit id="76ab6c81133e3493e8dadf59e7712738">
+        <source>The latest published version could not be checked right now.</source>
+        <target>Die zuletzt veröffentlichte Version konnte gerade nicht geprüft werden.</target>
+      </trans-unit>
+      <trans-unit id="e0232916f003ab14762b75e8b3c9cbd2">
+        <source>There is a newer version of this module</source>
+        <target>Es gibt eine neuere Version dieses Moduls</target>
+      </trans-unit>
+      <trans-unit id="61feb7a4678a542bfd73a5458717028e">
+        <source>Type a product name or reference</source>
+        <target>Produktname oder Artikelnummer eingeben</target>
+      </trans-unit>
+      <trans-unit id="555d9e486fc0ff4e1fcd8486b1601c25">
+        <source>View the module</source>
+        <target>Modul ansehen</target>
+      </trans-unit>
+      <trans-unit id="bac630adb4d5cd6ed5c91c79ad168a1d">
+        <source>Your module is up to date.</source>
+        <target>Ihr Modul ist auf dem neuesten Stand.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

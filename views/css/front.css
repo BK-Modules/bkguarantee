@@ -445,3 +445,70 @@
         display: none;
     }
 }
+
+/* ---- actualizaciones de software y reparación ----
+ *
+ * Una caja discreta con rótulo y valor: es texto del fabricante, no un sello, y tiene que leerse
+ * igual en una columna estrecha junto al botón de compra que en el pie de la ficha. En una sola
+ * columna los rótulos van encima del valor; con sitio, al lado.
+ */
+.bkdura {
+    margin: 1rem 0;
+    padding: .875rem 1rem;
+    border: 1px solid rgba(0, 0, 0, .14);
+    border-radius: 10px;
+    background: #fff;
+    color: inherit;
+    font-size: .875rem;
+    line-height: 1.45;
+}
+
+.bkdura__title {
+    margin: 0 0 .5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: normal;
+    text-transform: none;
+    color: inherit;
+}
+
+.bkdura__list {
+    margin: 0;
+}
+
+.bkdura__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .125rem 1rem;
+    padding: .375rem 0;
+    border-top: 1px solid rgba(0, 0, 0, .07);
+}
+
+.bkdura__row:first-child {
+    border-top: 0;
+}
+
+.bkdura__label {
+    flex: 1 1 11rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.bkdura__value {
+    flex: 2 1 14rem;
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+/* El enlace del fabricante tiene que verse como enlace aunque el tema los pinte como texto */
+.bkdura__value a {
+    text-decoration: underline;
+}
+
+.bkdura__note {
+    margin: .5rem 0 0;
+    font-size: .75rem;
+    color: rgba(0, 0, 0, .6);
+}

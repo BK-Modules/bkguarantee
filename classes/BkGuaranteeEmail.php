@@ -18,6 +18,10 @@ class BkGuaranteeEmail
     /** Plantilla del correo de confirmación de pedido */
     const TEMPLATE = 'order_conf';
 
+    /** Marcadores del bloque de actualizaciones y reparación, en el HTML y en el texto */
+    const DURABILITY_HTML = '{bkguar_durability}';
+    const DURABILITY_TXT = '{bkguar_durability_txt}';
+
     /**
      * @param string $template
      *
@@ -111,6 +115,70 @@ class BkGuaranteeEmail
     }
 
     /**
+     * Actualizaciones de software y reparación de los productos del pedido, en HTML con los estilos
+     * en línea y acotado al ancho del bloque del aviso. Vacío si ningún producto trae datos.
+     *
+     * @param int   $idLang
+     * @param array $products De BkGuaranteeDurability::forOrder()
+     *
+     * @return string
+     */
+    public static function durabilityHtml($idLang, array $products)
+    {
+        if (empty($products)) {
+            return '';
+        }
+
+        $font = 'font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.4;color:#333';
+        $html = '<div style="margin:24px auto 0;max-width:420px;text-align:left">'
+            . '<p style="margin:0 0 8px;' . $font . '"><strong>'
+            . Tools::htmlentitiesUTF8(BkGuaranteeDurability::text($idLang, 'Software updates and repair'))
+            . '</strong></p>';
+
+        foreach ($products as $product) {
+            $html .= '<p style="margin:12px 0 4px;' . $font . '"><strong>' . Tools::htmlentitiesUTF8($product['name']) . '</strong></p>'
+                . '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;width:100%">';
+            foreach ($product['rows'] as $row) {
+                $html .= '<tr>'
+                    . '<td style="padding:2px 12px 2px 0;vertical-align:top;width:40%;' . $font . ';color:#666">'
+                    . Tools::htmlentitiesUTF8($row['label']) . '</td>'
+                    . '<td style="padding:2px 0;vertical-align:top;' . $font . '">' . $row['html'] . '</td>'
+                    . '</tr>';
+            }
+            $html .= '</table>';
+        }
+
+        return $html . '<p style="margin:12px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.4;color:#666">'
+            . Tools::htmlentitiesUTF8(BkGuaranteeDurability::text($idLang, 'Information provided by the manufacturer or provider.'))
+            . '</p></div>';
+    }
+
+    /**
+     * Lo mismo para la versión de texto del correo.
+     *
+     * @param int   $idLang
+     * @param array $products
+     *
+     * @return string
+     */
+    public static function durabilityText($idLang, array $products)
+    {
+        if (empty($products)) {
+            return '';
+        }
+
+        $text = PHP_EOL . PHP_EOL . BkGuaranteeDurability::text($idLang, 'Software updates and repair') . PHP_EOL;
+        foreach ($products as $product) {
+            $text .= PHP_EOL . $product['name'] . PHP_EOL;
+            foreach ($product['rows'] as $row) {
+                $text .= '- ' . $row['label'] . ': ' . $row['text'] . PHP_EOL;
+            }
+        }
+
+        return $text . PHP_EOL . BkGuaranteeDurability::text($idLang, 'Information provided by the manufacturer or provider.') . PHP_EOL;
+    }
+
+    /**
      * Adjunto del aviso, en el formato que espera Mail::Send.
      *
      * @param int $idLang
@@ -148,7 +216,7 @@ class BkGuaranteeEmail
      */
     public static function garanAttachments(array $templateVars)
     {
-        $idOrder = isset($templateVars['{id_order}']) ? (int) $templateVars['{id_order}'] : 0;
+        $idOrder = self::orderId($templateVars);
         if ($idOrder <= 0) {
             return [];
         }
@@ -168,6 +236,35 @@ class BkGuaranteeEmail
         }
 
         return $out;
+    }
+
+    /**
+     * Pedido de un correo order_conf a partir de sus variables. Desde PrestaShop 1.7.7 el correo trae
+     * {id_order}; en 1.7.5 y 1.7.6 solo {order_name}, que es la referencia del pedido y, cuando el
+     * carrito se partió en varios pedidos, «#n» con su posición dentro del carrito
+     * (Order::getUniqReference()). Los pedidos de un carrito comparten referencia y llevan
+     * identificadores seguidos, así que el n-ésimo es el primero más n - 1.
+     *
+     * @param array $templateVars
+     *
+     * @return int 0 si no se puede saber
+     */
+    public static function orderId(array $templateVars)
+    {
+        if (isset($templateVars['{id_order}']) && ctype_digit((string) $templateVars['{id_order}'])) {
+            return (int) $templateVars['{id_order}'];
+        }
+
+        $name = isset($templateVars['{order_name}']) ? (string) $templateVars['{order_name}'] : '';
+        if (!preg_match('/^([A-Z0-9]+)(?:#(\d+))?$/i', $name, $m)) {
+            return 0;
+        }
+
+        $first = (int) Db::getInstance()->getValue(
+            'SELECT MIN(`id_order`) FROM `' . _DB_PREFIX_ . 'orders` WHERE `reference` = \'' . pSQL($m[1]) . '\''
+        );
+
+        return $first > 0 ? $first + (isset($m[2]) ? (int) $m[2] - 1 : 0) : 0;
     }
 
     /**

@@ -38,6 +38,54 @@
         <source>Producer durability guarantee</source>
         <target>Producer durability guarantee</target>
       </trans-unit>
+      <trans-unit id="7257a98c4a70d26b478dfa28c48d6794">
+        <source>Software updates and repair</source>
+        <target>Software updates and repair</target>
+      </trans-unit>
+      <trans-unit id="5009e1070e5138d1308165bc75e5706b">
+        <source>Software updates</source>
+        <target>Software updates</target>
+      </trans-unit>
+      <trans-unit id="67901c33d5eb0ed3b2f9bceda387b364">
+        <source>at least until %date%</source>
+        <target>at least until %date%</target>
+      </trans-unit>
+      <trans-unit id="ed8529bd055e408f0e7bc2a0d59255d5">
+        <source>for at least %years% years</source>
+        <target>for at least %years% years</target>
+      </trans-unit>
+      <trans-unit id="0e9d86c0ade0c983a268a6172cc23e76">
+        <source>for at least 1 year</source>
+        <target>for at least 1 year</target>
+      </trans-unit>
+      <trans-unit id="f3c9b75623376de1d8b693575105038d">
+        <source>Repairability score</source>
+        <target>Repairability score</target>
+      </trans-unit>
+      <trans-unit id="84a14caaa60228a9c8c3e25895766672">
+        <source>Spare parts: availability</source>
+        <target>Spare parts: availability</target>
+      </trans-unit>
+      <trans-unit id="03a0deafd647afbf186ed9f8ff23a3a5">
+        <source>Spare parts: estimated cost</source>
+        <target>Spare parts: estimated cost</target>
+      </trans-unit>
+      <trans-unit id="056769dc6ef1b1dfca1d982225630440">
+        <source>Spare parts: how to order</source>
+        <target>Spare parts: how to order</target>
+      </trans-unit>
+      <trans-unit id="fa158bd4c457ebfc40b1d4853f234a1f">
+        <source>Repair and maintenance instructions</source>
+        <target>Repair and maintenance instructions</target>
+      </trans-unit>
+      <trans-unit id="e7d3a5ee56354740cfa75b29ee3f1f5b">
+        <source>Repair restrictions</source>
+        <target>Repair restrictions</target>
+      </trans-unit>
+      <trans-unit id="2e6dd0a8b95fcb7cd7a4b9ee63714f06">
+        <source>Information provided by the manufacturer or provider.</source>
+        <target>Information provided by the manufacturer or provider.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

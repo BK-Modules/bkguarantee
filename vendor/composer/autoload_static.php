@@ -8,6 +8,7 @@ class ComposerStaticInit2c48b41232e63f7e8a2419ec84d14344
 {
     public static $classMap = array (
         'BkGuaranteeConfig' => __DIR__ . '/../..' . '/classes/BkGuaranteeConfig.php',
+        'BkGuaranteeDurability' => __DIR__ . '/../..' . '/classes/BkGuaranteeDurability.php',
         'BkGuaranteeEmail' => __DIR__ . '/../..' . '/classes/BkGuaranteeEmail.php',
         'BkGuaranteeLabelImage' => __DIR__ . '/../..' . '/classes/BkGuaranteeLabelImage.php',
         'BkGuaranteeLogger' => __DIR__ . '/../..' . '/classes/BkGuaranteeLogger.php',
@@ -17,6 +18,7 @@ class ComposerStaticInit2c48b41232e63f7e8a2419ec84d14344
         'BkGuaranteeRuleCsv' => __DIR__ . '/../..' . '/classes/BkGuaranteeRuleCsv.php',
         'BkGuaranteeScope' => __DIR__ . '/../..' . '/classes/BkGuaranteeScope.php',
         'BkGuaranteeTabsInstaller' => __DIR__ . '/../..' . '/classes/BkGuaranteeTabsInstaller.php',
+        'BkModules\\I18n\\V1\\Translations' => __DIR__ . '/../..' . '/classes/i18n/Translations.php',
         'BkModules\\Registry\\V1\\InstallReporter' => __DIR__ . '/../..' . '/classes/registry/InstallReporter.php',
         'BkModules\\Registry\\V2\\Catalog' => __DIR__ . '/../..' . '/classes/registry/v2/Catalog.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',

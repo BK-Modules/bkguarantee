@@ -97,7 +97,7 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             BkGuaranteeConfig::ENABLED, BkGuaranteeConfig::ON_PRODUCT, BkGuaranteeConfig::ON_CHECKOUT,
             BkGuaranteeConfig::ON_EMAIL, BkGuaranteeConfig::EMAIL_ATTACH, BkGuaranteeConfig::HIDE_FOR_B2B,
             BkGuaranteeConfig::SKIP_VIRTUAL, BkGuaranteeConfig::GARAN_ON, BkGuaranteeConfig::GARAN_NESTED,
-            BkGuaranteeConfig::GARAN_CHECKOUT, BkGuaranteeConfig::DEBUG,
+            BkGuaranteeConfig::GARAN_CHECKOUT, BkGuaranteeConfig::DURABILITY, BkGuaranteeConfig::DEBUG,
         ];
         foreach ($bools as $key) {
             Configuration::updateValue($key, (int) Tools::getValue($key));
@@ -114,6 +114,7 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         $this->saveFromList(BkGuaranteeConfig::SCOPE_MODE, BkGuaranteeConfig::SCOPE_MODES, 'all');
         $this->saveFromKeys(BkGuaranteeConfig::PLACEMENT, BkGuaranteeConfig::PLACEMENTS, 'footer');
         $this->saveFromKeys(BkGuaranteeConfig::GARAN_PLACEMENT, BkGuaranteeConfig::PLACEMENTS, 'thumbs');
+        $this->saveFromKeys(BkGuaranteeConfig::DURABILITY_PLACEMENT, BkGuaranteeConfig::PLACEMENTS, 'info');
         $this->saveFromKeys(BkGuaranteeConfig::CHECKOUT_PLACEMENT, BkGuaranteeConfig::CHECKOUT_PLACEMENTS, 'summary');
         $this->saveFromKeys(
             BkGuaranteeConfig::GARAN_CHECKOUT_PLACEMENT,
@@ -205,6 +206,7 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         $values[BkGuaranteeConfig::ALIGN] = BkGuaranteeConfig::getAlign();
         $values[BkGuaranteeConfig::PLACEMENT] = BkGuaranteeConfig::getPlacement();
         $values[BkGuaranteeConfig::GARAN_PLACEMENT] = BkGuaranteeConfig::getGaranPlacement();
+        $values[BkGuaranteeConfig::DURABILITY_PLACEMENT] = BkGuaranteeConfig::getDurabilityPlacement();
         $values[BkGuaranteeConfig::CHECKOUT_PLACEMENT] = BkGuaranteeConfig::getCheckoutPlacement();
         $values[BkGuaranteeConfig::GARAN_CHECKOUT_PLACEMENT] = BkGuaranteeConfig::getGaranCheckoutPlacement();
         $values[BkGuaranteeConfig::SCOPE_MODE] = BkGuaranteeConfig::getScopeMode();
@@ -238,6 +240,9 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             'bkguar_action' => self::$currentIndex . '&token=' . $this->token,
             'bkguar_rules_url' => $this->context->link->getAdminLink('AdminBkGuaranteeRules'),
             'bkguar_summary' => $this->summary($rows),
+            // Con el resumen final de PrestaShop, el tema pinta el hueco de encima del botón antes
+            // del resumen: la etiqueta queda arriba del bloque de revisión y no pegada al botón.
+            'bkguar_final_summary' => (bool) Configuration::get('PS_FINAL_SUMMARY_ENABLED'),
         ]);
 
         return '<script>var bkguarSearchUrl = ' . json_encode($searchUrl) . ';</script>'
@@ -266,8 +271,9 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             'tight' => $this->module->t('tight', [], 'Modules.Bkguarantee.Admin'),
             'bad' => $this->module->t('too small', [], 'Modules.Bkguarantee.Admin'),
         ];
-        $rules = (int) Db::getInstance()->getValue(
-            'SELECT COUNT(*) FROM `' . _DB_PREFIX_ . 'bk_guarantee_rule` WHERE `active` = 1'
+        $blocks = Db::getInstance()->getRow(
+            'SELECT SUM(`years` > 0) AS `garan`, SUM(`updates_mode` <> \'\') AS `updates`, SUM(`repair_mode` <> \'\') AS `repair`
+             FROM `' . _DB_PREFIX_ . 'bk_guarantee_rule` WHERE `active` = 1'
         );
 
         return [
@@ -294,7 +300,19 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             [
                 'icon' => 'certificate',
                 'label' => $this->module->t('GARAN rules', [], 'Modules.Bkguarantee.Admin'),
-                'value' => (string) $rules,
+                'value' => (string) (int) $blocks['garan'],
+                'level' => 'info',
+            ],
+            [
+                'icon' => 'refresh',
+                'label' => $this->module->t('Software updates', [], 'Modules.Bkguarantee.Admin'),
+                'value' => (string) (int) $blocks['updates'],
+                'level' => 'info',
+            ],
+            [
+                'icon' => 'wrench',
+                'label' => $this->module->t('Repair', [], 'Modules.Bkguarantee.Admin'),
+                'value' => (string) (int) $blocks['repair'],
                 'level' => 'info',
             ],
         ];

@@ -1,5 +1,5 @@
 {**
- * Importación y exportación de reglas GARAN.
+ * Importación y exportación de las reglas de datos del fabricante.
  *
  * El fichero que sale por «exportar» es el que entra por «importar»: se saca, se edita en la hoja
  * de cálculo y se devuelve. Subir un fichero nunca escribe nada — enseña lo que se haría y espera
@@ -18,6 +18,7 @@
     <div class="bkguar-csv__file">
       <input type="file" name="bkguar_csv" accept=".csv,text/csv" id="bkguar_csv" required>
       <p class="help-block">{l s='CSV separated by ; or , in UTF-8. Columns:' d='Modules.Bkguarantee.Admin'} <code>{$bkguar_columns|escape:'htmlall':'UTF-8'}</code></p>
+      <p class="help-block">{l s='updates: empty, none, a date (2031-12-31 or 31.12.2031) or a number of years. repair: empty, none or the EU score A to E; empty with any spare parts text means spare parts and repair. A column missing from the file is left as it is.' d='Modules.Bkguarantee.Admin'}</p>
     </div>
     <div class="bkguar-csv__actions">
       <button type="submit" name="submitBkGuarImport" class="btn btn-primary">
@@ -51,6 +52,8 @@
               <th class="text-center">{l s='Years' d='Modules.Bkguarantee.Admin'}</th>
               <th>{l s='Producer' d='Modules.Bkguarantee.Admin'}</th>
               <th>{l s='Model identifier' d='Modules.Bkguarantee.Admin'}</th>
+              <th>{l s='Software updates' d='Modules.Bkguarantee.Admin'}</th>
+              <th>{l s='Repair' d='Modules.Bkguarantee.Admin'}</th>
               <th>{l s='Result' d='Modules.Bkguarantee.Admin'}</th>
             </tr>
           </thead>
@@ -63,6 +66,9 @@
                 <td class="text-center">{$row.data.years|intval}</td>
                 <td>{$row.data.brand|escape:'htmlall':'UTF-8'}</td>
                 <td>{$row.data.model|escape:'htmlall':'UTF-8'}</td>
+                {* Estados ya escapados por el controlador, los mismos del listado *}
+                <td>{$row.updates_label}</td>
+                <td>{$row.repair_label}</td>
                 <td>
                   {if $row.action === 'new'}
                     <span class="badge badge-success">{l s='Will be created' d='Modules.Bkguarantee.Admin'}</span>

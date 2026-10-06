@@ -34,7 +34,9 @@ class BkGuarantee extends Module
      * displayProductAdditionalInfo cae bajo el bloque de compra, que es donde la oferta queda a
      * la vista; displayPaymentTop repite el aviso justo encima de las formas de pago, que es la
      * última pantalla antes de que el contrato se cierre; displayCheckoutBeforeConfirmation es el
-     * hueco encima del botón de compra, donde va la etiqueta GARAN.
+     * hueco encima del botón de compra, donde va la etiqueta GARAN. En el correo de confirmación,
+     * actionEmailAddAfterContent coloca los bloques y actionGetExtraMailTemplateVars rellena el de
+     * actualizaciones y reparación con los productos del pedido.
      *
      * @var array
      */
@@ -47,6 +49,7 @@ class BkGuarantee extends Module
         'displayCheckoutBeforeConfirmation',
         'actionEmailAddAfterContent',
         'actionEmailSendBefore',
+        'actionGetExtraMailTemplateVars',
         'actionFrontControllerSetMedia',
     ];
 
@@ -61,6 +64,10 @@ class BkGuarantee extends Module
         $this->ps_versions_compliancy = ['min' => '1.7.5.0', 'max' => '9.99.99'];
 
         parent::__construct();
+
+        // PrestaShop 1.7.5 no carga los XLF de los módulos: sin esto la tienda y el back office
+        // salen en inglés. Donde el núcleo ya los carga no hace nada.
+        \BkModules\I18n\V1\Translations::ensure($this->name);
 
         $this->displayName = $this->trans('BK EU Guarantee', [], 'Modules.Bkguarantee.Admin');
         $this->description = $this->trans(
@@ -156,23 +163,52 @@ class BkGuarantee extends Module
             return;
         }
 
+        // El correo se redacta en el idioma del cliente, no en el del lado desde el que se envía.
         $idLang = isset($params['id_lang']) ? (int) $params['id_lang'] : (int) $this->context->language->id;
-        $title = $this->trans('Your rights on this purchase', [], 'Modules.Bkguarantee.Shop');
-        $alt = $this->trans(
-            'EU harmonised notice on the legal guarantee of conformity',
-            [],
-            'Modules.Bkguarantee.Shop'
-        );
+        $title = BkGuaranteeDurability::text($idLang, 'Your rights on this purchase');
+        $alt = BkGuaranteeDurability::text($idLang, 'EU harmonised notice on the legal guarantee of conformity');
+
+        // Actualizaciones y reparación van delante del aviso, como marcadores: el contenido depende
+        // del pedido, que este hook no conoce, y lo rellena hookActionGetExtraMailTemplateVars.
+        $durability = BkGuaranteeConfig::isOn(BkGuaranteeConfig::DURABILITY);
 
         if (isset($params['template_html'])) {
             $params['template_html'] = BkGuaranteeEmail::insertIntoBody(
                 $params['template_html'],
-                BkGuaranteeEmail::htmlBlock($idLang, $title, $alt)
+                ($durability ? BkGuaranteeEmail::DURABILITY_HTML : '') . BkGuaranteeEmail::htmlBlock($idLang, $title, $alt)
             );
         }
         if (isset($params['template_txt'])) {
-            $params['template_txt'] .= BkGuaranteeEmail::textBlock($idLang, $title);
+            $params['template_txt'] .= ($durability ? BkGuaranteeEmail::DURABILITY_TXT : '')
+                . BkGuaranteeEmail::textBlock($idLang, $title);
         }
+    }
+
+    /**
+     * Rellena los marcadores de actualizaciones y reparación con los productos del pedido, en el
+     * idioma del correo. INVARIANTE: en un order_conf los dos marcadores reciben siempre valor —vacío
+     * si no hay nada que contar—, porque un marcador sin valor sale literal en el correo del cliente.
+     */
+    public function hookActionGetExtraMailTemplateVars(&$params)
+    {
+        if (!BkGuaranteeEmail::isOrderConfirmation(isset($params['template']) ? $params['template'] : '')) {
+            return;
+        }
+
+        $vars = isset($params['template_vars']) && is_array($params['template_vars']) ? $params['template_vars'] : [];
+        $idLang = isset($params['id_lang']) ? (int) $params['id_lang'] : (int) $this->context->language->id;
+        $idOrder = BkGuaranteeEmail::orderId($vars);
+        $products = [];
+        if ($idOrder > 0
+            && BkGuaranteeConfig::isOn(BkGuaranteeConfig::ON_EMAIL)
+            && BkGuaranteeConfig::isOn(BkGuaranteeConfig::ENABLED)
+            && BkGuaranteeConfig::isOn(BkGuaranteeConfig::DURABILITY)
+        ) {
+            $products = BkGuaranteeDurability::forOrder($idOrder, $idLang);
+        }
+
+        $params['extra_template_vars'][BkGuaranteeEmail::DURABILITY_HTML] = BkGuaranteeEmail::durabilityHtml($idLang, $products);
+        $params['extra_template_vars'][BkGuaranteeEmail::DURABILITY_TXT] = BkGuaranteeEmail::durabilityText($idLang, $products);
     }
 
     public function hookActionEmailSendBefore(&$params)
@@ -252,17 +288,53 @@ class BkGuarantee extends Module
      */
     public function hookDisplayProductAdditionalInfo(array $params)
     {
-        return $this->renderProduct('info', $params) . $this->renderGaran('info', $params);
+        return $this->renderProduct('info', $params) . $this->renderGaran('info', $params)
+            . $this->renderDurability('info', $params);
     }
 
     public function hookDisplayAfterProductThumbs(array $params)
     {
-        return $this->renderProduct('thumbs', $params) . $this->renderGaran('thumbs', $params);
+        return $this->renderProduct('thumbs', $params) . $this->renderGaran('thumbs', $params)
+            . $this->renderDurability('thumbs', $params);
     }
 
     public function hookDisplayFooterProduct(array $params)
     {
-        return $this->renderProduct('footer', $params) . $this->renderGaran('footer', $params);
+        return $this->renderProduct('footer', $params) . $this->renderGaran('footer', $params)
+            . $this->renderDurability('footer', $params);
+    }
+
+    /**
+     * Actualizaciones de software y reparación, con lo que el fabricante haya dado. No depende del
+     * alcance del aviso: el periodo de actualizaciones vale también para contenido digital.
+     *
+     * @param string $placement info|thumbs|footer
+     * @param array  $params
+     *
+     * @return string
+     */
+    private function renderDurability($placement, array $params)
+    {
+        if (!BkGuaranteeConfig::isOn(BkGuaranteeConfig::DURABILITY)
+            || BkGuaranteeConfig::getDurabilityPlacement() !== $placement
+            || !$this->shouldRender()
+        ) {
+            return '';
+        }
+
+        $idLang = (int) $this->context->language->id;
+        $rows = BkGuaranteeDurability::linesFor($this->productIdFrom($params), $idLang);
+        if (empty($rows)) {
+            return '';
+        }
+
+        $this->smarty->assign([
+            'bkdura_title' => BkGuaranteeDurability::text($idLang, 'Software updates and repair'),
+            'bkdura_rows' => $rows,
+            'bkdura_note' => BkGuaranteeDurability::text($idLang, 'Information provided by the manufacturer or provider.'),
+        ]);
+
+        return $this->fetch('module:bkguarantee/views/templates/hook/durability.tpl');
     }
 
     /**
