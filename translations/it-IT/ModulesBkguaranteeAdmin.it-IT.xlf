@@ -682,6 +682,30 @@
         <source>Only for products the producer covers for more than two years, free of charge. One rule by brand or category is enough.</source>
         <target>Solo per i prodotti che il produttore copre per più di due anni e senza costi. Basta una regola per marca o categoria.</target>
       </trans-unit>
+      <trans-unit id="718472c52692b810f48dc6664daa1b3f">
+        <source>Show the label right before the order button</source>
+        <target>Mostrare l’etichetta subito prima del pulsante d’acquisto</target>
+      </trans-unit>
+      <trans-unit id="a7c76e003bcb33504f72c2011aeabd8b">
+        <source>Each product in the cart that has a label shows it in the last checkout step, under its name. The law requires it there: § 312j BGB (DE), § 8 FAGG (AT), art. 51 Codice del consumo (IT).</source>
+        <target>Ogni prodotto del carrello che ha un’etichetta la mostra nell’ultimo passo del checkout, sotto il suo nome. La legge la richiede lì: § 312j BGB (DE), § 8 FAGG (AT), art. 51 Codice del consumo (IT).</target>
+      </trans-unit>
+      <trans-unit id="111bb8851b3494ed13cad06b75ea9f67">
+        <source>Position before the order button</source>
+        <target>Posizione prima del pulsante d’acquisto</target>
+      </trans-unit>
+      <trans-unit id="a7bb1014add948943f9c0ad432757cfc">
+        <source>Above the order button — PrestaShop 8 and 9 themes</source>
+        <target>Sopra il pulsante d’acquisto — temi di PrestaShop 8 e 9</target>
+      </trans-unit>
+      <trans-unit id="41cb09ced212de16d2dbca8db0fead6b">
+        <source>Top of the payment step — any theme, 1.7 included</source>
+        <target>In cima al passo di pagamento — qualsiasi tema, anche 1.7</target>
+      </trans-unit>
+      <trans-unit id="3308888d4646ca5ffc540594b7bf651a">
+        <source>The PrestaShop 1.7 themes have no spot above the button: there the label would not show. If it does not appear in the last step of your checkout, choose the top of the payment step.</source>
+        <target>I temi di PrestaShop 1.7 non hanno uno spazio sopra il pulsante: lì l’etichetta non comparirebbe. Se non appare nell’ultimo passo del tuo checkout, scegli in cima al passo di pagamento.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

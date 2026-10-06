@@ -97,7 +97,7 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             BkGuaranteeConfig::ENABLED, BkGuaranteeConfig::ON_PRODUCT, BkGuaranteeConfig::ON_CHECKOUT,
             BkGuaranteeConfig::ON_EMAIL, BkGuaranteeConfig::EMAIL_ATTACH, BkGuaranteeConfig::HIDE_FOR_B2B,
             BkGuaranteeConfig::SKIP_VIRTUAL, BkGuaranteeConfig::GARAN_ON, BkGuaranteeConfig::GARAN_NESTED,
-            BkGuaranteeConfig::DEBUG,
+            BkGuaranteeConfig::GARAN_CHECKOUT, BkGuaranteeConfig::DEBUG,
         ];
         foreach ($bools as $key) {
             Configuration::updateValue($key, (int) Tools::getValue($key));
@@ -115,6 +115,11 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         $this->saveFromKeys(BkGuaranteeConfig::PLACEMENT, BkGuaranteeConfig::PLACEMENTS, 'footer');
         $this->saveFromKeys(BkGuaranteeConfig::GARAN_PLACEMENT, BkGuaranteeConfig::PLACEMENTS, 'thumbs');
         $this->saveFromKeys(BkGuaranteeConfig::CHECKOUT_PLACEMENT, BkGuaranteeConfig::CHECKOUT_PLACEMENTS, 'summary');
+        $this->saveFromKeys(
+            BkGuaranteeConfig::GARAN_CHECKOUT_PLACEMENT,
+            BkGuaranteeConfig::GARAN_CHECKOUT_PLACEMENTS,
+            BkGuaranteeConfig::defaultGaranCheckoutPlacement()
+        );
 
         foreach ([BkGuaranteeConfig::INCLUDED_CATEGORIES, BkGuaranteeConfig::EXCLUDED_CATEGORIES,
                   BkGuaranteeConfig::EXCLUDED_PRODUCTS, BkGuaranteeConfig::B2B_GROUPS] as $key) {
@@ -201,6 +206,7 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         $values[BkGuaranteeConfig::PLACEMENT] = BkGuaranteeConfig::getPlacement();
         $values[BkGuaranteeConfig::GARAN_PLACEMENT] = BkGuaranteeConfig::getGaranPlacement();
         $values[BkGuaranteeConfig::CHECKOUT_PLACEMENT] = BkGuaranteeConfig::getCheckoutPlacement();
+        $values[BkGuaranteeConfig::GARAN_CHECKOUT_PLACEMENT] = BkGuaranteeConfig::getGaranCheckoutPlacement();
         $values[BkGuaranteeConfig::SCOPE_MODE] = BkGuaranteeConfig::getScopeMode();
 
         $dir = _PS_MODULE_DIR_ . $this->module->name . '/views/templates/admin/';

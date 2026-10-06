@@ -34,6 +34,10 @@
         <source>See the full label</source>
         <target>Vedi l'etichetta completa</target>
       </trans-unit>
+      <trans-unit id="1528ec71db5bcf9a17e541a8966ca70e">
+        <source>Producer durability guarantee</source>
+        <target>Garanzia commerciale di durabilità del produttore</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

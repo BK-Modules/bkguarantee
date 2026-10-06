@@ -185,7 +185,8 @@ class BkGuaranteeRule extends ObjectModel
         if ($brand === '') {
             $brand = trim((string) self::manufacturerName($idProduct));
         }
-        if ($model === '') {
+        // El MPN existe desde PrestaShop 1.7.7; antes no hay de dónde heredar el modelo.
+        if ($model === '' && property_exists('Product', 'mpn')) {
             $model = trim((string) Db::getInstance()->getValue(
                 'SELECT `mpn` FROM `' . _DB_PREFIX_ . 'product` WHERE `id_product` = ' . (int) $idProduct
             ));

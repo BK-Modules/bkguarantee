@@ -289,6 +289,25 @@
             desc={l s='The badge is the nested figure of Annex II itself, and the full label opens on the first click, hover or touch. The regulation grants this to the label only, never to the notice.' d='Modules.Bkguarantee.Admin'}}
         </div>
 
+        {* Última pantalla antes de comprar: la ley pide la etiqueta ahí, junto al botón. El selector
+           cuelga del interruptor y los dos de la etiqueta: apagada, no hay nada que colocar. *}
+        <div class="bkguar-row" data-when="BK_GUAR_GARAN">
+          {include file=$bkguar_switch on=$bkguar_v.BK_GUAR_GARAN_CO name='BK_GUAR_GARAN_CO'
+            label={l s='Show the label right before the order button' d='Modules.Bkguarantee.Admin'}
+            desc={l s='Each product in the cart that has a label shows it in the last checkout step, under its name. The law requires it there: § 312j BGB (DE), § 8 FAGG (AT), art. 51 Codice del consumo (IT).' d='Modules.Bkguarantee.Admin'}}
+
+          <div class="form-group bkguar-row" data-when="BK_GUAR_GARAN_CO">
+            <label class="control-label col-lg-3">{l s='Position before the order button' d='Modules.Bkguarantee.Admin'}</label>
+            <div class="col-lg-9">
+              <select name="BK_GUAR_GARAN_CO_PLACE">
+                <option value="confirmation"{if $bkguar_v.BK_GUAR_GARAN_CO_PLACE === 'confirmation'} selected{/if}>{l s='Above the order button — PrestaShop 8 and 9 themes' d='Modules.Bkguarantee.Admin'}</option>
+                <option value="payment"{if $bkguar_v.BK_GUAR_GARAN_CO_PLACE === 'payment'} selected{/if}>{l s='Top of the payment step — any theme, 1.7 included' d='Modules.Bkguarantee.Admin'}</option>
+              </select>
+              <p class="help-block">{l s='The PrestaShop 1.7 themes have no spot above the button: there the label would not show. If it does not appear in the last step of your checkout, choose the top of the payment step.' d='Modules.Bkguarantee.Admin'}</p>
+            </div>
+          </div>
+        </div>
+
         <div class="form-group">
           <div class="col-lg-9 col-lg-offset-3">
             <a class="btn btn-default" href="{$bkguar_rules_url|escape:'htmlall':'UTF-8'}">

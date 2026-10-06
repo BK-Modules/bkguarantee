@@ -34,6 +34,10 @@
         <source>See the full label</source>
         <target>See the full label</target>
       </trans-unit>
+      <trans-unit id="1528ec71db5bcf9a17e541a8966ca70e">
+        <source>Producer durability guarantee</source>
+        <target>Producer durability guarantee</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

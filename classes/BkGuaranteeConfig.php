@@ -36,6 +36,10 @@ class BkGuaranteeConfig
     const GARAN_WIDTH = 'BK_GUAR_GARAN_W';
     /** Visualización anidada de la etiqueta: se abre entera al primer clic */
     const GARAN_NESTED = 'BK_GUAR_GARAN_NEST';
+    /** Etiqueta de cada producto del carrito inmediatamente antes del botón de compra */
+    const GARAN_CHECKOUT = 'BK_GUAR_GARAN_CO';
+    /** Punto del checkout donde va la etiqueta: confirmation | payment */
+    const GARAN_CHECKOUT_PLACEMENT = 'BK_GUAR_GARAN_CO_PLACE';
     /** Aviso en el correo de confirmación de pedido */
     const ON_EMAIL = 'BK_GUAR_EMAIL';
     /** Adjunta además el aviso al correo, para que llegue aunque el cliente bloquee imágenes */
@@ -70,6 +74,17 @@ class BkGuaranteeConfig
      */
     const CHECKOUT_PLACEMENTS = [
         'summary' => 'displayCheckoutSummaryTop',
+        'payment' => 'displayPaymentTop',
+    ];
+    /**
+     * Puntos del último paso donde va la etiqueta GARAN, con el hook que los sirve.
+     *
+     * `confirmation` queda encima del botón de compra, pero el classic de 1.7 no dispara ese hook:
+     * allí la etiqueta no saldría, y por eso la posición por defecto depende de la versión.
+     * `payment` está en todos los temas, arriba del paso de pago.
+     */
+    const GARAN_CHECKOUT_PLACEMENTS = [
+        'confirmation' => 'displayCheckoutBeforeConfirmation',
         'payment' => 'displayPaymentTop',
     ];
     /** Puntos de la ficha admitidos, con el hook que los sirve */
@@ -108,6 +123,8 @@ class BkGuaranteeConfig
             self::GARAN_PLACEMENT => 'thumbs',
             self::GARAN_WIDTH => '420',
             self::GARAN_NESTED => '1',
+            self::GARAN_CHECKOUT => '1',
+            self::GARAN_CHECKOUT_PLACEMENT => self::defaultGaranCheckoutPlacement(),
             self::ON_EMAIL => '1',
             self::EMAIL_ATTACH => '1',
             self::SCOPE_MODE => 'all',
@@ -220,6 +237,27 @@ class BkGuaranteeConfig
         $value = (string) Configuration::get(self::CHECKOUT_PLACEMENT);
 
         return isset(self::CHECKOUT_PLACEMENTS[$value]) ? $value : 'summary';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getGaranCheckoutPlacement()
+    {
+        $value = (string) Configuration::get(self::GARAN_CHECKOUT_PLACEMENT);
+
+        return isset(self::GARAN_CHECKOUT_PLACEMENTS[$value]) ? $value : self::defaultGaranCheckoutPlacement();
+    }
+
+    /**
+     * Encima del botón desde PrestaShop 8, cuyo classic dispara displayCheckoutBeforeConfirmation;
+     * en 1.7, arriba del paso de pago, el único punto que su classic tiene antes del botón.
+     *
+     * @return string
+     */
+    public static function defaultGaranCheckoutPlacement()
+    {
+        return version_compare(_PS_VERSION_, '8.0.0', '>=') ? 'confirmation' : 'payment';
     }
 
     /**

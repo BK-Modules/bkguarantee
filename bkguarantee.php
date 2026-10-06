@@ -33,7 +33,8 @@ class BkGuarantee extends Module
     /**
      * displayProductAdditionalInfo cae bajo el bloque de compra, que es donde la oferta queda a
      * la vista; displayPaymentTop repite el aviso justo encima de las formas de pago, que es la
-     * última pantalla antes de que el contrato se cierre.
+     * última pantalla antes de que el contrato se cierre; displayCheckoutBeforeConfirmation es el
+     * hueco encima del botón de compra, donde va la etiqueta GARAN.
      *
      * @var array
      */
@@ -43,6 +44,7 @@ class BkGuarantee extends Module
         'displayFooterProduct',
         'displayPaymentTop',
         'displayCheckoutSummaryTop',
+        'displayCheckoutBeforeConfirmation',
         'actionEmailAddAfterContent',
         'actionEmailSendBefore',
         'actionFrontControllerSetMedia',
@@ -74,9 +76,7 @@ class BkGuarantee extends Module
             return false;
         }
 
-        foreach ($this->hooks as $hook) {
-            $this->registerHook($hook);
-        }
+        $this->registerHooks();
 
         if (!BkGuaranteeRule::installTable()) {
             return false;
@@ -111,6 +111,25 @@ class BkGuarantee extends Module
         BkGuaranteeLogger::confirmation('Módulo desinstalado');
 
         return parent::uninstall();
+    }
+
+    /**
+     * Registra todos los hooks del módulo. Es idempotente: la instalación y cada actualización que
+     * traiga un hook nuevo pasan por aquí, y un hook ya registrado se deja como está.
+     *
+     * @return bool
+     */
+    public function registerHooks()
+    {
+        $ok = true;
+        foreach ($this->hooks as $hook) {
+            if (!$this->registerHook($hook)) {
+                BkGuaranteeLogger::error('No se pudo registrar el hook ' . $hook);
+                $ok = false;
+            }
+        }
+
+        return $ok;
     }
 
     /**
@@ -199,6 +218,12 @@ class BkGuarantee extends Module
         return true;
     }
 
+    /**
+     * El CSS y el JS del front llevan la fecha del fichero como versión, igual que en el back
+     * office: tras actualizar el módulo, ni el navegador del cliente ni una CDN siguen sirviendo la
+     * copia vieja. PrestaShop la añade a la URL desde 8.0; 1.7 no tiene ese parámetro y los sirve
+     * sin firmar (una URL firmada como `remote` rompería allí las tiendas con servidor de medios).
+     */
     public function hookActionFrontControllerSetMedia()
     {
         if (!$this->shouldRender()) {
@@ -208,14 +233,14 @@ class BkGuarantee extends Module
         $this->context->controller->registerStylesheet(
             'bkguarantee-front',
             'modules/' . $this->name . '/views/css/front.css',
-            ['media' => 'all', 'priority' => 150]
+            ['media' => 'all', 'priority' => 150, 'version' => $this->assetVersion('views/css/front.css')]
         );
 
         if (BkGuaranteeConfig::isOn(BkGuaranteeConfig::GARAN_NESTED)) {
             $this->context->controller->registerJavascript(
                 'bkguarantee-garan',
                 'modules/' . $this->name . '/views/js/garan.js',
-                ['position' => 'bottom', 'priority' => 150]
+                ['position' => 'bottom', 'priority' => 150, 'version' => $this->assetVersion('views/js/garan.js')]
             );
         }
     }
@@ -275,8 +300,8 @@ class BkGuarantee extends Module
     private function renderGaran($placement, array $params)
     {
         if (!BkGuaranteeConfig::isOn(BkGuaranteeConfig::GARAN_ON)
-            || !BkGuaranteeConfig::isOn(BkGuaranteeConfig::ENABLED)
             || BkGuaranteeConfig::getGaranPlacement() !== $placement
+            || !$this->shouldRender()
         ) {
             return '';
         }
@@ -287,19 +312,93 @@ class BkGuarantee extends Module
             return '';
         }
 
+        $this->smarty->assign($this->garanVars() + [
+            'bkgaran_years' => (int) $label['years'],
+            'bkgaran_brand' => $label['brand'],
+            'bkgaran_model' => $label['model'],
+            'bkgaran_uid' => $idProduct . '-' . $placement,
+        ]);
+
+        return $this->fetch('module:bkguarantee/views/templates/hook/garan.tpl');
+    }
+
+    /**
+     * La etiqueta GARAN de cada producto del carrito que la tenga, inmediatamente antes del botón
+     * de compra: de la información de durabilidad es la única pieza que § 312j Abs. 2 BGB, § 8
+     * Abs. 1 FAGG y el art. 51 c.2 del Codice del consumo exigen ahí, destacada.
+     *
+     * Una etiqueta por modelo: los productos con la misma marca, el mismo modelo y los mismos años
+     * comparten una sola, con el nombre de todos ellos encima. La etiqueta es la misma garan.tpl de
+     * la ficha, no un resumen.
+     *
+     * @param string $placement confirmation|payment
+     *
+     * @return string
+     */
+    private function renderGaranCheckout($placement)
+    {
+        if (!BkGuaranteeConfig::isOn(BkGuaranteeConfig::GARAN_ON)
+            || !BkGuaranteeConfig::isOn(BkGuaranteeConfig::GARAN_CHECKOUT)
+            || BkGuaranteeConfig::getGaranCheckoutPlacement() !== $placement
+            || !$this->shouldRender()
+            || !Validate::isLoadedObject($this->context->cart)
+        ) {
+            return '';
+        }
+
+        $labels = [];
+        $seen = [];
+        foreach ($this->context->cart->getProducts() as $product) {
+            $idProduct = (int) $product['id_product'];
+            if (isset($seen[$idProduct])) {
+                continue;
+            }
+            $seen[$idProduct] = true;
+
+            $label = BkGuaranteeRule::labelFor($idProduct);
+            if ($label === null) {
+                continue;
+            }
+
+            $key = $label['years'] . '|' . $label['brand'] . '|' . $label['model'];
+            if (!isset($labels[$key])) {
+                $labels[$key] = $label + [
+                    'uid' => 'checkout-' . $placement . '-' . count($labels),
+                    'products' => [],
+                ];
+            }
+            $labels[$key]['products'][] = $product['name'];
+        }
+
+        if (empty($labels)) {
+            return '';
+        }
+
+        $this->smarty->assign($this->garanVars() + [
+            'bkgaran_co_title' => $this->trans('Producer durability guarantee', [], 'Modules.Bkguarantee.Shop'),
+            'bkgaran_co_labels' => array_values($labels),
+            'bkgaran_co_placement' => $placement,
+        ]);
+
+        return $this->fetch('module:bkguarantee/views/templates/hook/garan-checkout.tpl');
+    }
+
+    /**
+     * Lo que garan.tpl necesita y no depende del producto: el arte, los anchos y los textos.
+     *
+     * @return array
+     */
+    private function garanVars()
+    {
         $width = BkGuaranteeConfig::getGaranWidth();
 
-        $this->smarty->assign([
+        return [
             'bkgaran_art' => $this->assetUrl('views/img/garan-blank.png'),
             'bkgaran_nested_art' => $this->assetUrl('views/img/garan-nested.png'),
             'bkgaran_width' => $width,
             // La figura anidada es apaisada: al ancho de la etiqueta entera se vuelve un cartel.
             'bkgaran_badge_width' => min($width, self::GARAN_BADGE_MAX_WIDTH),
             'bkgaran_nested' => BkGuaranteeConfig::isOn(BkGuaranteeConfig::GARAN_NESTED),
-            'bkgaran_years' => (int) $label['years'],
-            'bkgaran_brand' => $label['brand'],
-            'bkgaran_model' => $label['model'],
-            'bkgaran_uid' => $idProduct . '-' . $placement,
             'bkgaran_alt' => $this->trans(
                 'GARAN label: producer durability guarantee in years',
                 [],
@@ -307,9 +406,7 @@ class BkGuarantee extends Module
             ),
             'bkgaran_toggle' => $this->trans('Producer guarantee in years', [], 'Modules.Bkguarantee.Shop'),
             'bkgaran_more' => $this->trans('See the full label', [], 'Modules.Bkguarantee.Shop'),
-        ]);
-
-        return $this->fetch('module:bkguarantee/views/templates/hook/garan.tpl');
+        ];
     }
 
     /**
@@ -339,9 +436,17 @@ class BkGuarantee extends Module
         return (int) Tools::getValue('id_product');
     }
 
+    /**
+     * Arriba del paso de pago van el aviso y la etiqueta GARAN, cada uno si su posición es esta.
+     */
     public function hookDisplayPaymentTop(array $params)
     {
-        return $this->renderCheckout('payment');
+        return $this->renderCheckout('payment') . $this->renderGaranCheckout('payment');
+    }
+
+    public function hookDisplayCheckoutBeforeConfirmation(array $params)
+    {
+        return $this->renderGaranCheckout('confirmation');
     }
 
     public function hookDisplayCheckoutSummaryTop(array $params)
@@ -395,10 +500,21 @@ class BkGuarantee extends Module
      */
     public function assetUrl($relative)
     {
-        $path = _PS_MODULE_DIR_ . $this->name . '/' . $relative;
-        $stamp = file_exists($path) ? filemtime($path) : $this->version;
+        return $this->_path . $relative . '?v=' . $this->assetVersion($relative);
+    }
 
-        return $this->_path . $relative . '?v=' . $stamp;
+    /**
+     * Fecha del fichero como versión de un asset del módulo.
+     *
+     * @param string $relative
+     *
+     * @return string
+     */
+    public function assetVersion($relative)
+    {
+        $path = _PS_MODULE_DIR_ . $this->name . '/' . $relative;
+
+        return (string) (file_exists($path) ? filemtime($path) : $this->version);
     }
 
     /**
