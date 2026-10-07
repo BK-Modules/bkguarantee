@@ -125,9 +125,9 @@ class BkGuaranteeRuleCsv
 
         return self::export([
             ['id_guarantee_rule' => 1, 'name' => 'Bosch power tools', 'filter_type' => BkGuaranteeRule::FILTER_MANUFACTURER, 'filter_values' => '1,2', 'years' => 5, 'updates_mode' => BkGuaranteeRule::UPDATES_NONE] + $base,
-            ['id_guarantee_rule' => 2, 'name' => 'Outdoor furniture', 'filter_type' => BkGuaranteeRule::FILTER_CATEGORY, 'filter_values' => '11', 'years' => 8, 'priority' => 10] + $base,
+            ['id_guarantee_rule' => 2, 'name' => 'Outdoor furniture', 'filter_type' => BkGuaranteeRule::FILTER_CATEGORY, 'filter_values' => '11', 'years' => 8] + $base,
             ['id_guarantee_rule' => 3, 'name' => 'Acme phones', 'filter_type' => BkGuaranteeRule::FILTER_MANUFACTURER, 'filter_values' => '3', 'years' => 0, 'repair_mode' => BkGuaranteeRule::REPAIR_PARTS] + $base,
-            ['id_guarantee_rule' => 4, 'name' => 'Model X9', 'filter_type' => BkGuaranteeRule::FILTER_PRODUCTS, 'filter_values' => '3,7,9', 'years' => 10, 'brand' => 'Acme', 'model' => 'X9', 'priority' => 20, 'updates_mode' => BkGuaranteeRule::UPDATES_DATE, 'updates_until' => '2031-12-31', 'repair_mode' => BkGuaranteeRule::REPAIR_SCORE, 'repair_score' => 'B'] + $base,
+            ['id_guarantee_rule' => 4, 'name' => 'Model X9', 'filter_type' => BkGuaranteeRule::FILTER_PRODUCTS, 'filter_values' => '3,7,9', 'years' => 10, 'brand' => 'Acme', 'model' => 'X9', 'updates_mode' => BkGuaranteeRule::UPDATES_DATE, 'updates_until' => '2031-12-31', 'repair_mode' => BkGuaranteeRule::REPAIR_SCORE, 'repair_score' => 'B'] + $base,
         ], [
             3 => [
                 'parts_availability' => [$idLang => 'Available for at least 7 years after the last unit is placed on the market'],

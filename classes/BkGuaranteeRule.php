@@ -30,6 +30,11 @@ class BkGuaranteeRule extends ObjectModel
     const FILTER_CATEGORY = 'category';
     const FILTER_MANUFACTURER = 'manufacturer';
     const FILTER_PRODUCTS = 'products';
+    /**
+     * Alcances de lo más concreto a lo más general: la regla de un modelo manda sobre la de su marca
+     * y la de la marca sobre la de su categoría, sin tocar prioridades.
+     */
+    const SCOPES = [self::FILTER_PRODUCTS, self::FILTER_MANUFACTURER, self::FILTER_CATEGORY];
 
     /** Duración mínima que la norma exige para que exista etiqueta */
     const MIN_YEARS = 3;
@@ -175,9 +180,10 @@ class BkGuaranteeRule extends ObjectModel
 
     /**
      * Lo que dice el fabricante de un producto, bloque a bloque: para cada uno, la primera regla
-     * activa que case **y defina ese bloque**, por tienda (la concreta antes que la de todas),
-     * prioridad descendente y antigüedad. Así una regla de marca pone la reparación de toda la gama
-     * y una regla de producto con más prioridad añade solo la fecha de actualizaciones de su modelo.
+     * activa que case **y defina ese bloque**. Manda la más concreta —productos, luego marca, luego
+     * categoría—; dentro del mismo alcance, la de la tienda concreta antes que la de todas, y después
+     * la prioridad y la antigüedad, que solo desempatan. Así una regla de marca pone la reparación
+     * de toda la gama y una regla de producto añade solo la fecha de actualizaciones de su modelo.
      *
      * @param int $idProduct
      *
@@ -203,7 +209,8 @@ class BkGuaranteeRule extends ObjectModel
             self::$rules[$idShop] = (array) Db::getInstance()->executeS(
                 'SELECT * FROM `' . _DB_PREFIX_ . 'bk_guarantee_rule`
                  WHERE `active` = 1 AND `id_shop` IN (0, ' . $idShop . ')
-                 ORDER BY `id_shop` DESC, `priority` DESC, `id_guarantee_rule` ASC'
+                 ORDER BY FIELD(`filter_type`, \'' . implode('\', \'', self::SCOPES) . '\'),
+                          `id_shop` DESC, `priority` DESC, `id_guarantee_rule` ASC'
             );
         }
 

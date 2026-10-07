@@ -486,10 +486,6 @@
         <source>too small.</source>
         <target>troppo piccolo.</target>
       </trans-unit>
-      <trans-unit id="672c988ec9b599f4a7ed962e47b02ada">
-        <source>A rule for one shop wins over an equivalent rule for all of them.</source>
-        <target>Una regola di un singolo negozio prevale su una regola equivalente per tutti.</target>
-      </trans-unit>
       <trans-unit id="804ccd6219996d12eda865d1c0707423">
         <source>All shops</source>
         <target>Tutti i negozi</target>
@@ -866,10 +862,6 @@
         <source>What you enter here is shown to your customers before they buy and again in the order confirmation, and becomes part of the contract (§ 312d BGB, § 4 Abs. 4 FAGG, art. 49 c.5 Codice del consumo). Enter only what the manufacturer or provider states.</source>
         <target>Ciò che inserisci qui viene mostrato ai tuoi clienti prima dell'acquisto e di nuovo nella conferma dell'ordine, e diventa parte integrante del contratto (§ 312d BGB, § 4 Abs. 4 FAGG, art. 49 c.5 Codice del consumo). Inserisci solo ciò che dichiara il produttore o il fornitore.</target>
       </trans-unit>
-      <trans-unit id="b0568e53296710471577ad9c4cc1ca27">
-        <source>When two rules match the same product, the higher priority wins, block by block: a product rule with only an update date still takes the repair from its brand rule.</source>
-        <target>Quando due regole si applicano allo stesso prodotto vince la priorità più alta, blocco per blocco: una regola di prodotto con solo una data di aggiornamento prende comunque la riparazione dalla regola della marca.</target>
-      </trans-unit>
       <trans-unit id="c1c881b7f9c8e4ce0ee467a4ad928389">
         <source>Your checkout shows the final order summary (Shop Parameters &gt; Order Settings), and the themes place the spot above the button before that summary: the label heads the order review and the summary sits between it and the button. Turn the final summary off if you want the label right above the button.</source>
         <target>Il tuo checkout mostra il riepilogo finale dell'ordine (Parametri negozio &gt; Impostazioni ordini) e i temi mettono lo spazio sopra il pulsante prima di quel riepilogo: l'etichetta apre la revisione dell'ordine e il riepilogo resta tra lei e il pulsante. Disattiva il riepilogo finale se vuoi l'etichetta subito sopra il pulsante.</target>
@@ -985,6 +977,14 @@
       <trans-unit id="bac630adb4d5cd6ed5c91c79ad168a1d">
         <source>Your module is up to date.</source>
         <target>Il tuo modulo è aggiornato.</target>
+      </trans-unit>
+      <trans-unit id="3db15d6b2a58b0c9ba74315fc13f8b8d">
+        <source>The most specific rule wins on its own: a product rule over a brand rule, and a brand rule over a category rule, block by block, so a product rule with only an update date still takes the repair from its brand rule. Priority only decides between two rules of the same kind; on a tie, the oldest.</source>
+        <target>Vince da sola la regola più specifica: quella di prodotto su quella di marca e quella di marca su quella di categoria, blocco per blocco, quindi una regola di prodotto con solo una data di aggiornamento prende comunque la riparazione dalla regola della sua marca. La priorità decide solo tra due regole dello stesso tipo; a parità, la più vecchia.</target>
+      </trans-unit>
+      <trans-unit id="65c9e6ee7ce929e88b0304b90fdf0f98">
+        <source>Between two rules of the same kind, the one for this shop wins over the one for all shops.</source>
+        <target>Tra due regole dello stesso tipo, quella di questo negozio vince su quella di tutti i negozi.</target>
       </trans-unit>
     </body>
   </file>

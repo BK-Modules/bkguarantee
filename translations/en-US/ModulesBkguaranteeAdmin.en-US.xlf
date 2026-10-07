@@ -486,10 +486,6 @@
         <source>too small.</source>
         <target>too small.</target>
       </trans-unit>
-      <trans-unit id="672c988ec9b599f4a7ed962e47b02ada">
-        <source>A rule for one shop wins over an equivalent rule for all of them.</source>
-        <target>A rule for one shop wins over an equivalent rule for all of them.</target>
-      </trans-unit>
       <trans-unit id="804ccd6219996d12eda865d1c0707423">
         <source>All shops</source>
         <target>All shops</target>
@@ -866,10 +862,6 @@
         <source>What you enter here is shown to your customers before they buy and again in the order confirmation, and becomes part of the contract (§ 312d BGB, § 4 Abs. 4 FAGG, art. 49 c.5 Codice del consumo). Enter only what the manufacturer or provider states.</source>
         <target>What you enter here is shown to your customers before they buy and again in the order confirmation, and becomes part of the contract (§ 312d BGB, § 4 Abs. 4 FAGG, art. 49 c.5 Codice del consumo). Enter only what the manufacturer or provider states.</target>
       </trans-unit>
-      <trans-unit id="b0568e53296710471577ad9c4cc1ca27">
-        <source>When two rules match the same product, the higher priority wins, block by block: a product rule with only an update date still takes the repair from its brand rule.</source>
-        <target>When two rules match the same product, the higher priority wins, block by block: a product rule with only an update date still takes the repair from its brand rule.</target>
-      </trans-unit>
       <trans-unit id="c1c881b7f9c8e4ce0ee467a4ad928389">
         <source>Your checkout shows the final order summary (Shop Parameters &gt; Order Settings), and the themes place the spot above the button before that summary: the label heads the order review and the summary sits between it and the button. Turn the final summary off if you want the label right above the button.</source>
         <target>Your checkout shows the final order summary (Shop Parameters &gt; Order Settings), and the themes place the spot above the button before that summary: the label heads the order review and the summary sits between it and the button. Turn the final summary off if you want the label right above the button.</target>
@@ -985,6 +977,14 @@
       <trans-unit id="bac630adb4d5cd6ed5c91c79ad168a1d">
         <source>Your module is up to date.</source>
         <target>Your module is up to date.</target>
+      </trans-unit>
+      <trans-unit id="3db15d6b2a58b0c9ba74315fc13f8b8d">
+        <source>The most specific rule wins on its own: a product rule over a brand rule, and a brand rule over a category rule, block by block, so a product rule with only an update date still takes the repair from its brand rule. Priority only decides between two rules of the same kind; on a tie, the oldest.</source>
+        <target>The most specific rule wins on its own: a product rule over a brand rule, and a brand rule over a category rule, block by block, so a product rule with only an update date still takes the repair from its brand rule. Priority only decides between two rules of the same kind; on a tie, the oldest.</target>
+      </trans-unit>
+      <trans-unit id="65c9e6ee7ce929e88b0304b90fdf0f98">
+        <source>Between two rules of the same kind, the one for this shop wins over the one for all shops.</source>
+        <target>Between two rules of the same kind, the one for this shop wins over the one for all shops.</target>
       </trans-unit>
     </body>
   </file>

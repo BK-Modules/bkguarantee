@@ -595,7 +595,7 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
                         'type' => 'select',
                         'label' => $this->module->t('Shop', [], 'Modules.Bkguarantee.Admin'),
                         'name' => 'id_shop',
-                        'desc' => $this->module->t('A rule for one shop wins over an equivalent rule for all of them.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->module->t('Between two rules of the same kind, the one for this shop wins over the one for all shops.', [], 'Modules.Bkguarantee.Admin'),
                         'options' => ['query' => $shops, 'id' => 'id', 'name' => 'name'],
                     ],
                     [
@@ -603,7 +603,7 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
                         'label' => $this->module->t('Priority', [], 'Modules.Bkguarantee.Admin'),
                         'name' => 'priority',
                         'class' => 'fixed-width-xs',
-                        'desc' => $this->module->t('When two rules match the same product, the higher priority wins, block by block: a product rule with only an update date still takes the repair from its brand rule.', [], 'Modules.Bkguarantee.Admin'),
+                        'desc' => $this->module->t('The most specific rule wins on its own: a product rule over a brand rule, and a brand rule over a category rule, block by block, so a product rule with only an update date still takes the repair from its brand rule. Priority only decides between two rules of the same kind; on a tie, the oldest.', [], 'Modules.Bkguarantee.Admin'),
                     ],
                     [
                         'type' => 'switch',
