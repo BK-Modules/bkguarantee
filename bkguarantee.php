@@ -57,7 +57,7 @@ class BkGuarantee extends Module
     {
         $this->name = 'bkguarantee';
         $this->tab = 'front_office_features';
-        $this->version = '1.1.2';
+        $this->version = '1.2.0';
         $this->author = 'BK Modules';
         $this->need_instance = 0;
         $this->bootstrap = true;
