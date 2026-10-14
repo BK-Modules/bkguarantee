@@ -19,8 +19,8 @@ class ComposerStaticInit2c48b41232e63f7e8a2419ec84d14344
         'BkGuaranteeScope' => __DIR__ . '/../..' . '/classes/BkGuaranteeScope.php',
         'BkGuaranteeTabsInstaller' => __DIR__ . '/../..' . '/classes/BkGuaranteeTabsInstaller.php',
         'BkModules\\I18n\\V1\\Translations' => __DIR__ . '/../..' . '/classes/i18n/Translations.php',
-        'BkModules\\Registry\\V1\\InstallReporter' => __DIR__ . '/../..' . '/classes/registry/InstallReporter.php',
         'BkModules\\Registry\\V2\\Catalog' => __DIR__ . '/../..' . '/classes/registry/v2/Catalog.php',
+        'BkModules\\Registry\\V2\\InstallReporter' => __DIR__ . '/../..' . '/classes/registry/v2/InstallReporter.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 

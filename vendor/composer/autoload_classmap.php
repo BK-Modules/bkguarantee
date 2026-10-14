@@ -18,7 +18,7 @@ return array(
     'BkGuaranteeScope' => $baseDir . '/classes/BkGuaranteeScope.php',
     'BkGuaranteeTabsInstaller' => $baseDir . '/classes/BkGuaranteeTabsInstaller.php',
     'BkModules\\I18n\\V1\\Translations' => $baseDir . '/classes/i18n/Translations.php',
-    'BkModules\\Registry\\V1\\InstallReporter' => $baseDir . '/classes/registry/InstallReporter.php',
     'BkModules\\Registry\\V2\\Catalog' => $baseDir . '/classes/registry/v2/Catalog.php',
+    'BkModules\\Registry\\V2\\InstallReporter' => $baseDir . '/classes/registry/v2/InstallReporter.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
 );

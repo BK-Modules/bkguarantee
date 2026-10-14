@@ -37,7 +37,7 @@ function upgrade_module_1_2_0($module)
 
     BkGuaranteeLogger::confirmation('Actualizado a ' . $module->version . ': actualizaciones de software y reparación');
 
-    \BkModules\Registry\V1\InstallReporter::report($module->name, $module->version, 'upgrade');
+    \BkModules\Registry\V2\InstallReporter::report($module->name, $module->version, 'upgrade');
 
     return true;
 }

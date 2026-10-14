@@ -26,7 +26,7 @@ function upgrade_module_1_1_2($module)
         . BkGuaranteeConfig::getGaranCheckoutPlacement()
     );
 
-    \BkModules\Registry\V1\InstallReporter::report($module->name, $module->version, 'upgrade');
+    \BkModules\Registry\V2\InstallReporter::report($module->name, $module->version, 'upgrade');
 
     return true;
 }

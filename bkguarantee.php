@@ -103,14 +103,14 @@ class BkGuarantee extends Module
         }
         BkGuaranteeLogger::confirmation('Módulo instalado, versión ' . $this->version);
 
-        \BkModules\Registry\V1\InstallReporter::report($this->name, $this->version, 'install');
+        \BkModules\Registry\V2\InstallReporter::report($this->name, $this->version, 'install');
 
         return true;
     }
 
     public function uninstall()
     {
-        \BkModules\Registry\V1\InstallReporter::report($this->name, $this->version, 'uninstall');
+        \BkModules\Registry\V2\InstallReporter::report($this->name, $this->version, 'uninstall');
 
         BkGuaranteeTabsInstaller::uninstall();
         BkGuaranteeRule::uninstallTable();
