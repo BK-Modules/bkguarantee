@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="ModulesBkguaranteeShop" source-language="en-US" target-language="pl-PL" datatype="plaintext">
+    <body>
+      <trans-unit id="36a39f9d964f9048c963cbab8168dd31">
+        <source>EU harmonised notice on the legal guarantee of conformity</source>
+        <target>Zharmonizowane zawiadomienie UE o rękojmi za brak zgodności towaru z umową</target>
+      </trans-unit>
+      <trans-unit id="00c5948f905128f9ad9676c9bd1a96b1">
+        <source>EU legal guarantee</source>
+        <target>Rękojmia w UE</target>
+      </trans-unit>
+      <trans-unit id="c6beb9157a0e29e604ad5ec484488608">
+        <source>View full size</source>
+        <target>Zobacz w pełnym rozmiarze</target>
+      </trans-unit>
+      <trans-unit id="0118572b0c611d2befab429b2ecf496a">
+        <source>This is the official European Union notice on the legal guarantee of conformity, reproduced exactly as the Commission publishes it.</source>
+        <target>To oficjalne zawiadomienie Unii Europejskiej o odpowiedzialności za brak zgodności towaru z umową, odtworzone dokładnie tak, jak publikuje je Komisja.</target>
+      </trans-unit>
+      <trans-unit id="4dc8bdb70a383d9be59bc44a80dfc0fa">
+        <source>Your rights on this purchase</source>
+        <target>Twoje prawa przy tym zakupie</target>
+      </trans-unit>
+      <trans-unit id="e80a3632cfb8578cd49629ecf0266be8">
+        <source>GARAN label: producer durability guarantee in years</source>
+        <target>Etykieta GARAN: gwarancja trwałości producenta w latach</target>
+      </trans-unit>
+      <trans-unit id="3c5e3918666f7f53c99192a089690d5d">
+        <source>Producer guarantee in years</source>
+        <target>Gwarancja producenta w latach</target>
+      </trans-unit>
+      <trans-unit id="06b48f7915a08d38abe2799956fc2aef">
+        <source>See the full label</source>
+        <target>Zobacz całą etykietę</target>
+      </trans-unit>
+      <trans-unit id="1528ec71db5bcf9a17e541a8966ca70e">
+        <source>Producer durability guarantee</source>
+        <target>Gwarancja trwałości producenta</target>
+      </trans-unit>
+      <trans-unit id="7257a98c4a70d26b478dfa28c48d6794">
+        <source>Software updates and repair</source>
+        <target>Aktualizacje oprogramowania i naprawa</target>
+      </trans-unit>
+      <trans-unit id="5009e1070e5138d1308165bc75e5706b">
+        <source>Software updates</source>
+        <target>Aktualizacje oprogramowania</target>
+      </trans-unit>
+      <trans-unit id="67901c33d5eb0ed3b2f9bceda387b364">
+        <source>at least until %date%</source>
+        <target>co najmniej do %date%</target>
+      </trans-unit>
+      <trans-unit id="ed8529bd055e408f0e7bc2a0d59255d5">
+        <source>for at least %years% years</source>
+        <target>przez okres co najmniej %years% lat</target>
+      </trans-unit>
+      <trans-unit id="0e9d86c0ade0c983a268a6172cc23e76">
+        <source>for at least 1 year</source>
+        <target>przez co najmniej 1 rok</target>
+      </trans-unit>
+      <trans-unit id="f3c9b75623376de1d8b693575105038d">
+        <source>Repairability score</source>
+        <target>Wskaźnik naprawialności</target>
+      </trans-unit>
+      <trans-unit id="84a14caaa60228a9c8c3e25895766672">
+        <source>Spare parts: availability</source>
+        <target>Części zamienne: dostępność</target>
+      </trans-unit>
+      <trans-unit id="03a0deafd647afbf186ed9f8ff23a3a5">
+        <source>Spare parts: estimated cost</source>
+        <target>Części zamienne: szacunkowy koszt</target>
+      </trans-unit>
+      <trans-unit id="056769dc6ef1b1dfca1d982225630440">
+        <source>Spare parts: how to order</source>
+        <target>Części zamienne: jak zamówić</target>
+      </trans-unit>
+      <trans-unit id="fa158bd4c457ebfc40b1d4853f234a1f">
+        <source>Repair and maintenance instructions</source>
+        <target>Instrukcje naprawy i konserwacji</target>
+      </trans-unit>
+      <trans-unit id="e7d3a5ee56354740cfa75b29ee3f1f5b">
+        <source>Repair restrictions</source>
+        <target>Ograniczenia napraw</target>
+      </trans-unit>
+      <trans-unit id="2e6dd0a8b95fcb7cd7a4b9ee63714f06">
+        <source>Information provided by the manufacturer or provider.</source>
+        <target>Informacje przekazane przez producenta lub dostawcę.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

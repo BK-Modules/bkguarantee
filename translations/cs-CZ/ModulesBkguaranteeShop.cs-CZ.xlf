@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="ModulesBkguaranteeShop" source-language="en-US" target-language="cs-CZ" datatype="plaintext">
+    <body>
+      <trans-unit id="36a39f9d964f9048c963cbab8168dd31">
+        <source>EU harmonised notice on the legal guarantee of conformity</source>
+        <target>Harmonizované oznámení EU o zákonné záruce</target>
+      </trans-unit>
+      <trans-unit id="00c5948f905128f9ad9676c9bd1a96b1">
+        <source>EU legal guarantee</source>
+        <target>Zákonná záruka v EU</target>
+      </trans-unit>
+      <trans-unit id="c6beb9157a0e29e604ad5ec484488608">
+        <source>View full size</source>
+        <target>Zobrazit v plné velikosti</target>
+      </trans-unit>
+      <trans-unit id="0118572b0c611d2befab429b2ecf496a">
+        <source>This is the official European Union notice on the legal guarantee of conformity, reproduced exactly as the Commission publishes it.</source>
+        <target>Toto je oficiální oznámení Evropské unie o zákonné záruce, reprodukované přesně tak, jak ho zveřejňuje Komise.</target>
+      </trans-unit>
+      <trans-unit id="4dc8bdb70a383d9be59bc44a80dfc0fa">
+        <source>Your rights on this purchase</source>
+        <target>Vaše práva při tomto nákupu</target>
+      </trans-unit>
+      <trans-unit id="e80a3632cfb8578cd49629ecf0266be8">
+        <source>GARAN label: producer durability guarantee in years</source>
+        <target>Štítek GARAN: obchodní záruka trvanlivosti od výrobce v letech</target>
+      </trans-unit>
+      <trans-unit id="3c5e3918666f7f53c99192a089690d5d">
+        <source>Producer guarantee in years</source>
+        <target>Záruka výrobce v letech</target>
+      </trans-unit>
+      <trans-unit id="06b48f7915a08d38abe2799956fc2aef">
+        <source>See the full label</source>
+        <target>Zobrazit celý štítek</target>
+      </trans-unit>
+      <trans-unit id="1528ec71db5bcf9a17e541a8966ca70e">
+        <source>Producer durability guarantee</source>
+        <target>Obchodní záruka trvanlivosti od výrobce</target>
+      </trans-unit>
+      <trans-unit id="7257a98c4a70d26b478dfa28c48d6794">
+        <source>Software updates and repair</source>
+        <target>Aktualizace softwaru a opravy</target>
+      </trans-unit>
+      <trans-unit id="5009e1070e5138d1308165bc75e5706b">
+        <source>Software updates</source>
+        <target>Aktualizace softwaru</target>
+      </trans-unit>
+      <trans-unit id="67901c33d5eb0ed3b2f9bceda387b364">
+        <source>at least until %date%</source>
+        <target>nejméně do %date%</target>
+      </trans-unit>
+      <trans-unit id="ed8529bd055e408f0e7bc2a0d59255d5">
+        <source>for at least %years% years</source>
+        <target>po dobu nejméně %years% let</target>
+      </trans-unit>
+      <trans-unit id="0e9d86c0ade0c983a268a6172cc23e76">
+        <source>for at least 1 year</source>
+        <target>po dobu nejméně 1 roku</target>
+      </trans-unit>
+      <trans-unit id="f3c9b75623376de1d8b693575105038d">
+        <source>Repairability score</source>
+        <target>Index opravitelnosti</target>
+      </trans-unit>
+      <trans-unit id="84a14caaa60228a9c8c3e25895766672">
+        <source>Spare parts: availability</source>
+        <target>Náhradní díly: dostupnost</target>
+      </trans-unit>
+      <trans-unit id="03a0deafd647afbf186ed9f8ff23a3a5">
+        <source>Spare parts: estimated cost</source>
+        <target>Náhradní díly: odhadovaná cena</target>
+      </trans-unit>
+      <trans-unit id="056769dc6ef1b1dfca1d982225630440">
+        <source>Spare parts: how to order</source>
+        <target>Náhradní díly: jak je objednat</target>
+      </trans-unit>
+      <trans-unit id="fa158bd4c457ebfc40b1d4853f234a1f">
+        <source>Repair and maintenance instructions</source>
+        <target>Návod k opravě a údržbě</target>
+      </trans-unit>
+      <trans-unit id="e7d3a5ee56354740cfa75b29ee3f1f5b">
+        <source>Repair restrictions</source>
+        <target>Omezení oprav</target>
+      </trans-unit>
+      <trans-unit id="2e6dd0a8b95fcb7cd7a4b9ee63714f06">
+        <source>Information provided by the manufacturer or provider.</source>
+        <target>Informace poskytnuté výrobcem nebo poskytovatelem.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
