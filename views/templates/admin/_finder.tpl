@@ -8,14 +8,14 @@
   <div class="input-group fixed-width-xxl">
     <span class="input-group-addon"><i class="icon-search"></i></span>
     <input type="text" class="form-control bkguar-finder__input" autocomplete="off"
-           placeholder="{l s='Type a product name or reference' d='Modules.Bkguarantee.Admin'}">
+           placeholder="{$bkguar_module->t('Type a product name or reference', [], 'Modules.Bkguarantee.Admin') nofilter}">
   </div>
   <div class="bkguar-finder__results"></div>
   <div class="bkguar-finder__chips">
     {foreach from=$items item=it}
       <span class="bkguar-chip" data-id="{$it.id|intval}">
         {$it.name|escape:'htmlall':'UTF-8'} <small>#{$it.id|intval}</small>
-        <a href="#" class="bkguar-chip__x" title="{l s='Remove' d='Modules.Bkguarantee.Admin'}">&times;</a>
+        <a href="#" class="bkguar-chip__x" title="{$bkguar_module->t('Remove', [], 'Modules.Bkguarantee.Admin') nofilter}">&times;</a>
       </span>
     {/foreach}
   </div>

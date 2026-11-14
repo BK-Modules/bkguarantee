@@ -7,9 +7,9 @@
   <div class="col-lg-9">
     <span class="switch prestashop-switch fixed-width-lg">
       <input type="radio" name="{$name|escape:'htmlall':'UTF-8'}" id="{$name|escape:'htmlall':'UTF-8'}_on" value="1"{if $on} checked{/if}>
-      <label for="{$name|escape:'htmlall':'UTF-8'}_on">{l s='Yes' d='Modules.Bkguarantee.Admin'}</label>
+      <label for="{$name|escape:'htmlall':'UTF-8'}_on">{$bkguar_module->t('Yes', [], 'Modules.Bkguarantee.Admin') nofilter}</label>
       <input type="radio" name="{$name|escape:'htmlall':'UTF-8'}" id="{$name|escape:'htmlall':'UTF-8'}_off" value="0"{if !$on} checked{/if}>
-      <label for="{$name|escape:'htmlall':'UTF-8'}_off">{l s='No' d='Modules.Bkguarantee.Admin'}</label>
+      <label for="{$name|escape:'htmlall':'UTF-8'}_off">{$bkguar_module->t('No', [], 'Modules.Bkguarantee.Admin') nofilter}</label>
       <a class="slide-button btn"></a>
     </span>
     {if $desc}<p class="help-block">{$desc|escape:'htmlall':'UTF-8'}</p>{/if}

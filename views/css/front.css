@@ -14,13 +14,17 @@
  * disponible, que es lo que la mantiene legible en móvil. El aviso entero es un enlace al fichero
  * oficial a tamaño completo: en pantalla estrecha el QR baja del tamaño escaneable y abrirlo es lo
  * que lo recupera.
+ *
+ * Medidas de texto y separación en --bkguar-rem, que vale 1rem: en PrestaShop 1.6 vale 16px
+ * (front-ps16.css), porque sus temas Bootstrap 3 ponen la raíz en 10px y en rem todo saldría a un
+ * 62,5 %.
  */
 .bkguar {
     --bkguar-blue: #003399;
     --bkguar-ink: #1a1f36;
     display: block;
     max-width: var(--bkguar-w, 380px);
-    margin: 1.5rem 0;
+    margin: calc(1.5 * var(--bkguar-rem, 1rem)) 0;
     padding: 0;
     background: #fff;
     overflow: hidden;
@@ -53,12 +57,12 @@
 .bkguar__full {
     display: inline-flex;
     align-items: center;
-    gap: .4rem;
+    gap: calc(.4 * var(--bkguar-rem, 1rem));
     min-height: 44px;
-    padding: .5rem .85rem;
+    padding: calc(.5 * var(--bkguar-rem, 1rem)) calc(.85 * var(--bkguar-rem, 1rem));
     border: 1px solid rgba(0, 51, 153, .28);
     border-radius: 999px;
-    font-size: .875rem;
+    font-size: calc(.875 * var(--bkguar-rem, 1rem));
     font-weight: 600;
     line-height: 1.2;
     color: var(--bkguar-blue);
@@ -95,8 +99,8 @@
 .bkguar__head {
     display: flex;
     align-items: center;
-    gap: .5rem;
-    padding: .6rem .85rem;
+    gap: calc(.5 * var(--bkguar-rem, 1rem));
+    padding: calc(.6 * var(--bkguar-rem, 1rem)) calc(.85 * var(--bkguar-rem, 1rem));
     background: var(--bkguar-blue);
     color: #fff;
 }
@@ -107,7 +111,7 @@
 }
 
 .bkguar__title {
-    font-size: .8125rem;
+    font-size: calc(.8125 * var(--bkguar-rem, 1rem));
     font-weight: 600;
     letter-spacing: .02em;
     line-height: 1.2;
@@ -115,7 +119,7 @@
 
 .bkguar--card .bkguar__aside,
 .bkguar--framed .bkguar__aside {
-    padding: .6rem .85rem .75rem;
+    padding: calc(.6 * var(--bkguar-rem, 1rem)) calc(.85 * var(--bkguar-rem, 1rem)) calc(.75 * var(--bkguar-rem, 1rem));
     border-top: 1px solid rgba(0, 51, 153, .12);
 }
 
@@ -140,7 +144,7 @@
 }
 
 .bkguar--plain .bkguar__aside {
-    padding: .6rem 0 0;
+    padding: calc(.6 * var(--bkguar-rem, 1rem)) 0 0;
 }
 
 /* ---- el resumen del pedido siempre va centrado, sea cual sea la alineación de la ficha ---- */
@@ -165,8 +169,8 @@
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: 1.25rem 2.5rem;
-    padding: clamp(1rem, 3vw, 2rem);
+    gap: calc(1.25 * var(--bkguar-rem, 1rem)) calc(2.5 * var(--bkguar-rem, 1rem));
+    padding: clamp(calc(1 * var(--bkguar-rem, 1rem)), 3vw, calc(2 * var(--bkguar-rem, 1rem)));
     border: 1px solid rgba(0, 51, 153, .14);
     border-radius: 12px;
     background: linear-gradient(180deg, rgba(0, 51, 153, .04), rgba(0, 51, 153, .015));
@@ -187,15 +191,15 @@
    tamaño completo tiene que seguir a mano. --bkguar-sticky-top deja sitio a la cabecera fija del
    tema; el tema lo ajusta si la suya es más alta. */
 .bkguar--band .bkguar__aside {
-    flex: 1 1 17rem;
+    flex: 1 1 calc(17 * var(--bkguar-rem, 1rem));
     position: sticky;
-    top: var(--bkguar-sticky-top, 5.5rem);
+    top: var(--bkguar-sticky-top, calc(5.5 * var(--bkguar-rem, 1rem)));
     align-self: flex-start;
 }
 
 .bkguar__band-title {
-    margin: 0 0 .5rem;
-    font-size: 1.25rem;
+    margin: 0 0 calc(.5 * var(--bkguar-rem, 1rem));
+    font-size: calc(1.25 * var(--bkguar-rem, 1rem));
     line-height: 1.25;
     font-weight: 700;
     letter-spacing: -.01em;
@@ -203,8 +207,8 @@
 }
 
 .bkguar__band-text {
-    margin: 0 0 1rem;
-    font-size: .9375rem;
+    margin: 0 0 calc(1 * var(--bkguar-rem, 1rem));
+    font-size: calc(.9375 * var(--bkguar-rem, 1rem));
     line-height: 1.55;
     color: rgba(26, 31, 54, .78);
     max-width: 46ch;
@@ -226,7 +230,7 @@
 }
 
 .bkgaran {
-    margin: 1.25rem 0;
+    margin: calc(1.25 * var(--bkguar-rem, 1rem)) 0;
     max-width: 100%;
 }
 
@@ -275,10 +279,10 @@
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: .5rem .75rem;
+    gap: calc(.5 * var(--bkguar-rem, 1rem)) calc(.75 * var(--bkguar-rem, 1rem));
     max-width: 100%;
     margin: 0;
-    padding: .5rem .75rem;
+    padding: calc(.5 * var(--bkguar-rem, 1rem)) calc(.75 * var(--bkguar-rem, 1rem));
     border: 1px solid rgba(0, 0, 0, .14);
     border-radius: 10px;
     background: #fff;
@@ -329,20 +333,20 @@
 .bkgaran__hint {
     display: flex;
     flex-direction: column;
-    gap: .1rem;
-    flex: 1 1 8rem;
+    gap: calc(.1 * var(--bkguar-rem, 1rem));
+    flex: 1 1 calc(8 * var(--bkguar-rem, 1rem));
     min-width: 0;
     font-family: inherit;
     line-height: 1.25;
 }
 
 .bkgaran__hint-text {
-    font-size: .8125rem;
+    font-size: calc(.8125 * var(--bkguar-rem, 1rem));
     opacity: .75;
 }
 
 .bkgaran__hint-more {
-    font-size: .8125rem;
+    font-size: calc(.8125 * var(--bkguar-rem, 1rem));
     font-weight: 600;
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -399,16 +403,16 @@
  * fija su propia tipografía: los temas dan a los h2 tamaños y mayúsculas de cabecera de sección.
  */
 .bkgaran-checkout {
-    margin: 1rem 0;
-    padding: .875rem 1rem;
+    margin: calc(1 * var(--bkguar-rem, 1rem)) 0;
+    padding: calc(.875 * var(--bkguar-rem, 1rem)) calc(1 * var(--bkguar-rem, 1rem));
     border: 1px solid rgba(0, 0, 0, .14);
     border-radius: 10px;
     background: #fff;
 }
 
 .bkgaran-checkout__title {
-    margin: 0 0 .625rem;
-    font-size: 1rem;
+    margin: 0 0 calc(.625 * var(--bkguar-rem, 1rem));
+    font-size: calc(1 * var(--bkguar-rem, 1rem));
     font-weight: 700;
     line-height: 1.3;
     letter-spacing: normal;
@@ -419,7 +423,7 @@
 .bkgaran-checkout__list {
     display: flex;
     flex-direction: column;
-    gap: .875rem;
+    gap: calc(.875 * var(--bkguar-rem, 1rem));
     margin: 0;
     padding: 0;
     list-style: none;
@@ -430,8 +434,8 @@
 }
 
 .bkgaran-checkout__products {
-    margin: 0 0 .375rem;
-    font-size: .875rem;
+    margin: 0 0 calc(.375 * var(--bkguar-rem, 1rem));
+    font-size: calc(.875 * var(--bkguar-rem, 1rem));
     line-height: 1.35;
 }
 
@@ -453,19 +457,19 @@
  * columna los rótulos van encima del valor; con sitio, al lado.
  */
 .bkdura {
-    margin: 1rem 0;
-    padding: .875rem 1rem;
+    margin: calc(1 * var(--bkguar-rem, 1rem)) 0;
+    padding: calc(.875 * var(--bkguar-rem, 1rem)) calc(1 * var(--bkguar-rem, 1rem));
     border: 1px solid rgba(0, 0, 0, .14);
     border-radius: 10px;
     background: #fff;
     color: inherit;
-    font-size: .875rem;
+    font-size: calc(.875 * var(--bkguar-rem, 1rem));
     line-height: 1.45;
 }
 
 .bkdura__title {
-    margin: 0 0 .5rem;
-    font-size: 1rem;
+    margin: 0 0 calc(.5 * var(--bkguar-rem, 1rem));
+    font-size: calc(1 * var(--bkguar-rem, 1rem));
     font-weight: 700;
     line-height: 1.3;
     letter-spacing: normal;
@@ -480,8 +484,8 @@
 .bkdura__row {
     display: flex;
     flex-wrap: wrap;
-    gap: .125rem 1rem;
-    padding: .375rem 0;
+    gap: calc(.125 * var(--bkguar-rem, 1rem)) calc(1 * var(--bkguar-rem, 1rem));
+    padding: calc(.375 * var(--bkguar-rem, 1rem)) 0;
     border-top: 1px solid rgba(0, 0, 0, .07);
 }
 
@@ -490,13 +494,13 @@
 }
 
 .bkdura__label {
-    flex: 1 1 11rem;
+    flex: 1 1 calc(11 * var(--bkguar-rem, 1rem));
     margin: 0;
     font-weight: 600;
 }
 
 .bkdura__value {
-    flex: 2 1 14rem;
+    flex: 2 1 calc(14 * var(--bkguar-rem, 1rem));
     min-width: 0;
     margin: 0;
     overflow-wrap: anywhere;
@@ -508,7 +512,7 @@
 }
 
 .bkdura__note {
-    margin: .5rem 0 0;
-    font-size: .75rem;
+    margin: calc(.5 * var(--bkguar-rem, 1rem)) 0 0;
+    font-size: calc(.75 * var(--bkguar-rem, 1rem));
     color: rgba(0, 0, 0, .6);
 }

@@ -6,12 +6,12 @@
  *}
 <div class="alert alert-warning bkguar-update">
   <p class="bkguar-update-title">
-    <i class="icon-refresh"></i> {l s='There is a newer version of this module' d='Modules.Bkguarantee.Admin'}
+    <i class="icon-refresh"></i> {$bkguar_module->t('There is a newer version of this module', [], 'Modules.Bkguarantee.Admin') nofilter}
   </p>
   <p>
-    {l s='You have version %installed%; the latest published version is %latest%.' sprintf=['%installed%' => $bkguar_version.installed, '%latest%' => $bkguar_version.latest] d='Modules.Bkguarantee.Admin'}
+    {$bkguar_module->t('You have version %installed%; the latest published version is %latest%.', ['%installed%' => $bkguar_version.installed, '%latest%' => $bkguar_version.latest], 'Modules.Bkguarantee.Admin') nofilter}
   </p>
   <a class="btn btn-primary" href="{$bkguar_version.url|escape:'html':'UTF-8'}" target="_blank" rel="noopener">
-    <i class="icon-download"></i> {l s='Get the update' d='Modules.Bkguarantee.Admin'}
+    <i class="icon-download"></i> {$bkguar_module->t('Get the update', [], 'Modules.Bkguarantee.Admin') nofilter}
   </a>
 </div>

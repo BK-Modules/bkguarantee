@@ -30,47 +30,30 @@ class BkGuarantee extends Module
 
     /** Ancho máximo de la figura anidada: por encima deja de leerse como una insignia */
     const GARAN_BADGE_MAX_WIDTH = 240;
-    /**
-     * displayProductAdditionalInfo cae bajo el bloque de compra, que es donde la oferta queda a
-     * la vista; displayPaymentTop repite el aviso justo encima de las formas de pago, que es la
-     * última pantalla antes de que el contrato se cierre; displayCheckoutBeforeConfirmation es el
-     * hueco encima del botón de compra, donde va la etiqueta GARAN. En el correo de confirmación,
-     * actionEmailAddAfterContent coloca los bloques y actionGetExtraMailTemplateVars rellena el de
-     * actualizaciones y reparación con los productos del pedido.
-     *
-     * @var array
-     */
-    private $hooks = [
-        'displayProductAdditionalInfo',
-        'displayAfterProductThumbs',
-        'displayFooterProduct',
-        'displayPaymentTop',
-        'displayCheckoutSummaryTop',
-        'displayCheckoutBeforeConfirmation',
-        'actionEmailAddAfterContent',
-        'actionEmailSendBefore',
-        'actionGetExtraMailTemplateVars',
-        'actionFrontControllerSetMedia',
-    ];
 
     public function __construct()
     {
         $this->name = 'bkguarantee';
         $this->tab = 'front_office_features';
-        $this->version = '1.2.0';
+        $this->version = '1.3.0';
         $this->author = 'BK Modules';
         $this->need_instance = 0;
         $this->bootstrap = true;
-        $this->ps_versions_compliancy = ['min' => '1.7.5.0', 'max' => '9.99.99'];
+        // Un solo código de 1.6.1 a 9: lo que cambia entre versiones son los hooks de cada punto
+        // (BkGuaranteeConfig), los textos (t()) y la forma de pintar una plantilla (render()).
+        $this->ps_versions_compliancy = ['min' => '1.6.1.0', 'max' => '9.99.99'];
 
         parent::__construct();
 
-        // PrestaShop 1.7.5 no carga los XLF de los módulos: sin esto la tienda y el back office
-        // salen en inglés. Donde el núcleo ya los carga no hace nada.
-        \BkModules\I18n\V1\Translations::ensure($this->name);
+        // Hasta 1.7.5 el traductor no carga los XLF de los módulos: sin esto la tienda y el back
+        // office salen en inglés. Donde el núcleo ya los carga no hace nada. 1.6 no tiene traductor
+        // de Symfony: t() lee el XLF directamente.
+        if (!BkGuaranteeConfig::isPs16()) {
+            \BkModules\I18n\V1\Translations::ensure($this->name);
+        }
 
-        $this->displayName = $this->trans('BK EU Guarantee', [], 'Modules.Bkguarantee.Admin');
-        $this->description = $this->trans(
+        $this->displayName = $this->t('BK EU Guarantee', [], 'Modules.Bkguarantee.Admin');
+        $this->description = $this->t(
             'Shows the EU harmonised notice on the legal guarantee of conformity on your product pages and order summary.',
             [],
             'Modules.Bkguarantee.Admin'
@@ -121,15 +104,17 @@ class BkGuarantee extends Module
     }
 
     /**
-     * Registra todos los hooks del módulo. Es idempotente: la instalación y cada actualización que
-     * traiga un hook nuevo pasan por aquí, y un hook ya registrado se deja como está.
+     * Registra los hooks del módulo en esta versión (BkGuaranteeConfig::hooks()): los de los puntos
+     * de la ficha y del checkout, los del correo y el de los recursos del front. Es idempotente: la
+     * instalación y cada actualización que traiga un hook nuevo pasan por aquí, y un hook ya
+     * registrado se deja como está.
      *
      * @return bool
      */
     public function registerHooks()
     {
         $ok = true;
-        foreach ($this->hooks as $hook) {
+        foreach (BkGuaranteeConfig::hooks() as $hook) {
             if (!$this->registerHook($hook)) {
                 BkGuaranteeLogger::error('No se pudo registrar el hook ' . $hook);
                 $ok = false;
@@ -282,7 +267,25 @@ class BkGuarantee extends Module
     }
 
     /**
-     * Los tres puntos de la ficha se registran siempre y solo pinta el elegido: así cambiar de
+     * Los mismos ficheros en 1.6, que los añade desde displayHeader: con la fecha en la URL y sin
+     * comprobar la ruta, que con el interrogante no encontraría el fichero. Más front-ps16.css, que
+     * fija la unidad de medida del módulo para la raíz de 10px de los temas de 1.6.
+     */
+    public function hookDisplayHeader()
+    {
+        if (!$this->shouldRender()) {
+            return;
+        }
+
+        $this->context->controller->addCSS($this->assetUrl('views/css/front.css'), 'all', null, false);
+        $this->context->controller->addCSS($this->assetUrl('views/css/front-ps16.css'), 'all', null, false);
+        if (BkGuaranteeConfig::isOn(BkGuaranteeConfig::GARAN_NESTED)) {
+            $this->context->controller->addJS($this->assetUrl('views/js/garan.js'), false);
+        }
+    }
+
+    /**
+     * Los puntos de la ficha de esta versión se registran todos y solo pinta el elegido: así cambiar de
      * sitio es un desplegable y no una reinstalación, y el comerciante puede además moverlo desde
      * Posiciones sin que el módulo se entere.
      */
@@ -290,6 +293,15 @@ class BkGuarantee extends Module
     {
         return $this->renderProduct('info', $params) . $this->renderGaran('info', $params)
             . $this->renderDurability('info', $params);
+    }
+
+    /**
+     * `info` en 1.6 y 1.7.0, dentro del bloque de compra tras el botón: el mismo hueco que 1.7.1
+     * renombró a displayProductAdditionalInfo. Solo se registra en esas versiones.
+     */
+    public function hookDisplayProductButtons(array $params)
+    {
+        return $this->hookDisplayProductAdditionalInfo($params);
     }
 
     public function hookDisplayAfterProductThumbs(array $params)
@@ -334,7 +346,7 @@ class BkGuarantee extends Module
             'bkdura_note' => BkGuaranteeDurability::text($idLang, 'Information provided by the manufacturer or provider.'),
         ]);
 
-        return $this->fetch('module:bkguarantee/views/templates/hook/durability.tpl');
+        return $this->render('durability.tpl');
     }
 
     /**
@@ -391,7 +403,7 @@ class BkGuarantee extends Module
             'bkgaran_uid' => $idProduct . '-' . $placement,
         ]);
 
-        return $this->fetch('module:bkguarantee/views/templates/hook/garan.tpl');
+        return $this->render('garan.tpl');
     }
 
     /**
@@ -447,12 +459,13 @@ class BkGuarantee extends Module
         }
 
         $this->smarty->assign($this->garanVars() + [
-            'bkgaran_co_title' => $this->trans('Producer durability guarantee', [], 'Modules.Bkguarantee.Shop'),
+            'bkgaran_co_title' => $this->t('Producer durability guarantee', [], 'Modules.Bkguarantee.Shop'),
             'bkgaran_co_labels' => array_values($labels),
             'bkgaran_co_placement' => $placement,
+            'bkgaran_tpl' => $this->templateRef('garan.tpl'),
         ]);
 
-        return $this->fetch('module:bkguarantee/views/templates/hook/garan-checkout.tpl');
+        return $this->render('garan-checkout.tpl');
     }
 
     /**
@@ -471,13 +484,13 @@ class BkGuarantee extends Module
             // La figura anidada es apaisada: al ancho de la etiqueta entera se vuelve un cartel.
             'bkgaran_badge_width' => min($width, self::GARAN_BADGE_MAX_WIDTH),
             'bkgaran_nested' => BkGuaranteeConfig::isOn(BkGuaranteeConfig::GARAN_NESTED),
-            'bkgaran_alt' => $this->trans(
+            'bkgaran_alt' => $this->t(
                 'GARAN label: producer durability guarantee in years',
                 [],
                 'Modules.Bkguarantee.Shop'
             ),
-            'bkgaran_toggle' => $this->trans('Producer guarantee in years', [], 'Modules.Bkguarantee.Shop'),
-            'bkgaran_more' => $this->trans('See the full label', [], 'Modules.Bkguarantee.Shop'),
+            'bkgaran_toggle' => $this->t('Producer guarantee in years', [], 'Modules.Bkguarantee.Shop'),
+            'bkgaran_more' => $this->t('See the full label', [], 'Modules.Bkguarantee.Shop'),
         ];
     }
 
@@ -527,6 +540,14 @@ class BkGuarantee extends Module
     }
 
     /**
+     * `summary` en 1.6: bajo la tabla del carrito, en el primer paso y en el checkout de una página.
+     */
+    public function hookDisplayShoppingCartFooter(array $params)
+    {
+        return $this->renderCheckout('summary');
+    }
+
+    /**
      * @param string $placement payment|summary
      *
      * @return string
@@ -545,11 +566,13 @@ class BkGuarantee extends Module
     }
 
     /**
-     * Traducción accesible desde los controladores del módulo.
+     * Única puerta de los textos del módulo, sus controladores y sus plantillas
+     * (`{$bkguar_module->t('…')}`).
      *
      * `Module::trans()` es protected y los controladores no la alcanzan; y `AdminController` no
-     * tiene `trans()` propio hasta 1.7.6, así que llamarlo desde allí revienta en 1.7.5. Este
-     * envoltorio, que sí vive dentro de la clase del módulo, funciona igual de 1.7.5 a 9.
+     * tiene `trans()` propio hasta 1.7.6, así que llamarlo desde allí revienta en 1.7.5. En 1.6 no
+     * hay traductor de Symfony y se lee el XLF del módulo en el locale del contexto. Nada de `{l}`
+     * en las plantillas: en 1.6 no conoce el dominio del módulo.
      *
      * @param string $id
      * @param array  $parameters
@@ -559,6 +582,16 @@ class BkGuarantee extends Module
      */
     public function t($id, array $parameters = [], $domain = null)
     {
+        if (BkGuaranteeConfig::isPs16()) {
+            return \BkModules\I18n\V1\Translations::trans(
+                $this->name,
+                (string) $domain,
+                BkGuaranteeDurability::locale((int) $this->context->language->id),
+                $id,
+                $parameters
+            );
+        }
+
         return $this->trans($id, $parameters, $domain);
     }
 
@@ -590,6 +623,39 @@ class BkGuarantee extends Module
     }
 
     /**
+     * Pinta una plantilla de views/templates/hook/, con la sustitución del tema si la trae: por su
+     * recurso `module:` desde 1.7 y con display() en 1.6, que no lo conoce.
+     *
+     * @param string $template
+     *
+     * @return string
+     */
+    private function render($template)
+    {
+        if (BkGuaranteeConfig::isPs16()) {
+            return $this->display(__FILE__, 'views/templates/hook/' . $template);
+        }
+
+        return $this->fetch($this->templateRef($template));
+    }
+
+    /**
+     * Cómo se nombra una plantilla de hook para fetch() o para un {include} desde otra.
+     *
+     * @param string $template
+     *
+     * @return string
+     */
+    private function templateRef($template)
+    {
+        if (BkGuaranteeConfig::isPs16()) {
+            return $this->getTemplatePath('views/templates/hook/' . $template);
+        }
+
+        return 'module:bkguarantee/views/templates/hook/' . $template;
+    }
+
+    /**
      * @param string $place product|checkout
      *
      * @return string
@@ -614,22 +680,22 @@ class BkGuarantee extends Module
             'bkguar_place' => $place,
             'bkguar_style' => BkGuaranteeConfig::getStyle(),
             'bkguar_align' => BkGuaranteeConfig::getAlign(),
-            'bkguar_alt' => $this->trans(
+            'bkguar_alt' => $this->t(
                 'EU harmonised notice on the legal guarantee of conformity',
                 [],
                 'Modules.Bkguarantee.Shop'
             ),
-            'bkguar_full' => $this->trans('View full size', [], 'Modules.Bkguarantee.Shop'),
-            'bkguar_title' => $this->trans('EU legal guarantee', [], 'Modules.Bkguarantee.Shop'),
-            'bkguar_band_title' => $this->trans('Your rights on this purchase', [], 'Modules.Bkguarantee.Shop'),
-            'bkguar_band_text' => $this->trans(
+            'bkguar_full' => $this->t('View full size', [], 'Modules.Bkguarantee.Shop'),
+            'bkguar_title' => $this->t('EU legal guarantee', [], 'Modules.Bkguarantee.Shop'),
+            'bkguar_band_title' => $this->t('Your rights on this purchase', [], 'Modules.Bkguarantee.Shop'),
+            'bkguar_band_text' => $this->t(
                 'This is the official European Union notice on the legal guarantee of conformity, reproduced exactly as the Commission publishes it.',
                 [],
                 'Modules.Bkguarantee.Shop'
             ),
         ]);
 
-        return $this->fetch('module:bkguarantee/views/templates/hook/notice.tpl');
+        return $this->render('notice.tpl');
     }
 
     /**

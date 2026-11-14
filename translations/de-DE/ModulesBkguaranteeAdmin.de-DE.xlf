@@ -986,6 +986,10 @@
         <source>Between two rules of the same kind, the one for this shop wins over the one for all shops.</source>
         <target>Bei zwei Regeln derselben Art gewinnt die für diesen Shop vor der für alle Shops.</target>
       </trans-unit>
+      <trans-unit id="f27a80d684e279e2727a123e7690799a">
+        <source>This version of PrestaShop does not let modules attach files to its emails: the notice travels in the body of the email, as an image and as a link to the official file.</source>
+        <target>Diese PrestaShop-Version erlaubt Modulen keine Anhänge an ihren E-Mails: Der Hinweis steht im Text der E-Mail, als Bild und als Link zur offiziellen Datei.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

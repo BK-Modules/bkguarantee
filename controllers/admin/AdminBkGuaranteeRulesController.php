@@ -108,6 +108,15 @@ class AdminBkGuaranteeRulesController extends ModuleAdminController
         ];
     }
 
+    /**
+     * Las plantillas traducen con el t() del módulo: `{l}` no conoce su dominio en 1.6.
+     */
+    public function init()
+    {
+        parent::init();
+        $this->context->smarty->assign('bkguar_module', $this->module);
+    }
+
     public function setMedia($isNewTheme = false)
     {
         parent::setMedia($isNewTheme);

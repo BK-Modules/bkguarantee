@@ -71,32 +71,114 @@ class BkGuaranteeConfig
     /** Alineaciones admitidas */
     const ALIGNS = ['left', 'center'];
     /**
-     * Puntos del checkout admitidos, con el hook que los sirve.
+     * Puntos de la ficha que tiene esta versión de PrestaShop, con el hook que los sirve. Cada
+     * diferencia entre versiones vive aquí y solo aquí; el resto del módulo pregunta a estas listas.
+     *
+     *  - 1.7.1+: `info` bajo el bloque de compra, `thumbs` bajo la galería y `footer` al pie.
+     *  - 1.6 y 1.7.0: `info` es displayProductButtons —dentro del bloque de compra, tras el botón,
+     *    el hueco que 1.7.1 renombró a displayProductAdditionalInfo— y `footer`; la galería no tiene
+     *    hook en esas fichas, así que `thumbs` no existe.
+     *
+     * @return array [posición => hook]
+     */
+    public static function placements()
+    {
+        if (version_compare(_PS_VERSION_, '1.7.1.0', '<')) {
+            return [
+                'info' => 'displayProductButtons',
+                'footer' => 'displayFooterProduct',
+            ];
+        }
+
+        return [
+            'info' => 'displayProductAdditionalInfo',
+            'thumbs' => 'displayAfterProductThumbs',
+            'footer' => 'displayFooterProduct',
+        ];
+    }
+
+    /**
+     * Puntos del checkout admitidos, con el hook que los sirve. En 1.6 el resumen del pedido es el
+     * carrito del primer paso (y del checkout de una página): displayShoppingCartFooter, bajo la
+     * tabla de productos.
      *
      * displayCheckoutSubtotalDetails NO sirve: el tema solo lo dispara en la línea de gastos de
      * envío y dentro de un <small>, así que en un carrito sin transporte no llega a ejecutarse.
+     *
+     * @return array [posición => hook]
      */
-    const CHECKOUT_PLACEMENTS = [
-        'summary' => 'displayCheckoutSummaryTop',
-        'payment' => 'displayPaymentTop',
-    ];
+    public static function checkoutPlacements()
+    {
+        return [
+            'summary' => self::isPs16() ? 'displayShoppingCartFooter' : 'displayCheckoutSummaryTop',
+            'payment' => 'displayPaymentTop',
+        ];
+    }
+
     /**
      * Puntos del último paso donde va la etiqueta GARAN, con el hook que los sirve.
      *
      * `confirmation` queda encima del botón de compra, pero el classic de 1.7 no dispara ese hook:
-     * allí la etiqueta no saldría, y por eso la posición por defecto depende de la versión.
+     * allí la etiqueta no saldría, y por eso la posición por defecto depende de la versión. En 1.6
+     * el botón de compra es del módulo de pago y no hay hueco encima: solo existe `payment`.
      * `payment` está en todos los temas, arriba del paso de pago.
+     *
+     * @return array [posición => hook]
      */
-    const GARAN_CHECKOUT_PLACEMENTS = [
-        'confirmation' => 'displayCheckoutBeforeConfirmation',
-        'payment' => 'displayPaymentTop',
-    ];
-    /** Puntos de la ficha admitidos, con el hook que los sirve */
-    const PLACEMENTS = [
-        'info' => 'displayProductAdditionalInfo',
-        'thumbs' => 'displayAfterProductThumbs',
-        'footer' => 'displayFooterProduct',
-    ];
+    public static function garanCheckoutPlacements()
+    {
+        if (self::isPs16()) {
+            return ['payment' => 'displayPaymentTop'];
+        }
+
+        return [
+            'confirmation' => 'displayCheckoutBeforeConfirmation',
+            'payment' => 'displayPaymentTop',
+        ];
+    }
+
+    /**
+     * El adjunto del correo necesita actionEmailSendBefore, que PrestaShop dispara desde 1.7.1. En
+     * 1.6 y 1.7.0 el aviso viaja solo en el cuerpo, como imagen y como enlace.
+     *
+     * @return bool
+     */
+    public static function canAttach()
+    {
+        return version_compare(_PS_VERSION_, '1.7.1.0', '>=');
+    }
+
+    /**
+     * 1.6: sin traductor de Symfony, sin plantillas `module:` y con los recursos del front en
+     * displayHeader.
+     *
+     * @return bool
+     */
+    public static function isPs16()
+    {
+        return version_compare(_PS_VERSION_, '1.7.0.0', '<');
+    }
+
+    /**
+     * Hooks que el módulo registra en esta versión: los de cada punto que existe, los del correo y
+     * el de los recursos del front. Solo los de la versión en curso, para no pintar dos veces en un
+     * tema que dispare a la vez un hook antiguo y su sustituto.
+     *
+     * @return array
+     */
+    public static function hooks()
+    {
+        $hooks = array_merge(
+            array_values(self::placements()),
+            array_values(self::checkoutPlacements()),
+            array_values(self::garanCheckoutPlacements()),
+            ['actionEmailAddAfterContent', 'actionGetExtraMailTemplateVars'],
+            self::canAttach() ? ['actionEmailSendBefore'] : [],
+            [self::isPs16() ? 'displayHeader' : 'actionFrontControllerSetMedia']
+        );
+
+        return array_values(array_unique($hooks));
+    }
 
     /**
      * Ancho por debajo del cual el aviso deja de leerse. El mínimo se queda bajo a propósito —hay
@@ -216,9 +298,7 @@ class BkGuaranteeConfig
      */
     public static function getPlacement()
     {
-        $value = (string) Configuration::get(self::PLACEMENT);
-
-        return isset(self::PLACEMENTS[$value]) ? $value : 'info';
+        return self::pick(self::PLACEMENT, self::placements(), 'info');
     }
 
     /**
@@ -226,9 +306,7 @@ class BkGuaranteeConfig
      */
     public static function getGaranPlacement()
     {
-        $value = (string) Configuration::get(self::GARAN_PLACEMENT);
-
-        return isset(self::PLACEMENTS[$value]) ? $value : 'thumbs';
+        return self::pick(self::GARAN_PLACEMENT, self::placements(), 'thumbs');
     }
 
     /**
@@ -236,9 +314,7 @@ class BkGuaranteeConfig
      */
     public static function getDurabilityPlacement()
     {
-        $value = (string) Configuration::get(self::DURABILITY_PLACEMENT);
-
-        return isset(self::PLACEMENTS[$value]) ? $value : 'info';
+        return self::pick(self::DURABILITY_PLACEMENT, self::placements(), 'info');
     }
 
     /**
@@ -256,9 +332,7 @@ class BkGuaranteeConfig
      */
     public static function getCheckoutPlacement()
     {
-        $value = (string) Configuration::get(self::CHECKOUT_PLACEMENT);
-
-        return isset(self::CHECKOUT_PLACEMENTS[$value]) ? $value : 'summary';
+        return self::pick(self::CHECKOUT_PLACEMENT, self::checkoutPlacements(), 'summary');
     }
 
     /**
@@ -266,9 +340,7 @@ class BkGuaranteeConfig
      */
     public static function getGaranCheckoutPlacement()
     {
-        $value = (string) Configuration::get(self::GARAN_CHECKOUT_PLACEMENT);
-
-        return isset(self::GARAN_CHECKOUT_PLACEMENTS[$value]) ? $value : self::defaultGaranCheckoutPlacement();
+        return self::pick(self::GARAN_CHECKOUT_PLACEMENT, self::garanCheckoutPlacements(), self::defaultGaranCheckoutPlacement());
     }
 
     /**
@@ -322,6 +394,26 @@ class BkGuaranteeConfig
     public static function getExcludedProducts()
     {
         return self::idList(self::EXCLUDED_PRODUCTS);
+    }
+
+    /**
+     * Posición guardada si esta versión la tiene; si no, la de por defecto, y si tampoco existe aquí
+     * (la galería en 1.6), la primera de la lista.
+     *
+     * @param string $key
+     * @param array  $allowed [posición => hook]
+     * @param string $default
+     *
+     * @return string
+     */
+    private static function pick($key, array $allowed, $default)
+    {
+        $value = (string) Configuration::get($key);
+        if (isset($allowed[$value])) {
+            return $value;
+        }
+
+        return isset($allowed[$default]) ? $default : (string) key($allowed);
     }
 
     /**

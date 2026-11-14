@@ -26,6 +26,15 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         parent::__construct();
     }
 
+    /**
+     * Las plantillas traducen con el t() del módulo: `{l}` no conoce su dominio en 1.6.
+     */
+    public function init()
+    {
+        parent::init();
+        $this->context->smarty->assign('bkguar_module', $this->module);
+    }
+
     public function setMedia($isNewTheme = false)
     {
         parent::setMedia($isNewTheme);
@@ -33,6 +42,9 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         // El CSS del front se carga también aquí: el selector de presentación enseña el aviso tal
         // como se verá en la tienda, y todo cuelga de .bkguar, así que no toca el back office.
         $this->addCSS($this->module->assetUrl('views/css/front.css'), 'all', null, false);
+        if (BkGuaranteeConfig::isPs16()) {
+            $this->addCSS($this->module->assetUrl('views/css/front-ps16.css'), 'all', null, false);
+        }
         $this->addJqueryPlugin('chosen');
         $this->addJS($this->module->assetUrl('views/js/config.js'), false);
     }
@@ -112,13 +124,13 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
         $this->saveFromList(BkGuaranteeConfig::STYLE, BkGuaranteeConfig::STYLES, 'band');
         $this->saveFromList(BkGuaranteeConfig::ALIGN, BkGuaranteeConfig::ALIGNS, 'left');
         $this->saveFromList(BkGuaranteeConfig::SCOPE_MODE, BkGuaranteeConfig::SCOPE_MODES, 'all');
-        $this->saveFromKeys(BkGuaranteeConfig::PLACEMENT, BkGuaranteeConfig::PLACEMENTS, 'footer');
-        $this->saveFromKeys(BkGuaranteeConfig::GARAN_PLACEMENT, BkGuaranteeConfig::PLACEMENTS, 'thumbs');
-        $this->saveFromKeys(BkGuaranteeConfig::DURABILITY_PLACEMENT, BkGuaranteeConfig::PLACEMENTS, 'info');
-        $this->saveFromKeys(BkGuaranteeConfig::CHECKOUT_PLACEMENT, BkGuaranteeConfig::CHECKOUT_PLACEMENTS, 'summary');
+        $this->saveFromKeys(BkGuaranteeConfig::PLACEMENT, BkGuaranteeConfig::placements(), 'footer');
+        $this->saveFromKeys(BkGuaranteeConfig::GARAN_PLACEMENT, BkGuaranteeConfig::placements(), 'thumbs');
+        $this->saveFromKeys(BkGuaranteeConfig::DURABILITY_PLACEMENT, BkGuaranteeConfig::placements(), 'info');
+        $this->saveFromKeys(BkGuaranteeConfig::CHECKOUT_PLACEMENT, BkGuaranteeConfig::checkoutPlacements(), 'summary');
         $this->saveFromKeys(
             BkGuaranteeConfig::GARAN_CHECKOUT_PLACEMENT,
-            BkGuaranteeConfig::GARAN_CHECKOUT_PLACEMENTS,
+            BkGuaranteeConfig::garanCheckoutPlacements(),
             BkGuaranteeConfig::defaultGaranCheckoutPlacement()
         );
 
@@ -243,6 +255,10 @@ class AdminBkGuaranteeConfigController extends ModuleAdminController
             // Con el resumen final de PrestaShop, el tema pinta el hueco de encima del botón antes
             // del resumen: la etiqueta queda arriba del bloque de revisión y no pegada al botón.
             'bkguar_final_summary' => (bool) Configuration::get('PS_FINAL_SUMMARY_ENABLED'),
+            // Las posiciones que ofrece la pantalla son las que tiene esta versión de PrestaShop.
+            'bkguar_placements' => BkGuaranteeConfig::placements(),
+            'bkguar_garan_co_placements' => BkGuaranteeConfig::garanCheckoutPlacements(),
+            'bkguar_can_attach' => BkGuaranteeConfig::canAttach(),
         ]);
 
         return '<script>var bkguarSearchUrl = ' . json_encode($searchUrl) . ';</script>'

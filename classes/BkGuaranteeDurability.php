@@ -136,15 +136,29 @@ class BkGuaranteeDurability
      */
     public static function text($idLang, $string, array $params = [])
     {
-        $language = Language::getLanguage((int) $idLang);
+        return \BkModules\I18n\V1\Translations::trans('bkguarantee', self::DOMAIN, self::locale($idLang), $string, $params);
+    }
 
-        return \BkModules\I18n\V1\Translations::trans(
-            'bkguarantee',
-            self::DOMAIN,
-            $language ? (string) $language['locale'] : '',
-            $string,
-            $params
-        );
+    /**
+     * Locale de PrestaShop de un idioma (de-DE). 1.6 no tiene `locale` y solo guarda
+     * `language_code` (de-de).
+     *
+     * @param int $idLang
+     *
+     * @return string
+     */
+    public static function locale($idLang)
+    {
+        $language = Language::getLanguage((int) $idLang);
+        if (!$language) {
+            return '';
+        }
+        if (!empty($language['locale'])) {
+            return (string) $language['locale'];
+        }
+        $parts = explode('-', (string) $language['language_code']);
+
+        return Tools::strtolower($parts[0]) . (isset($parts[1]) ? '-' . Tools::strtoupper($parts[1]) : '');
     }
 
     /**

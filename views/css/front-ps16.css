@@ -1,0 +1,8 @@
+/**
+ * PrestaShop 1.6: la unidad de medida del módulo en píxeles. Los temas de 1.6 (Bootstrap 3) ponen
+ * la raíz del documento en 10px, y las medidas de front.css, en --bkguar-rem, están pensadas para
+ * una raíz de 16px. Solo se carga en 1.6.
+ */
+:root {
+    --bkguar-rem: 16px;
+}
